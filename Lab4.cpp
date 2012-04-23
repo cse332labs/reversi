@@ -42,8 +42,7 @@ int main(int argc, char* argv[])
 	}
 	catch(endCondition e)
 	{	
-		//calvin: -5: Be sure sure to call the delete operator just before _any_ point where control flow would leave the program.
-		//				If play throws a QUIT exception, then the program will terminate without deallocating memory. 
+
 		if(e == QUIT)
 		{
 			delete game;
