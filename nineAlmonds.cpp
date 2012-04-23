@@ -1,193 +1,218 @@
+//Lab 4 - Nine Almonds and Magic Squares
+//Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu)
+// 5-7-12
+// nineAlmonds.cpp
+
 #include "stdafx.h"
 #include "nineAlmonds.h"
-#include <sstream>
 
 using namespace std;
 
-const unsigned int horizontal_dimension = 5;
-const unsigned int vertical_dimension = 5;
-
+//constructs nineAlmonds using the base class constructor and its own specifications. fills board
+// for proper nine almonds game.
 nineAlmonds::nineAlmonds()
-	: abstractGame(), turns_(0) //, boardx_(horizontal_dimension), boardy_(vertical_dimension)
+	: abstractGame() 
 {
-	boardx_= horizontal_dimension;
-	boardy_= vertical_dimension;
+	boardx_=5;
+	boardy_=5;
+	turn_=1;
 	almondPiece almond = almondPiece();
 	for(int i=0; i < boardx_ ; ++i)
 	{
 		for(int j=0; j < boardy_; ++j)
 		{
-			//TODO: switch to generic values based on boardx_ and boardy_
-			if( ((i<4)&&(i>0)) && ((j<4)&&(j>0)) )
+			if( ((i<boardx_-1)&&(i>0)) && ((j<boardy_-1)&&(j>0)) )
 			{
 				Point temp = Point(i, j);
 				board_[temp]=almond;
 			}
 		}
 	}
-	
-	setMaxNA(maxSymbol_, boardx_);
-	//maxSymbol_ = 1; //this is not a necessary variable for nine almonds if we only play it for a 5 x 5 board - factor out?
+	undoBoards_.push_back(board_);
 }
 
-//this is used pretty much for magic squares
-void setMaxNA(int & max, int boardLength)
-{
-	max = boardLength * boardLength; //NOTE: this is the max in an nxn board for magic squares; the largest in nine almonds would be boardLength
-	string maxStr = "";
-	stringstream intToStr;
-	intToStr << max;
-	intToStr >> maxStr;
-	max = maxStr.size();
-
-}
-
+//finds the jumped piece
 Point nineAlmonds::jumpedPiece(Point start, Point end)
 {
 	int jumpedx, jumpedy;
 
 	jumpedx=(start.x_ + end.x_)/2;
-	jumpedy=(start.x_ + end.y_)/2;
+	jumpedy=(start.y_ + end.y_)/2;
 	return Point(jumpedx, jumpedy);
 }
 
+//overridden instance of piecemover that adjusts booleans used in nineAlmonds as well as calls pieceKiller 
+//on jumpedPiece. moves piece from board_[start] to board_[destination] if start has a piece and destination
+// is empty. Jumped piece must also have a piece. both start and jumped are removed.
+bool nineAlmonds :: pieceMover(Point start, Point destination)
+{
+	Point jumped = jumpedPiece(start, destination);
+	if(board_.count(jumped) != 1)
+	{
+		cout << "You have to jump over an occupied spot on the board. Please select another move." << endl;
+		return false;
+	}
+	else
+	{
+		almondPiece almond = almondPiece();
+		board_.erase(jumped);
+		board_[destination] = almond;
+		start_=destination;
+		board_.erase(start);
+
+		validFirst_=true;
+		return true;
+	}
+}
+
+// undoes moves starting with most recent
+void nineAlmonds :: undo()
+{
+	state_= TURNSTART;
+	int i = undoBoards_.size()-1;
+	board_=undoBoards_.at(i);
+	movesThisTurn_.clear();
+	return;
+}
+
+// print operator using operator<< below
 void nineAlmonds :: print()
 {
 	cout << *this << endl;
 }
 
+// checks if the board is completed, returns true if finished otherwise false.
+// finished only if one almond remains and it is in square 2,2
 bool nineAlmonds :: done()
 {
+	bool empty = true;
+	Point key = Point();
+	for(int i = 0; i <5; ++i)
+	{
+		for (int j=0; j<5; ++j)
+		{
+			key.set(i, j);
+			if(board_.count(key) == 1 && (i != 2 || j != 2))
+				empty = false;
+		}
+	}
+	if(empty && (board_.count(Point(2, 2)) == 1))
+	{
+		print();
+		return true;
+	}
 	return false;
 }
 
+// calls prompt from abstractGame
 void nineAlmonds :: prompt()
 {
-
+	abstractGame :: prompt();
 }
 
+// does the turn logic for nineAlmonds. calls prompt and listen where appropriate.
 void nineAlmonds :: turn()
 {
 
+	switch(state_)
+	{
+	case SETUP:
+		cout << "Welcome to Nine Almonds!" << endl;
+		cout << "Your goal is to remove all almonds except for one, leaving the final almond in the center square (2,2)." << endl;
+		cout << "You may make moves by jumping one almond over another, removing the jumped piece. Use a square's coordinate point to select it."<< endl;
+		state_=TURNSTART;
+		break;
+	case FIRSTLOCKED:
+		original_ = start_;
+		break;
+	case EXTENDEDTURN:
+		cout << "Continuing turn " << turn_ << ". Originally started moving piece at " << original_ << endl << endl;
+		break;
+	case ENDTURN:
+		++turn_;
+		undoBoards_.push_back(board_);
+		state_=TURNSTART;
+		break;
+	}
+	print();
+	cout << moves_.str() << endl;
+	prompt();
+	listen();
 }
 
+// calls the abstract listen 
+void nineAlmonds :: listen()
+{
+	abstractGame :: listen();
+}
+
+//repeatedly calls turn() until done() evaulates true. Then returns SUCCESS.
 endCondition nineAlmonds :: play()
 {
+	bool finished = false;
+	while(!finished)
+	{
+		this->turn();
+		if(this->done())
+		{
+
+			finished = true;
+		}
+	}
+
+	cout << "Congratulations! You completed the game in " << turn_ << " turns! Exiting game now." << endl << endl;
 	return SUCCESS;
 }
 
-
-
-
-//not going to be necessary if we just use a 5x5 board but I left it in for testing the magic square board from here
-int getLengthNA(int symbol)
-{
-	string symbolStr = "";
-	stringstream intToStr;
-	intToStr << symbol;
-	intToStr >> symbolStr;
-	return symbolStr.size();
-}
-
-/*
-//
-// UNCOMMENT THIS METHOD TO SEE THE MAGIC SQUARE BOARD (tested with the nineAlmonds game object)
-//
-
-// the required operator overload that takes in a game object and prints out the board (and returns the stream).
+//formats a NineAlmonds board for printing.
 ostream& operator<<(ostream &stream, const nineAlmonds &game)
 {
-	// formatting set-up to account for variable length symbols and for readability 
-	char space = ' ';
-	string spacing(game.maxSymbol_, space); // adds space the width of the max length symbol
-	char verticalBar = '|';
-	int dashCount = (game.boardx_ * (game.maxSymbol_ + 2)) + (game.boardx_ - 1); 
-	string dashes(dashCount,'-');
-	string dashRow = " ";
-		dashRow += verticalBar + dashes + verticalBar;
-	int piece = 0; //temp - not sure what the pieces structure is
+        // formatting set-up to account for variable length symbols and readability 
+        char space = ' ';
+        string spacing(game.maxSymbol_, space); // adds space the width of the max length symbol
+        char verticalBar = '|';
+        int dashCount = (game.boardx_ * 3) + (game.boardx_ - 1); 
+        string dashes(dashCount,'-');
+        string offset = spacing + space; // offets by the width of the vertical axis
+        string dashRow = offset + verticalBar + dashes + verticalBar;
 
-	for(unsigned int y=(game.boardy_); y > 0; --y)
-	{
-		stream << dashRow << endl; //add a dashed line before each line of content for formatting
+        stream << space << 'y' << endl;
+        for(unsigned int y=(game.boardy_); y > 0; --y)
+        {
+                stream << dashRow << endl; //add a dashed line before each line of content for formatting
+                for(int x=0; x <= game.boardx_; ++x)
+                {
+                        if(x==0 && y!=0)
+                        {
+                                if (getLength(y-1) < game.maxSymbol_)
+                                {
+                                //determine number spaces to add before y-axis symbol (only need if we are using nxn boards)
+                                        string spaces(game.maxSymbol_ - getLength(y-1), space);
+                                        stream << spaces;
+                                }
+                                stream << y-1; //prints vertical axis
+                        }
+                        else if(game.board_.count(Point(x-1, y-1)) == 1) //check if there is a piece at that position
+                        {
+                                almondPiece almond = almondPiece();
+								stream << almond.symbol_;
+                        }
+                        else
+                        {
+                                stream << space; 
+                        }
+                        stream << space << verticalBar << space;
+                }
+                stream << endl;
+        }
+        stream << dashRow << endl;
+        stream << offset;  // offets the axis labeling by the width of the vertical axis
 
-		for(int x=0; x < game.boardx_; ++x)
-		{
-			stream << space << verticalBar << space;
-			if(game.board_.count(Point(x, y-1)) == 1) //is there a piece at that position?
-			{
-				if (getLengthNA(piece) < game.maxSymbol_)
-				{
-				//determine number spaces to add before symbol
-					string spaces(game.maxSymbol_ - getLengthNA(piece), space);
-					stream << spaces;
-				}
-				stream << piece;
-			}
-			else
-			{
-				stream << spacing; 
-			}
-		}
-		stream << space << verticalBar << endl;
-	}
-	stream << dashRow << endl << endl;
-	stream << " Available Pieces: " << endl << endl; //add this in when we have the structure to hold pieces
-	return stream;
-}
-*/
-
-//
-// This is the real operator for Nine Almonds
-// The one above is a copy of the one in Magic Squares for testing
-//
-ostream& operator<<(ostream &stream, const nineAlmonds &game)
-{
-	// formatting set-up to account for variable length symbols and readability 
-	char space = ' ';
-	string spacing(game.maxSymbol_, space); // adds space the width of the max length symbol
-	char verticalBar = '|';
-	int dashCount = (game.boardx_ * 3) + (game.boardx_ - 1); 
-	string dashes(dashCount,'-');
-	string offset = spacing + space; // offets by the width of the vertical axis: "  |"
-	string dashRow = offset + verticalBar + dashes + verticalBar;
-
-	stream << space << 'y' << endl;
-	for(unsigned int y=(game.boardy_); y > 0; --y)
-	{
-		stream << dashRow << endl; //add a dashed line before each line of content for formatting
-		for(int x=0; x <= game.boardx_; ++x)
-		{
-			if(x==0 && y!=0)
-			{
-				if (getLengthNA(y-1) < game.maxSymbol_)
-				{
-				//determine number spaces to add before y-axis symbol (only need if we are using nxn boards)
-					string spaces(game.maxSymbol_ - getLengthNA(y-1), space);
-					stream << spaces;
-				}
-				stream << y-1; //prints vertical axis
-			}
-			else if(game.board_.count(Point(x-1, y-1)) == 1) //is there a piece at that position?
-			{
-				stream << 'A';
-			}
-			else
-			{
-				stream << space; 
-			}
-			stream << space << verticalBar << space;
-		}
-		stream << endl;
-	}
-	stream << dashRow << endl;
-	stream << offset;  // offets the axis labeling by the width of the vertical axis
-
-	//prints the horizontal axis
-	for(int xPos=0; xPos < game.boardx_; ++xPos)
-	{
-		stream << space << space << xPos << space;
-	}
-	stream << " x" << endl;
-	return stream;
+        //prints the horizontal axis
+        for(int xPos=0; xPos < game.boardx_; ++xPos)
+        {
+                stream << space << space << xPos << space;
+        }
+        stream << " x" << endl;
+        return stream;
 }

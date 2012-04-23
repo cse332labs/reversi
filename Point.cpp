@@ -1,3 +1,8 @@
+//Lab 4 - Nine Almonds and Magic Squares
+//Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu)
+// 5-7-12
+// Point.cpp
+
 #include "stdafx.h"
 #include "point.h" 
 
@@ -15,9 +20,17 @@ bool Point::operator< (const Point& p) const
 	return( x_ < p.x_ ) || (( x_ == p.x_ ) && ( y_ < p.y_ ));
 }
 
+// sets the values of x_ and y_ to x and y
+void Point :: set (int x, int y)
+{
+	x_ = x;
+	y_ = y;
+	return;
+}
+
+// prints out the Point by printing out x_,y_
 ostream& operator<<(ostream& stream, const Point& point)
 {
-	stream << point.x_ << ", " << point.y_;
-
+	stream << point.x_ << "," << point.y_;
 	return stream;
 }

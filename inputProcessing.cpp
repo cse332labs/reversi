@@ -1,3 +1,8 @@
+//Lab 4 - Nine Almonds and Magic Squares
+//Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu)
+// 5-7-12
+// inputProcessing.cpp
+
 #include "stdafx.h"
 #include "inputProcessing.h"
 
@@ -22,4 +27,14 @@ void removePunctuation(string& str)
 			str.at(i)=' ';
 		}
 	}
+}
+
+// returns the length of the int symbol as if it were a string.
+int getLength(int symbol)
+{
+        string symbolStr = "";
+        stringstream intToStr;
+        intToStr << symbol;
+        intToStr >> symbolStr;
+        return symbolStr.size();
 }

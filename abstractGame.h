@@ -1,45 +1,88 @@
+//Lab 4 - Nine Almonds and Magic Squares
+//Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu)
+// 5-7-12
+// abstractGame.h
+
 #include "stdafx.h"
 
 #ifndef ABSTRACTGAME_H
 #define ABSTRACTGAME_H
 
-#include "menus.h"
 #include "Point.h"
 #include "gamePiece.h"
-//#include "nineAlmonds.h"
-//#include "magicSquares.h"
 #include "endCondition.h"
+#include "inputProcessing.h"
 #include <vector>
+#include <sstream>
+#include <iostream>
 #include <map>
 
 
 using namespace std;
 
-class abstractGame{
+	typedef enum{SETUP, TURNSTART, FIRSTLOCKED, NEEDPIECE, NEEDLOC, EXTENDEDTURN, ENDTURN, FINISHED}gameState;
 
+// struct of abstract (base) game type. Above are the various states that the game could be in declared in an enum
+
+class abstractGame{
 protected:
-	typedef enum{SETUP, TURNSTART, FIRSTLOCKED, EXTENDEDTURN, ENDTURN, FINISHED}gameState;
+	// stores state
 	gameState state_;
 
+	//stores number of turns (nineAlmonds) or number of uses of undo (magicSquare)
+	int turn_;
+
+	//prevents accidental quitting
+	bool quitGuard_;
+
+	// used for game logic
+	bool validFirst_;
+
+	// used to store points from user input
+	Point start_;
+	Point dest_;
+
+	// the game board in memory
 	map<Point, gamePiece> board_;
+
+	//holds copies of the game board that can be used by undo
 	vector<map<Point, gamePiece>> undoBoards_;
+
+	//list of moves made this turn
+	vector<Point> movesThisTurn_;
+
+	// board dimensions
 	int boardx_, boardy_;
+
+	// for display purposes
 	int maxSymbol_;
 
-	void pieceMover(Point start, Point destination);
-	int getLength(int symbol); //didn't set this up right so that the derived classes would use this method; they use their own copies of the same method
+	//function to move piece from start to destination on board_
+	virtual bool pieceMover(Point start, Point destination);
+
+	
+	Point placeHolder_;
+	virtual void undo()=0;
+
+	// used by magicSquares, but could be abstracted to other games
+	virtual void setBoardDim(int n);
 
 public:
 	abstractGame();
 
-	abstractGame* newGame(int argc, char** argv);
+	//method that can return various types of sub-games
+	abstractGame* newGame(int argc, char* argv[]);
 
 	virtual void print()=0;
 	virtual bool done()=0;
-	virtual void prompt()=0;
+	virtual void prompt();
 	virtual void turn()=0;
+	virtual void listen();
+	virtual gameState getState();
 	virtual endCondition play()=0;
-	
+
+	int maxSymbol();
+
 };
 
 #endif

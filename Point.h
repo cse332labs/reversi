@@ -1,3 +1,8 @@
+//Lab 4 - Nine Almonds and Magic Squares
+//Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu)
+// 5-7-12
+// Point.h
+
 #include "stdafx.h"
 
 #ifndef POINT_H
@@ -13,6 +18,7 @@ struct Point{
 	Point(unsigned int x, unsigned int y);
 	Point();
 	bool operator< (const Point&) const;
+	void set(int x, int y);
 	int x_;
 	int y_;
 };
