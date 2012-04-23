@@ -41,11 +41,10 @@ int main(int argc, char* argv[])
 		return play;
 	}
 	catch(endCondition e)
-	{	
-
+	{	 
 		if(e == QUIT)
 		{
-			delete game;
+			delete game; 
 			return QUIT;
 		}
 	}
