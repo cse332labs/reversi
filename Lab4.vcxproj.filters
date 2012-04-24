@@ -74,5 +74,8 @@
     <ClCompile Include="menus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="magicSquares.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

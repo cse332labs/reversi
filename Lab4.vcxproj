@@ -91,6 +91,7 @@
     <ClCompile Include="gamePiece.cpp" />
     <ClCompile Include="inputProcessing.cpp" />
     <ClCompile Include="Lab4.cpp" />
+    <ClCompile Include="magicSquares.cpp" />
     <ClCompile Include="menus.cpp" />
     <ClCompile Include="nineAlmonds.cpp" />
     <ClCompile Include="Point.cpp" />

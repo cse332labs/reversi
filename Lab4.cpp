@@ -44,6 +44,9 @@ int main(int argc, char* argv[])
 	{	 
 		if(e == QUIT)
 		{
+			game->isQuitting();
+			cout << "Do you want to save? ";
+			game->listen();
 			delete game; 
 			return QUIT;
 		}

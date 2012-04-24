@@ -15,12 +15,13 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include <fstream>
 #include <map>
 
 
 using namespace std;
 
-	typedef enum{SETUP, TURNSTART, FIRSTLOCKED, NEEDPIECE, NEEDLOC, EXTENDEDTURN, ENDTURN, FINISHED}gameState;
+	typedef enum{SETUP, TURNSTART, FIRSTLOCKED, NEEDPIECE, NEEDLOC, EXTENDEDTURN, ENDTURN, FINISHED, QUITTING, BADSTATE}gameState;
 
 // struct of abstract (base) game type. Above are the various states that the game could be in declared in an enum
 
@@ -29,11 +30,14 @@ protected:
 	// stores state
 	gameState state_;
 
+	//stores game Name
+	string name_;
+
 	//stores number of turns (nineAlmonds) or number of uses of undo (magicSquare)
 	int turn_;
 
 	//prevents accidental quitting
-	bool quitGuard_;
+	bool quitGuard_, quitting_, comingBack_;
 
 	// used for game logic
 	bool validFirst_;
@@ -64,11 +68,28 @@ protected:
 	Point placeHolder_;
 	virtual void undo()=0;
 
+	virtual void createSave()=0;
+	virtual void loadSave()=0;
+	virtual void loadSave(string name);
+
+	void loadAlmonds(string in);
+	void loadSquares(string in);
+
+	void noSave();
+
+	void nameChecker();
+
+	gameState intToState(int i);
+
 	// used by magicSquares, but could be abstracted to other games
 	virtual void setBoardDim(int n);
 
 public:
 	abstractGame();
+
+	void setState(gameState s);
+
+	void isQuitting();
 
 	//method that can return various types of sub-games
 	abstractGame* newGame(int argc, char* argv[]);

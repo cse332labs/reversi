@@ -16,6 +16,8 @@ using namespace std;
 void lowerCase(string& s);
 void removePunctuation(string&);
 
+bool isNumber(string s);
+
 // returns length of the string of an int
 int getLength(int symbol);
 

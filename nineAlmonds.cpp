@@ -134,6 +134,11 @@ void nineAlmonds :: turn()
 		state_=TURNSTART;
 		break;
 	}
+	if(comingBack_)
+	{
+		comingBack_=false;
+		cout << "Welcome back to Nine Almonds. Rejoining the game on turn " << turn_ << "." << endl;
+	}
 	print();
 	cout << moves_.str() << endl;
 	prompt();
@@ -216,3 +221,44 @@ ostream& operator<<(ostream &stream, const nineAlmonds &game)
         stream << " x" << endl;
         return stream;
 }
+
+void nineAlmonds :: createSave()
+{
+	ofstream save;
+	// opens the file with the same name as the game being played.
+	save.open (name_ + ".txt");
+	//identifies the save file at the top
+	save << "nineAlmonds" << endl;
+	save << name_ << endl;
+	// begins to print gamestate. The first line contains the turn #, the gameState_, the validfirst bool, 
+	// board diemsions
+	save << turn_ << " " << state_ << " " << validFirst_ << " " << boardx_ << "," << boardy_ << endl;
+	// the second line has the starting point and destination point
+	save << start_.x_ << "," << start_.y_ << " " << dest_.x_ << "," << dest_.y_ << endl;
+
+	save << original_.x_ << "," << original_.y_ << endl;
+
+	save << "BOARD START" << endl;
+
+	for (int i = 0; i < boardx_ ; ++i)
+	{
+		for ( int j = 0; j < boardx_; ++j)
+		{
+			if(board_.count(Point(i, j))==1)
+			{
+				almondPiece almond = almondPiece();
+				save << "(" << i << "," << j << ") " << almond.name_ << " " << almond.symbol_ << endl;
+			}
+		}
+	}
+
+	save << "END" << endl;
+}
+
+void nineAlmonds :: loadSave()
+{
+	abstractGame :: loadSave("nineAlmonds");
+}
+
+
+

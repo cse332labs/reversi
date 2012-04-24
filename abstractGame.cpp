@@ -10,7 +10,9 @@
 #include "inputProcessing.h"
 
 abstractGame::abstractGame()
-	: state_(SETUP), quitGuard_(true), maxSymbol_(1), validFirst_(false) {}
+	: state_(SETUP), quitGuard_(true), quitting_(false), comingBack_(false), maxSymbol_(1), validFirst_(false) 
+{
+}
 
 //basic piecemover for the all games. moves piece at Map[start] to map[finished] 
 // if no piece is there or the destination is full, return false
@@ -24,6 +26,38 @@ bool abstractGame :: pieceMover(Point start, Point destination)
 	}
 	else
 		return false;
+}
+
+void abstractGame :: nameChecker()
+{
+	cout << "What would you like to name this game? ";
+	listen();
+	ifstream name;
+	string gameType;
+
+	name.open(name_ + ".txt");
+
+
+
+	getline(name, gameType);
+
+	lowerCase(gameType);
+	removePunctuation(gameType);
+
+	if(gameType == "ninealmonds")
+	{
+		loadAlmonds(name_);
+		return;
+	}
+	else if(gameType =="magicsquare")
+	{
+		loadSquares(name_);
+		return;
+	}
+	else if(gameType == "reversi")
+	{
+
+	}
 }
 
 
@@ -77,11 +111,13 @@ abstractGame* abstractGame::newGame(int argc, char* argv[])
 		if(gameName == "ninealmonds")
 		{
 			abstractGame* game = new nineAlmonds();
+			game->nameChecker();
 			return game;
 		}
 		else if(gameName == "magicsquare" || gameName == "magicsquares")
 		{
 			abstractGame* game = new magicSquares(size, lowest);
+			game->nameChecker();
 			return game;
 		}
 		return 0;
@@ -103,7 +139,8 @@ gameState abstractGame :: getState()
 // sets board dimensions equal to i x i
 void abstractGame :: setBoardDim(int i)
 {
-	cout << "wut" << endl;
+	boardx_=i;
+	boardy_=i;
 	return;
 }
 
@@ -146,17 +183,20 @@ void abstractGame :: listen()
 	{
 		if(state_==SETUP)
 		{
-			bool num1=true;
-			for(unsigned int i = 0; i < in1.length(); ++i)
+			name_=in1;
+			cout << endl << endl;
+			return;
+		}
+		else if(quitting_)
+		{
+			if(in1 == "yes")
 			{
-				if(!isdigit(in1.at(i)))
-				{
-					num1=false;
-				}
+				this->createSave();
+				return;
 			}
-			if(num1)
+			else
 			{
-				this->setBoardDim(atoi(in1.c_str()));
+				this->noSave();
 				return;
 			}
 		}
@@ -280,4 +320,356 @@ void abstractGame :: listen()
 int abstractGame :: maxSymbol()
 {
 	return maxSymbol_;
+}
+
+void abstractGame :: noSave()
+{
+	ofstream save;
+
+	save.open (name_ + ".txt");
+	save << "NO SAVE DATA" << endl << endl;
+}
+
+void abstractGame :: setState(gameState s)
+{
+	state_ = s;
+}
+
+void abstractGame :: loadSave(string name)
+{
+	ifstream save;
+	string input;
+
+	save.open(name + ".txt");
+
+	getline(save, input);
+
+	lowerCase(input);
+	removePunctuation(input);
+
+	if(input == "ninealmonds")
+	{
+		loadAlmonds(name);
+	}
+	else if(input == "magicsquare" || input == "magicsquares")
+	{
+		loadSquares(name);
+	}
+	else
+	{
+		cout << "Sorry, that's not a valid game file. Please try again." << endl << endl;
+		return;
+	}
+}
+
+void abstractGame :: loadAlmonds(string name)
+{
+	nineAlmonds load = nineAlmonds();
+
+	
+	
+	ifstream save;
+	string input;
+
+	save.open(name + ".txt");
+	getline(save, input);
+	input="";
+	getline(save, input);
+	lowerCase(input);
+	removePunctuation(input);
+	load.name_=name;
+	input = "";
+
+	getline(save, input);
+	lowerCase(input);
+	removePunctuation(input);
+
+	istringstream ins(input);
+
+	string in1, in2, in3, in4, in5;
+	int int1, int2, int3, int4, int5;
+	if(!(ins >> in1))
+	{
+		cout << "Sorry, that's not a valid game file. You're missing the turn value" << endl << endl;
+		return;
+	}
+	if(!(ins >> in2))
+	{
+		cout << "Sorry, that's not a valid game file. You're missing the state value." << endl << endl;
+		return;
+	}
+	if(!(ins >> in3))
+	{
+		cout << "Sorry, that's not a valid game file. You're missing the validFirst boolean" << endl << endl;
+		return;
+	}
+	if(!(ins >> in4))
+	{
+		cout << "Sorry, that's not a valid game file. You're missing the Board X" << endl << endl;
+		return;
+	}
+	if(!(ins >> in5))
+	{
+		cout << "Sorry, that's not a valid game file. You're missing the Board Y" << endl << endl;
+		return;
+	}
+
+	gameState state = intToState(atoi(in2.c_str()));
+	bool check1 = isNumber(in1);
+	bool check2 = ((isNumber(in2)) && (state != BADSTATE));
+	bool check3 = isNumber(in3);
+	bool check4 = isNumber(in4);
+	bool check5 = isNumber(in5);
+	if(!(check1 && check2 && check3 && check4 && check5))
+	{
+		cout << "One of your items failed its validity check in line 3 [The line with 5 numers]" << endl << endl;
+		return;
+	}
+	int1 = atoi(in1.c_str());
+	int3 = atoi(in3.c_str());
+	int4 = atoi(in4.c_str());
+	int5 = atoi(in5.c_str());
+	bool validFirst;
+	if(int3 == 0)
+	{
+		validFirst=false;
+	}
+	else if (int3 == 1)
+	{
+		validFirst=true;
+	}
+	else
+	{
+		cout << "Sorry, that's not a valid game file. Your ValidFirst was not a 0 or 1" << endl << endl;
+		return;
+	}
+
+	load.turn_=int1;
+	load.state_=state;
+	load.validFirst_=validFirst;
+	load.boardx_=int4;
+	load.boardy_=int5;
+
+	input="";
+
+	getline(save, input);
+
+	lowerCase(input);
+	removePunctuation(input);
+	
+	istringstream ins2(input);
+
+	in1 = "", in2="", in3="", in4="", in5="";
+
+	if(!(ins2 >> in1))
+	{
+		cout << "Sorry, that's not a valid game file. You're missing the Start Point X." << endl << endl;
+		return;
+	}
+	if(!(ins2 >> in2))
+	{
+		cout << "Sorry, that's not a valid game file. You're missing the Start Point Y." << endl << endl;
+		return;
+	}
+	if(!(ins2 >> in3))
+	{
+		cout << "Sorry, that's not a valid game file. You're missing Destination X." << endl << endl;
+		return;
+	}
+	if(!(ins2 >> in4))
+	{
+		cout << "Sorry, that's not a valid game file. You're missing Destination Y." << endl << endl;
+		return;
+	}
+
+	check1 = isNumber(in1);
+	check2 = isNumber(in2);
+	check3 = isNumber(in3);
+	check4 = isNumber(in4);
+	if(!(check1 && check2 && check3 && check4))
+	{
+		cout << "Sorry, that's not a valid game file. One of your start or end points failed validity check." << endl << endl;
+		return;
+	}
+	int1 = atoi(in1.c_str());
+	int2 = atoi(in2.c_str());
+	int3 = atoi(in3.c_str());
+	int4 = atoi(in4.c_str());
+
+	Point start = Point(int1, int2);
+	Point dest = Point(int3, int4);
+
+	load.start_=start;
+	load.dest_=dest;
+
+	input = "";
+
+	getline(save, input);
+
+	lowerCase(input);
+	removePunctuation(input);
+
+	in1="", in2="", in3="", in4="";
+
+	istringstream ins3(input);
+
+	if(!(ins3>>in1))
+	{
+		cout << "Sorry, that's not a valid game file. You're missing the Original Point X." << endl << endl;
+		return;
+	}
+	if(!(ins3>>in2))
+	{
+		cout << "Sorry, that's not a valid game file. you're missing the Original Point Y." << endl << endl;
+		return;
+	}
+	
+	check1 = isNumber(in1);
+	check2 = isNumber(in2);
+
+	if(!(check1 && check2))
+	{
+		cout << "Sorry, that's not a valid game file. Original Point failed validity." << endl << endl;
+		return;
+	}
+	int1 = atoi(in1.c_str());
+	int2 = atoi(in2.c_str());
+
+	Point original = Point(int1, int2);
+	load.original_=original;
+
+	input = "";
+	
+	getline(save, input);
+	lowerCase(input);
+	removePunctuation(input);
+
+	if(input != "board start")
+	{
+		cout << "Sorry, that's not a valid game file. The Board is not started properly." << endl << endl;
+		return; 
+	}
+
+	input="";
+
+	map<Point, gamePiece> board;
+
+	bool boardDone = false;
+
+	input="";
+	getline(save, input);
+	lowerCase(input);
+	removePunctuation(input);
+
+	while(!boardDone)
+	{
+
+
+	
+
+	istringstream piece(input);
+
+	string xval, yval, name, symbol;
+	int xint, yint;
+	
+	if(!(piece >> xval))
+	{
+		cout << "Sorry, that's not a valid game file. You're missing an X value for a Piece. It has been skipped" << endl << endl;
+	}
+	if(!(piece >> yval))
+	{
+		cout << "Sorry, that's not a valid game file. You're missing a Y value for a Piece. It has been skipped." << endl << endl;
+	}
+	if(!(piece >> name))
+	{
+		cout << "Sorry, that's not a valid game file. You're missing the name for a piece. It has been skipped." << endl << endl;
+	}
+	if(!(piece >> symbol))
+	{
+		cout << "Sorry, that's not a valid game file. You're missing the symbol for a piece. It has been skipped." << endl << endl;
+	}
+
+
+
+	check1 = isNumber(xval);
+	check2 = isNumber(yval);
+	check3 = (name == "almond");
+	check4 = (symbol == "a");
+
+	xint = atoi(xval.c_str());
+	yint = atoi(yval.c_str());
+
+	if((xint <0 || yint < 0) || (xint > load.boardx_ || yint > load.boardy_))
+	{
+		cout << "A piece is out of bounds for this board. It has been skipped" << endl;
+		break;
+	}
+
+	if(!(check1 && check2 && check3 && check4))
+	{
+		cout <<"Sorry, that's not a valid game file. One of your pieces failed a validity check." << endl << endl;
+		return; 
+	}
+
+	almondPiece almond = almondPiece();
+
+	board[Point(xint, yint)] = almond;
+
+	input="";
+	getline(save, input);
+	lowerCase(input);
+	removePunctuation(input);
+
+	if(input == "end")
+	{
+		boardDone=true;
+	}
+
+	}
+
+	load.board_=board;
+	load.comingBack_=true;
+	*this=load;
+	
+}
+
+void abstractGame :: loadSquares(string name)
+{
+	ifstream save;
+	string input;
+
+	save.open(name + ".txt");
+	getline(save, input);
+}
+
+gameState abstractGame :: intToState(int i)
+{
+	switch(i)
+	{
+	case 0:
+		return SETUP;
+	case 1:
+		return TURNSTART;
+	case 2:
+		return FIRSTLOCKED;
+	case 3:
+		return NEEDPIECE;
+	case 4:
+		return NEEDLOC;
+	case 5:
+		return EXTENDEDTURN;
+	case 6:
+		return ENDTURN;
+	case 7:
+		return FINISHED;
+	case 8: 
+		return QUITTING;
+	default:
+		return BADSTATE;
+	}
+}
+
+void abstractGame :: isQuitting()
+{
+	quitting_=true;
 }

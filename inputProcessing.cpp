@@ -38,3 +38,16 @@ int getLength(int symbol)
         intToStr >> symbolStr;
         return symbolStr.size();
 }
+
+bool :: isNumber(string s)
+{
+	bool num=true;
+	for(int i =0; i<s.length();++i)
+	{
+		if(!isdigit(s.at(i)))
+		{
+			num=false;
+		}
+	}
+	return num;
+}

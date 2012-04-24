@@ -48,6 +48,9 @@ protected:
 	//takes piece off the board and makes it available again. increments turn_
 	virtual void undo(numberSquare piece);
 
+	virtual void createSave();
+	virtual void loadSave();
+
 	void generateTiles(int lowest, int dim);
 
 	bool checkTile(int value);

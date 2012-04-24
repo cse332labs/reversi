@@ -426,3 +426,13 @@ void magicSquares :: pieceAdd(numberSquare &piece, Point location)
 	}
 	availablePieces_=availUpdated;
 }
+
+void magicSquares :: createSave()
+{
+	return;
+}
+
+void magicSquares :: loadSave()
+{
+	abstractGame :: loadSave("magicSquares");
+}

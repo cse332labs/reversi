@@ -15,6 +15,7 @@ using namespace std;
 
 class nineAlmonds : public abstractGame {
 	friend ostream& operator<<(ostream&, const nineAlmonds&);
+	friend void abstractGame :: loadAlmonds(string name);
 private:
 	// displays moves in ostringstream form
 	ostringstream moves_;
@@ -28,9 +29,11 @@ private:
 
 	virtual void undo();
 
+	virtual void createSave();
+	void loadSave();
+
 public:
 	nineAlmonds();
-
 
 	virtual void print();
 	virtual bool done();
