@@ -429,7 +429,66 @@ void magicSquares :: pieceAdd(numberSquare &piece, Point location)
 
 void magicSquares :: createSave()
 {
-	return;
+	ofstream save;
+
+	save.open (name_ + ".txt");
+
+	bool finished = false;
+	int line = 1;
+
+	while(!finished)
+	{
+		switch(line)
+		{
+		case 1:
+			save << "magicSquare";
+			break;
+		case 2:
+			save << name_;
+			break;
+		case 3:
+			save << turn_ << " " << state_ << " " << validFirst_ << " " << boardx_ << "," << boardy_;
+			break;
+		case 4:
+			save << start_.x_ << "," << start_.y_ << " " << dest_.x_ << "," <<  dest_.y_;
+			break;
+		case 5:
+			save << chosenTile_ << " " << lowest_ << maxAxis_;
+			break;
+		case 6:
+			for(unsigned int i = 0; i < availablePieces_.size(); ++i)
+			{
+				save << availablePieces_.at(i).symbol_ << " ";
+			}
+			cout << endl;
+			break;
+		case 7:
+			save << "START";
+			break;
+		default:
+			for(int i = 0; i < boardx_; ++i)
+			{
+				for(int j = 0; j < boardy_; ++j)
+				{
+					Point temp = Point(i,j);
+					if(board_.count(temp)==1)
+					{
+						numberSquare piece = numberSquare(board_.at(temp).value_);
+
+						save << i << "," << j << " " << piece.symbol_ << endl;
+						++line;
+					}
+				}
+			}
+			save << "END";
+			finished=true;
+			break;
+		}
+		save << endl;
+		++line;
+	}
+
+
 }
 
 void magicSquares :: loadSave()
