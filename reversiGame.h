@@ -15,6 +15,7 @@ private:
 	static string player2 = "";
 public:
 	reversiGame();
+	virtual void print();
 
 }
 

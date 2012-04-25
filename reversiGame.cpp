@@ -70,3 +70,8 @@ ostream& operator<<(ostream &stream, const reversiGame &game)
 
         return stream;
 }
+
+void reversiGame :: print()
+{
+	cout << *this << endl;
+}
