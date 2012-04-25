@@ -21,6 +21,7 @@ struct gamePiece
 	string name_;
 	string symbol_;
 	int value_;
+	bool TF_;
 
 	bool operator==(const gamePiece& piece);
 
@@ -52,5 +53,11 @@ struct numberSquare : gamePiece
 	//for sorting
 	bool const operator<(const numberSquare &other);
 };
+
+struct reversiPiece : gamePiece
+{
+	reversiPiece(); //default is true
+	reversiPiece(bool TF);
+}
 
 #endif
