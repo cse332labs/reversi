@@ -5,6 +5,8 @@
 
 #include "abstractGame.h"
 #include <vector>
+#include <string>
+#include <iostream>
 
 using namespace std; 
 
@@ -18,6 +20,6 @@ public:
 	virtual void print();
 	virtual bool done();
 
-}
+};
 
 #endif

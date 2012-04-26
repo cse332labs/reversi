@@ -64,7 +64,6 @@ protected:
 	//function to move piece from start to destination on board_
 	virtual bool pieceMover(Point start, Point destination);
 
-	
 	Point placeHolder_;
 	virtual void undo()=0;
 

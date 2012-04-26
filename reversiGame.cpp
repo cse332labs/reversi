@@ -1,10 +1,11 @@
 #include "stdafx.h"
 #include "reversiGame.h"
+#include <iostream>
 
 using namespace std;
 
-//constructs nineAlmonds using the base class constructor and its own specifications. fills board
-// for proper nine almonds game.
+//constructs reversiGame using the base class constructor and its own specifications. fills board
+// for proper reversi game.
 reversiGame::reversiGame()
 	:abstractGame()
 {
