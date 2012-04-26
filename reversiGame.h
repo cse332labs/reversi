@@ -16,6 +16,7 @@ private:
 public:
 	reversiGame();
 	virtual void print();
+	virtual bool done();
 
 }
 

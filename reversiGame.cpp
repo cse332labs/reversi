@@ -75,3 +75,24 @@ void reversiGame :: print()
 {
 	cout << *this << endl;
 }
+
+bool reversiGame :: done()
+{
+	bool empty = true;
+	Point key = Point();
+	for(int i = 0; i <5; ++i)
+	{
+		for (int j=0; j<5; ++j)
+		{
+			key.set(i, j);
+			if(board_.count(key) == 1 && (i != 2 || j != 2))
+				empty = false;
+		}
+	}
+	if(empty && (board_.))
+	{
+		print();
+		return true;
+	}
+	return false;
+}

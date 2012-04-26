@@ -27,7 +27,7 @@ almondPiece::almondPiece()
 
 reversiPiece::reversiPiece()
 {
-	name_="T";
+	name_="Black";
 	symbol_="X";
 	TF_=true;
 }
