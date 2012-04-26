@@ -25,6 +25,26 @@ almondPiece::almondPiece()
 	symbol_="A";
 }
 
+reversiPiece::reversiPiece()
+{
+	name_="T";
+	symbol_="X";
+	TF_=true;
+}
+
+reversiPiece::reversiPiece(bool TF)
+{
+	if(TF == true){
+		name_="Black";
+		symbol_="X";
+		TF_=true;
+	}else{
+		name_="White";
+		symbol_="O";
+		TF_=false;
+	}
+}
+
 //creates a numberSquare named "NumberTile" and sets its variables to value
 numberSquare::numberSquare(unsigned int value)
 {
