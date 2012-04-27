@@ -15,6 +15,8 @@
 
 using namespace std;
 
+typedef enum{WHITE, BLACK}color;
+
 //declarations for basic gamepiece
 struct gamePiece
 {
@@ -59,11 +61,5 @@ struct reversiPiece : gamePiece
 	reversiPiece(); //default is true
 	reversiPiece(bool TF);
 };
-
-struct reversiPiece : gamePiece
-{
-	reversiPiece(); //default is true
-	reversiPiece(bool TF);
-}
 
 #endif

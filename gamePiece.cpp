@@ -30,6 +30,7 @@ reversiPiece::reversiPiece()
 	name_="Black";
 	symbol_="X";
 	TF_=true;
+	value_ = BLACK;
 }
 
 reversiPiece::reversiPiece(bool TF)
@@ -38,10 +39,12 @@ reversiPiece::reversiPiece(bool TF)
 		name_="Black";
 		symbol_="X";
 		TF_=true;
+		value_ = BLACK;
 	}else{
 		name_="White";
 		symbol_="O";
 		TF_=false;
+		value_ = WHITE;
 	}
 }
 
