@@ -4,6 +4,7 @@
 // endCondition.h
 
 #include "stdafx.h"
+
 #ifndef ENDCONDITION_H
 #define ENDCONDITION_H
 
