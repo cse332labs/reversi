@@ -30,3 +30,4 @@ _ReSharper*/
 *.opensdf
 *.sdfbak
 ipch/
+*.orig

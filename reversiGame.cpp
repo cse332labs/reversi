@@ -195,7 +195,6 @@ endCondition reversiGame :: play()
 }
 
 
-
 //abstract version of undo(), retreives most recent piece from usedPieces_ (i.e. the most recent move)
 // and calls undo(numberSquare piece) on it (below)
 void reversiGame :: undo()
@@ -209,7 +208,7 @@ void reversiGame :: createSave()
 
 void reversiGame :: loadSave()
 {
-	abstractGame :: loadSave("reversigame");
+	abstractGame :: loadSave("reversi");
 }
 
 bool reversiGame:: checkMove()
