@@ -10,7 +10,7 @@
 #include "inputProcessing.h"
 
 abstractGame::abstractGame()
-	: state_(SETUP), quitGuard_(true), quitting_(false), comingBack_(false), maxSymbol_(1), validFirst_(false) 
+	: state_(SETUP), quitGuard_(true), quitting_(false), comingBack_(false), maxSymbol_(1), validFirst_(false), self(0) 
 {
 }
 
@@ -67,45 +67,35 @@ void abstractGame :: nameChecker()
 // the pointer is null, otherwise it is to the appropriate game type.
 abstractGame* abstractGame::newGame(int argc, char* argv[])
 {
-	enum{PROGRAMNAME, GAMENAME, SIZE, LOWEST};
-	string gameName;
+	enum{PROGRAMNAME, GAMENAME, FIRSTVAR, SECONDVAR};
+	string gameName, firstvar, secondvar;
 	int lowest = 1;
 	int size = 3;
-	switch(argc)
-	{
-	case 4:
-	{
-		istringstream lowestString(argv[LOWEST]);
 
-		lowestString>>lowest;
-	}
-	case 3:
+	gamename = argv[GAMENAME];
+	lowerCase(gamename);
+	removePunctuation(gamename);
+
+	if(!(argc == 4 || argc == 2))
 	{
-		istringstream sizeString(argv[SIZE]);
-		if(sizeString >> size)
-		{
-			if(size <= 0)
-			{
-				cout << "That isn't a valid size. Exiting Program";
-				return 0;
-			}
-		}
-		else
-		{
-			cout << "That isn't a valid size. Exiting Program";
-			return 0;
-		}
-	}
-	case 2:
-	{
-		gameName = argv[GAMENAME];
-		lowerCase(gameName);
-		removePunctuation(gameName);
-		break;
-	}
-	default:
 		return 0;
 	}
+
+	if(argc == 4)
+	{
+		firstvar = argv[FIRSTVAR];
+		secondvar = argv[SECONDVAR];
+	}
+
+	if(gamename == "magicsquare" || gamename == "magicsquares")
+	{
+		
+	}
+	else if (gamename == "reversi")
+	{
+
+	}
+	
 
 	try
 	{
