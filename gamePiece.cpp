@@ -48,6 +48,21 @@ reversiPiece::reversiPiece(bool TF)
 	}
 }
 
+void almondPiece :: flip()
+{
+	return;
+}
+
+void numberSquare :: flip()
+{
+	return;
+}
+
+void gamePiece :: flip()
+{
+
+}
+
 void reversiPiece :: flip()
 {
 	if(TF_ == true)

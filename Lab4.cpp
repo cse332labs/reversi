@@ -28,7 +28,23 @@ int main(int argc, char* argv[])
 {
 	abstractGame* game = 0;
 
-	game = game->newGame(argc, argv);
+	try
+	{
+		try
+		{
+			game->instance(argc, argv);
+		}
+		catch(endCondition)
+		{
+			cout << "There was an uknown error involving instancing." <<endl;
+			return INSTANCEFAIL;
+		}
+	}
+	catch(bad_alloc)
+	{
+		cout << "Failed to allocate memory." << endl;
+	}
+
 	if(!game)
 	{
 		return usage();

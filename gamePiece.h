@@ -28,12 +28,15 @@ struct gamePiece
 	bool operator==(const gamePiece& piece);
 
 	gamePiece();
+
+	virtual void flip();
 };
 
 // the almondpiece has no special variables, but the default constructor knows to assing the proper name and symbol
 struct almondPiece : gamePiece
 {
 	almondPiece();
+	virtual void flip();
 	bool operator==(const almondPiece& piece);
 };
 
@@ -46,6 +49,8 @@ struct numberSquare : gamePiece
 	numberSquare(unsigned int value);
 	//default constructor value = 0
 	numberSquare();
+
+	virtual void flip();
 
 	bool operator==(const numberSquare& piece);
 
@@ -61,7 +66,7 @@ struct reversiPiece : gamePiece
 	reversiPiece(); //default is true
 	reversiPiece(bool TF);
 
-	void flip();
+	virtual void flip();
 };
 
 #endif

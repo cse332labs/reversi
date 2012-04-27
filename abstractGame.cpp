@@ -9,9 +9,13 @@
 #include "magicSquares.h"
 #include "inputProcessing.h"
 
+gameState abstractGame :: state_ = SETUP;
+abstractGame* abstractGame :: self_ = 0;
+
 abstractGame::abstractGame()
-	: state_(SETUP), quitGuard_(true), quitting_(false), comingBack_(false), maxSymbol_(1), validFirst_(false), self(0) 
+	: quitGuard_(true), quitting_(false), comingBack_(false), maxSymbol_(1), validFirst_(false) 
 {
+	
 }
 
 //basic piecemover for the all games. moves piece at Map[start] to map[finished] 
@@ -37,8 +41,6 @@ void abstractGame :: nameChecker()
 
 	name.open(name_ + ".txt");
 
-
-
 	getline(name, gameType);
 
 	lowerCase(gameType);
@@ -58,6 +60,10 @@ void abstractGame :: nameChecker()
 	{
 		loadReversi(name_);
 		return;
+	}
+	else
+	{
+
 	}
 }
 
@@ -109,7 +115,7 @@ void abstractGame::newGame(int argc, char* argv[])
 		}
 		else if (gamename == "reversi" && argc == 4)
 		{
-			self_ = new reversiGame(firstvar, secondvar);
+
 			self_->nameChecker();
 		}
 		else
@@ -1036,6 +1042,11 @@ void abstractGame :: loadSquares(string name)
 	{
 		throw BADSAVE;
 	}
+
+}
+
+void abstractGame :: loadReversi(string name)
+{
 
 }
 

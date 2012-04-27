@@ -24,6 +24,7 @@ protected:
 	void pieceFlipper(Point p);
 
 	void lineFlipper(vector<Point> points);
+	bool lineCheck(vector<Point> points);
 
 virtual void createSave();
 	virtual void loadSave();

@@ -31,9 +31,9 @@ protected:
 	static gameState state_;
 
 	//stores game Name
-	static string name_;
+	string name_;
 
-	static abstractGame* self_;
+
 
 	//stores number of turns (nineAlmonds) or number of uses of undo (magicSquare)
 	int turn_;
@@ -42,7 +42,7 @@ protected:
 	bool quitGuard_, quitting_, comingBack_;
 
 	// used for game logic
-	static bool validFirst_;
+	bool validFirst_;
 
 	// used to store points from user input
 	Point start_;
@@ -93,6 +93,8 @@ protected:
 
 public:
 	abstractGame();
+
+	static abstractGame* self_;
 
 	void setState(gameState s);
 
