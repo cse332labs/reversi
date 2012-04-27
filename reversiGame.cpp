@@ -194,7 +194,7 @@ endCondition reversiGame :: play()
 	return SUCCESS;
 }
 
-}
+
 
 //abstract version of undo(), retreives most recent piece from usedPieces_ (i.e. the most recent move)
 // and calls undo(numberSquare piece) on it (below)
@@ -210,24 +210,6 @@ void reversiGame :: createSave()
 void reversiGame :: loadSave()
 {
 	abstractGame :: loadSave("reversigame");
-}
-
-//repeatedly calls turn() until done() evaulates true. Then returns SUCCESS.
-endCondition reversiGame :: play()
-{
-	bool finished = false;
-	while(!finished)
-	{
-		this->turn();
-		if(this->done())
-		{
-
-			finished = true;
-		}
-	}
-
-	cout << "The game has been won. Exiting game now." << endl << endl;
-	return SUCCESS;
 }
 
 bool reversiGame:: checkMove()
