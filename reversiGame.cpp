@@ -4,20 +4,41 @@
 
 using namespace std;
 
+const int defaultSize = 8;
+
 //constructs reversiGame using the base class constructor and its own specifications. fills board
 // for proper reversi game.
 reversiGame::reversiGame()
 	:abstractGame()
 {
-	boardx_ = 8;
-	boardy_ = 8;
-	for(int i=0; i < boardx_ ; ++i)
-	{
-		for(int j=0; j < boardy_; ++j)
-		{
-			//define initial pieces
-		}
-	}
+	this->setBoardDim(defaultSize);
+
+	//define initial pieces
+	reversiPiece black = reversiPiece();
+	reversiPiece white = reversiPiece(false);
+	Point ll = Point(3, 3);
+	Point lr = Point(3, 4);
+	Point ul = Point(3, 4);
+	Point ur = Point(4, 4);
+	board_[ll]=white;
+	board_[lr]=black;
+	board_[ul]=white;
+	board_[ur]=black;
+
+
+}
+
+// sets the board dimensions. 
+void reversiGame :: setBoardDim(int n)
+{
+	boardx_=n;
+	boardy_=n;
+}
+
+// calls prompt from abstractGame
+void reversiGame :: prompt()
+{
+	abstractGame :: prompt();
 }
 
 ostream& operator<<(ostream &stream, const reversiGame &game)
@@ -79,7 +100,7 @@ void reversiGame :: print()
 
 bool reversiGame :: done()
 {
-	bool empty = true;
+/*	bool empty = true;
 	Point key = Point();
 	for(int i = 0; i <5; ++i)
 	{
@@ -90,10 +111,10 @@ bool reversiGame :: done()
 				empty = false;
 		}
 	}
-	if(empty && (board_.))
+	if(empty && (board_))
 	{
 		print();
 		return true;
-	}
+	} */
 	return false;
 }

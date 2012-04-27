@@ -60,10 +60,5 @@ struct reversiPiece : gamePiece
 	reversiPiece(bool TF);
 };
 
-struct reversiPiece : gamePiece
-{
-	reversiPiece(); //default is true
-	reversiPiece(bool TF);
-}
 
 #endif
