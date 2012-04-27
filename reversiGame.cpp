@@ -287,6 +287,7 @@ void reversiGame :: lineFlipper(vector<Point> points)
 	vector<Point> toFlip;
 	
 	bool stillValid = true;
+	Point prevPiece;
 
 	int i = 0;
 	while(stillValid)
@@ -298,7 +299,10 @@ void reversiGame :: lineFlipper(vector<Point> points)
 		}
 		else
 		{
-
+			if(i != 0)
+			{
+				
+			}
 		}
 		++i;
 	}

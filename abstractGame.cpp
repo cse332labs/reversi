@@ -65,10 +65,11 @@ void abstractGame :: nameChecker()
 // returns a pointer of AbstractGame type that is based off the string in argv[1]
 // if there are improper argument numbers (or the argv[1] is not a valid game name)
 // the pointer is null, otherwise it is to the appropriate game type.
-abstractGame* abstractGame::newGame(int argc, char* argv[])
+void abstractGame::newGame(int argc, char* argv[])
 {
 	enum{PROGRAMNAME, GAMENAME, FIRSTVAR, SECONDVAR};
-	string gameName, firstvar, secondvar;
+	string gamename, firstvar, secondvar;
+
 	int lowest = 1;
 	int size = 3;
 
@@ -78,47 +79,59 @@ abstractGame* abstractGame::newGame(int argc, char* argv[])
 
 	if(!(argc == 4 || argc == 2))
 	{
-		return 0;
+		throw BADARGC;
 	}
 
 	if(argc == 4)
 	{
-		firstvar = argv[FIRSTVAR];
+
 		secondvar = argv[SECONDVAR];
-	}
 
-	if(gamename == "magicsquare" || gamename == "magicsquares")
-	{
-		
-	}
-	else if (gamename == "reversi")
-	{
+		lowerCase(secondvar);
 
+		removePunctuation(secondvar);
+	}
+	if(argc > 2)
+	{
+		firstvar = argv[FIRSTVAR];
+		lowerCase(firstvar);
+		removePunctuation(firstvar);
 	}
 	
-
 	try
 	{
-		if(gameName == "ninealmonds")
+		if(gamename == "magicsquare" || gamename == "magicsquares" && argc == 4)
 		{
-			abstractGame* game = new nineAlmonds();
-			game->nameChecker();
-			return game;
+			int size = atoi(firstvar.c_str());
+			int lowest = atoi(secondvar.c_str());
+			self_ = new magicSquares(size, lowest);
+			self_->nameChecker();
 		}
-		else if(gameName == "magicsquare" || gameName == "magicsquares")
+		else if (gamename == "reversi" && argc == 4)
 		{
-			abstractGame* game = new magicSquares(size, lowest);
-			game->nameChecker();
-			return game;
+			self_ = new reversiGame(firstvar, secondvar);
+			self_->nameChecker();
 		}
-		return 0;
-
+		else
+		{
+			self_ = new nineAlmonds();
+			self_->nameChecker();
+		}
 	}
 	catch (bad_alloc ba)
 	{
 		cout << "Failed to allocate memory. " << ba.what() << endl;
-		return 0;
+		throw BADMEM;
 	}
+}
+
+void abstractGame :: instance(int argc, char* argv[])
+{
+	if(self_ != 0)
+	{
+		throw INSTANCEFAIL;
+	}
+	newGame(argc, argv);
 }
 
 // state accessor
