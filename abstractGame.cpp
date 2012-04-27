@@ -260,6 +260,18 @@ void abstractGame :: listen()
 							}
 						}
 						break;
+					case WHITETURN:
+						if(board_.count(p)==0)
+						{
+							dest_=p;
+						}
+						break;
+					case BLACKTURN:
+						if(board_.count(p)==0)
+						{
+							dest_=p;
+						}
+						break;
 					default:
 						cout << "You can't choose a piece right now. Try again later" << endl;
 					}

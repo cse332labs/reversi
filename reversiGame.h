@@ -13,9 +13,14 @@ using namespace std;
 class reversiGame : public abstractGame {
 	friend ostream& operator<<(ostream &stream, const reversiGame &game);
 private:
-	static const string playerB_;
-	static const string playerW_;
+	string playerB_;
+	string playerW_;
+
+	int Bcount_, Wcount_;
+
 	bool checkMove();
+	bool addPiece();
+
 public:
 	reversiGame();
 
@@ -25,7 +30,6 @@ public:
 	virtual void prompt();
 	virtual void print();
 	virtual bool done();
-	virtual void prompt();
 	virtual void turn();
 	virtual endCondition play();
 };
