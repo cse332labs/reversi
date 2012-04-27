@@ -48,6 +48,24 @@ reversiPiece::reversiPiece(bool TF)
 	}
 }
 
+void reversiPiece :: flip()
+{
+	if(TF_ == true)
+	{
+		name_="White";
+		symbol_="O";
+		TF_=false;
+		value_ = WHITE;
+	}
+	else
+	{
+		name_="Black";
+		symbol_="X";
+		TF_=true;
+		value_ = BLACK;
+	}
+}
+
 //creates a numberSquare named "NumberTile" and sets its variables to value
 numberSquare::numberSquare(unsigned int value)
 {

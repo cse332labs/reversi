@@ -42,7 +42,7 @@ int getLength(int symbol)
 bool :: isNumber(string s)
 {
 	bool num=true;
-	for(int i =0; i<s.length();++i)
+	for(unsigned int i =0; i<s.length();++i)
 	{
 		if(!isdigit(s.at(i)))
 		{

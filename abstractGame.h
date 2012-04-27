@@ -74,6 +74,7 @@ protected:
 
 	void loadAlmonds(string in);
 	void loadSquares(string in);
+	void loadReversi(string in);
 
 	void noSave();
 

@@ -194,9 +194,6 @@ endCondition reversiGame :: play()
 	return SUCCESS;
 }
 
-
-//abstract version of undo(), retreives most recent piece from usedPieces_ (i.e. the most recent move)
-// and calls undo(numberSquare piece) on it (below)
 void reversiGame :: undo()
 {
 }
@@ -213,16 +210,96 @@ void reversiGame :: loadSave()
 
 bool reversiGame:: checkMove()
 {
-	bool firstCheck = false;
-	int offset = 1;
-	for(int i = dest_.y_+1; i < boardy_; ++ i)
-	{
-		Point temp = Point(dest_.x_, i);
-	}
-	return false;
+	bool availableMove = false;
 }
 
 bool reversiGame::addPiece()
 {
-	return true;
+	bool validMove = true;
+
+	if(board_.count(dest_)==1)
+	{
+		validMove = false;
+	}
+
+	if(checkMove())
+	{
+		if(BLACKTURN)
+		{
+			reversiPiece black = reversiPiece(true);
+			board_[dest_] = black;
+			pieceFlipper(dest_);
+			return true;
+		}
+		else if(WHITETURN)
+		{
+			reversiPiece white = reversiPiece(false);
+			board_[dest_] = white;
+			pieceFlipper(dest_);
+			return true;
+		}
+		else
+			return false;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void reversiGame :: pieceFlipper(Point p)
+{
+	vector<Point> up, upright, right, downright, down, downleft, left, upleft;
+
+	for(int offset = 0; offset < boardx_; ++offset)
+	{
+		up.push_back(Point(p.x_, p.y_+offset));
+		upright.push_back(Point(p.x_+offset, p.y_+offset));
+		right.push_back(Point(p.x_+offset, p.y_);
+		downright.push_back(Point(p.x_+offset, p.y_-offset));
+		down.push_back(Point(p.x_, p.y_-offset));
+		downleft.push_back(Point(p.x_-offset, p.y_ - offset));
+		left.push_back(Point(p.x_-offset, p.y_));
+		upleft.push_back(Point(p.x_-offset, p.y_+offset));
+	}
+
+	lineFlipper(up);
+	lineFlipper(upright);
+	lineFlipper(right);
+	lineFlipper(downright);
+	lineFlipper(down);
+	lineFlipper(downleft);
+	lineFlipper(left);
+	lineFlipper(upleft);
+}
+
+void reversiGame :: lineFlipper(vector<Point> points)
+{
+	int size = points.size();
+	bool isBlackTurn = false;
+
+	if(state_==BLACKTURN)
+	{
+		isBlackTurn = true;
+	}
+
+
+	vector<Point> toFlip;
+	
+	bool stillValid = true;
+
+	int i = 0;
+	while(stillValid)
+	{
+		Point temp = points.at(i);
+		if(board_.count(temp)==0 || temp.x_ >= boardx_ || temp.y_ >= boardy_)
+		{
+			stillValid = false;
+		}
+		else
+		{
+
+		}
+		++i;
+	}
 }

@@ -60,6 +60,8 @@ struct reversiPiece : gamePiece
 {
 	reversiPiece(); //default is true
 	reversiPiece(bool TF);
+
+	void flip();
 };
 
 #endif

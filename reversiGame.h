@@ -19,7 +19,11 @@ protected:
 	int Bcount_, Wcount_;
 
 	bool checkMove();
+
 	bool addPiece();
+
+	void pieceFlipper(Point p);
+	void lineFlipper(vector<Point> points);
 
 virtual void createSave();
 	virtual void loadSave();
