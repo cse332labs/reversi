@@ -15,12 +15,14 @@ class reversiGame : public abstractGame {
 private:
 	static string player1;
 	static string player2;
+	bool checkMove();
 public:
 	reversiGame();
 	virtual void print();
 	virtual bool done();
 	virtual void prompt();
 	virtual void turn();
+	virtual endCondition play();
 };
 
 #endif

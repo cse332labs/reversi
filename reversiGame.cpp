@@ -124,7 +124,10 @@ void reversiGame :: turn()
 			cout << "You may make moves by jumping one almond over another, removing the jumped piece. Use a square's coordinate point to select it."<< endl;
 			state_=TURNSTART;
 			break;
-		
+		case ENDTURN:
+			undoBoards_.push_back(board_);
+			state_=TURNSTART;
+			break;
 	}
 	
 	isBlackTurn = !isBlackTurn;
@@ -132,4 +135,33 @@ void reversiGame :: turn()
 	prompt();
 	listen();
 
+}
+
+endCondition reversiGame :: play()
+{
+	bool finished = false;
+	while(!finished)
+	{
+		this->turn();
+		if(this->done())
+		{
+
+			finished = true;
+		}
+	}
+
+	cout << "Congratulations! You completed the game! Exiting game now." << endl << endl;
+	return SUCCESS;
+}
+
+bool reversiGame:: checkMove()
+{
+	bool 
+	bool firstCheck = false;
+	int offset = 1;
+	for(int i = dest_.y_+1; i < boardy_; ++ i)
+	{
+		Point temp = Point(dest_.x_, i);
+		if(
+	}
 }
