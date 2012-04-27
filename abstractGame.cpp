@@ -7,6 +7,7 @@
 #include "abstractGame.h"
 #include "nineAlmonds.h"
 #include "magicSquares.h"
+#include "reversiGame.h"
 #include "inputProcessing.h"
 
 abstractGame::abstractGame()
@@ -117,6 +118,12 @@ abstractGame* abstractGame::newGame(int argc, char* argv[])
 		else if(gameName == "magicsquare" || gameName == "magicsquares")
 		{
 			abstractGame* game = new magicSquares(size, lowest);
+			game->nameChecker();
+			return game;
+		}
+		else if(gameName == "reversi" || gameName == "reversigame")
+		{
+			abstractGame* game = new reversiGame();
 			game->nameChecker();
 			return game;
 		}

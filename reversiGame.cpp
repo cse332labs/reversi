@@ -16,16 +16,25 @@ reversiGame::reversiGame()
 	//define initial pieces
 	reversiPiece black = reversiPiece();
 	reversiPiece white = reversiPiece(false);
-	Point ll = Point(3, 3);
-	Point lr = Point(3, 4);
+
 	Point ul = Point(3, 4);
 	Point ur = Point(4, 4);
-	board_[ll]=white;
+	Point ll = Point(3, 3);
+	Point lr = Point(4, 3);
+	board_[ul]=black;
 	board_[lr]=black;
-	board_[ul]=white;
-	board_[ur]=black;
+	board_[ur]=white;
+	board_[ll]=white;
+	
 
 
+}
+
+reversiGame::reversiGame(string playerB, string playerW)
+	:abstractGame() 
+{
+	playerB_ = playerB;
+	playerW_ = playerW;
 }
 
 // sets the board dimensions. 
@@ -35,10 +44,6 @@ void reversiGame :: setBoardDim(int n)
 	boardy_=n;
 }
 
-// calls prompt from abstractGame
-void reversiGame :: prompt()
-{
-	abstractGame :: prompt();
 
 ostream& operator<<(ostream &stream, const reversiGame &game)
 {
@@ -69,9 +74,8 @@ ostream& operator<<(ostream &stream, const reversiGame &game)
                         }
                         else if(game.board_.count(Point(x-1, y-1)) == 1) //check if there is a piece at that position
                         {
-                                reversiPiece reverse = reversiPiece();
-								stream << reverse.symbol_;
-                        }
+							stream << game.board_.at(Point(x-1, y-1)).symbol_;
+						}
                         else
                         {
                                 stream << space; 
@@ -82,13 +86,13 @@ ostream& operator<<(ostream &stream, const reversiGame &game)
         }
         stream << dashRow << endl;
         stream << offset;  // offets the axis labeling by the width of the vertical axis
-        stream << " x" << endl;
+
         //prints the horizontal axis
         for(int xPos=0; xPos < game.boardx_; ++xPos)
         {
                 stream << space << space << xPos << space;
         }
-
+		stream << " x" << endl;
         return stream;
 }
 
@@ -128,6 +132,8 @@ bool reversiGame :: done()
 	return false;
 }
 
+
+// calls prompt from abstractGame for now
 void reversiGame :: prompt()
 {
 	abstractGame :: prompt();
@@ -152,4 +158,38 @@ void reversiGame :: turn()
 	prompt();
 	listen();
 
+}
+
+//abstract version of undo(), retreives most recent piece from usedPieces_ (i.e. the most recent move)
+// and calls undo(numberSquare piece) on it (below)
+void reversiGame :: undo()
+{
+}
+
+
+void reversiGame :: createSave()
+{
+}
+
+void reversiGame :: loadSave()
+{
+	abstractGame :: loadSave("reversigame");
+}
+
+//repeatedly calls turn() until done() evaulates true. Then returns SUCCESS.
+endCondition reversiGame :: play()
+{
+	bool finished = false;
+	while(!finished)
+	{
+		this->turn();
+		if(this->done())
+		{
+
+			finished = true;
+		}
+	}
+
+	cout << "The game has been won. Exiting game now." << endl << endl;
+	return SUCCESS;
 }

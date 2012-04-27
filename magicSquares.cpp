@@ -487,9 +487,8 @@ void magicSquares :: createSave()
 		save << endl;
 		++line;
 	}
-
-
 }
+
 
 void magicSquares :: loadSave()
 {

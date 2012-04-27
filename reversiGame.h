@@ -12,11 +12,19 @@ using namespace std;
 
 class reversiGame : public abstractGame {
 	friend ostream& operator<<(ostream &stream, const reversiGame &game);
-private:
-	static const string playerB_;
-	static const string playerW_;
+protected:
+	string playerB_;
+	string playerW_;
+
+	virtual void createSave();
+	virtual void loadSave();
+	
+	//temporarily adding - we probably shouldn't give the option to undo but it is pure virtual in abstractGame
+	virtual void undo();
+
 public:
 	reversiGame();
+	reversiGame(string playerB, string playerW);
 
 	// sets the board dimensions
 	virtual void setBoardDim(int n);
@@ -25,6 +33,7 @@ public:
 	virtual void print();
 	virtual bool done();
 	virtual void turn();
+	virtual endCondition play();
 };
 
 #endif
