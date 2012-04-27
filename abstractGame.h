@@ -21,7 +21,7 @@
 
 using namespace std;
 
-	typedef enum{SETUP, TURNSTART, FIRSTLOCKED, NEEDPIECE, NEEDLOC, EXTENDEDTURN, ENDTURN, FINISHED, QUITTING, BADSTATE}gameState;
+	typedef enum{SETUP, TURNSTART, FIRSTLOCKED, NEEDPIECE, NEEDLOC, EXTENDEDTURN, ENDTURN, FINISHED, QUITTING, WHITETURN, BLACKTURN, BADSTATE}gameState;
 
 // struct of abstract (base) game type. Above are the various states that the game could be in declared in an enum
 

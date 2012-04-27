@@ -16,12 +16,16 @@ protected:
 	string playerB_;
 	string playerW_;
 
-	virtual void createSave();
+	int Bcount_, Wcount_;
+
+	bool checkMove();
+	bool addPiece();
+
+virtual void createSave();
 	virtual void loadSave();
 	
 	//temporarily adding - we probably shouldn't give the option to undo but it is pure virtual in abstractGame
 	virtual void undo();
-
 public:
 	reversiGame();
 	reversiGame(string playerB, string playerW);

@@ -44,7 +44,6 @@ void reversiGame :: setBoardDim(int n)
 	boardy_=n;
 }
 
-
 ostream& operator<<(ostream &stream, const reversiGame &game)
 {
         // formatting set-up to account for variable length symbols and readability 
@@ -105,8 +104,10 @@ bool reversiGame :: done()
 {
 	//bool isFull = true;
 	bool sameColor = false;
-	int Bcount = 0;
-	int Wcount = 0;
+
+	Bcount_=0;
+	Wcount_=0;
+
 	Point key = Point();
 	for(int i = 0; i < boardx_; ++i)
 	{
@@ -115,16 +116,16 @@ bool reversiGame :: done()
 			key.set(i, j);
 			if(board_.at(key).value_ == BLACK)
 			{
-				++Bcount;
+				++Bcount_;
 			}else if(board_.at(key).value_ == WHITE)
 			{
-				++Wcount;
+				++Wcount_;
 			}
 
 
 		}
 	}
-	if((Bcount+Wcount == 64) || (Bcount>0 && Wcount==0) || (Bcount==0 && Wcount>0) /* OR NO MOVES LEFT*/)  // fix so not hard coding
+	if((Bcount_+Wcount_ == 64) || (Bcount_>0 && Wcount_==0) || (Bcount_==0 && Wcount_>0) /* OR NO MOVES LEFT*/)  // fix so not hard coding
 	{
 		print();
 		return true;
@@ -136,27 +137,62 @@ bool reversiGame :: done()
 // calls prompt from abstractGame for now
 void reversiGame :: prompt()
 {
-	abstractGame :: prompt();
+	switch(state_)
+	{
+	case WHITETURN:
+		cout << playerW_ << " select a piece to move? ";
+		break;
+	case BLACKTURN:
+		cout << playerB_ << " select a piece to move? ";
+		break;
+	case NEEDPIECE:
+		cout << "That move was not valid." << endl;
+		break;
+	}
 }
 
 void reversiGame :: turn()
 {
-	bool isBlackTurn = true;
-	switch(state_)
-	{
-		case SETUP:
-			cout << "Welcome to Nine Almonds!" << endl;
-			cout << "Your goal is to remove all almonds except for one, leaving the final almond in the center square (2,2)." << endl;
-			cout << "You may make moves by jumping one almond over another, removing the jumped piece. Use a square's coordinate point to select it."<< endl;
-			state_=TURNSTART;
-			break;
-		
-	}
-	
-	isBlackTurn = !isBlackTurn;
-	print();
 	prompt();
 	listen();
+	if(addPiece())
+	{
+		if(state_=WHITETURN)
+		{
+			state_=BLACKTURN;
+			++turn_;
+		}
+		else
+		{
+			state_=WHITETURN;
+		}
+	}
+	else
+	{
+		gameState temp = state_;
+		state_ = NEEDPIECE;
+		prompt();
+		state_ = temp;
+		return;
+	}
+}
+
+endCondition reversiGame :: play()
+{
+	bool finished = false;
+	while(!finished)
+	{
+		this->turn();
+		if(this->done())
+		{
+
+			finished = true;
+		}
+	}
+
+	cout << "Congratulations! You completed the game! Exiting game now." << endl << endl;
+	return SUCCESS;
+}
 
 }
 
@@ -192,4 +228,20 @@ endCondition reversiGame :: play()
 
 	cout << "The game has been won. Exiting game now." << endl << endl;
 	return SUCCESS;
+}
+
+bool reversiGame:: checkMove()
+{
+	bool firstCheck = false;
+	int offset = 1;
+	for(int i = dest_.y_+1; i < boardy_; ++ i)
+	{
+		Point temp = Point(dest_.x_, i);
+	}
+	return false;
+}
+
+bool reversiGame::addPiece()
+{
+	return true;
 }
