@@ -33,6 +33,8 @@ protected:
 	//stores game Name
 	string name_;
 
+	abstractGame* self;
+
 	//stores number of turns (nineAlmonds) or number of uses of undo (magicSquare)
 	int turn_;
 
@@ -63,6 +65,7 @@ protected:
 
 	//function to move piece from start to destination on board_
 	virtual bool pieceMover(Point start, Point destination);
+	static abstractGame* instance();
 
 	
 	Point placeHolder_;
