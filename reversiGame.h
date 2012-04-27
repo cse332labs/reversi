@@ -24,7 +24,7 @@ public:
 	virtual void prompt();
 	virtual void print();
 	virtual bool done();
-
+	virtual void turn();
 };
 
 #endif

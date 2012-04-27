@@ -640,6 +640,11 @@ void abstractGame :: loadSquares(string name)
 
 	save.open(name + ".txt");
 	getline(save, input);
+
+	lowerCase(input);
+	removePunctuation(input);
+
+
 }
 
 gameState abstractGame :: intToState(int i)

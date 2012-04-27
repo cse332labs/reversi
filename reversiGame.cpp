@@ -39,7 +39,6 @@ void reversiGame :: setBoardDim(int n)
 void reversiGame :: prompt()
 {
 	abstractGame :: prompt();
-}
 
 ostream& operator<<(ostream &stream, const reversiGame &game)
 {
@@ -100,21 +99,57 @@ void reversiGame :: print()
 
 bool reversiGame :: done()
 {
-/*	bool empty = true;
+	//bool isFull = true;
+	bool sameColor = false;
+	int Bcount = 0;
+	int Wcount = 0;
 	Point key = Point();
-	for(int i = 0; i <5; ++i)
+	for(int i = 0; i < boardx_; ++i)
 	{
-		for (int j=0; j<5; ++j)
+		for (int j=0; j< boardy_; ++j)
 		{
 			key.set(i, j);
-			if(board_.count(key) == 1 && (i != 2 || j != 2))
-				empty = false;
+			if(board_.at(key).value_ == BLACK)
+			{
+				++Bcount;
+			}else if(board_.at(key).value_ == WHITE)
+			{
+				++Wcount;
+			}
+
+
 		}
 	}
-	if(empty && (board_))
+	if((Bcount+Wcount == 64) || (Bcount>0 && Wcount==0) || (Bcount==0 && Wcount>0) /* OR NO MOVES LEFT*/)  // fix so not hard coding
 	{
 		print();
 		return true;
-	} */
+	}
 	return false;
+}
+
+void reversiGame :: prompt()
+{
+	abstractGame :: prompt();
+}
+
+void reversiGame :: turn()
+{
+	bool isBlackTurn = true;
+	switch(state_)
+	{
+		case SETUP:
+			cout << "Welcome to Nine Almonds!" << endl;
+			cout << "Your goal is to remove all almonds except for one, leaving the final almond in the center square (2,2)." << endl;
+			cout << "You may make moves by jumping one almond over another, removing the jumped piece. Use a square's coordinate point to select it."<< endl;
+			state_=TURNSTART;
+			break;
+		
+	}
+	
+	isBlackTurn = !isBlackTurn;
+	print();
+	prompt();
+	listen();
+
 }

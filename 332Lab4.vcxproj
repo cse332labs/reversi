@@ -83,7 +83,6 @@
     <ClInclude Include="menus.h" />
     <ClInclude Include="nineAlmonds.h" />
     <ClInclude Include="Point.h" />
-    <ClInclude Include="reversiGame.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -96,7 +95,6 @@
     <ClCompile Include="menus.cpp" />
     <ClCompile Include="nineAlmonds.cpp" />
     <ClCompile Include="Point.cpp" />
-    <ClCompile Include="reversiGame.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
