@@ -13,11 +13,16 @@ using namespace std;
 class reversiGame : public abstractGame {
 	friend ostream& operator<<(ostream &stream, const reversiGame &game);
 private:
-	static string player1;
-	static string player2;
+	static const string playerB_;
+	static const string playerW_;
 	bool checkMove();
 public:
 	reversiGame();
+
+	// sets the board dimensions
+	virtual void setBoardDim(int n);
+
+	virtual void prompt();
 	virtual void print();
 	virtual bool done();
 	virtual void prompt();

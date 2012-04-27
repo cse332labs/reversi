@@ -15,7 +15,7 @@
 
 using namespace std;
 
-typedef enum{WHITE, BLACK}color;
+typedef enum{BLACK, WHITE, INVALID_COLOR}color;
 
 //declarations for basic gamepiece
 struct gamePiece

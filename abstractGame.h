@@ -81,7 +81,7 @@ protected:
 
 	gameState intToState(int i);
 
-	// used by magicSquares, but could be abstracted to other games
+	// used by magicSquares and reversiGame to set the board size
 	virtual void setBoardDim(int n);
 
 public:
