@@ -18,6 +18,7 @@ using namespace std;
 class magicSquares : public abstractGame {
 	friend ostream& operator<<(ostream &stream, const magicSquares &game);
 	friend ostream& operator<<(ostream &stream, const vector<numberSquare> &pieces);
+	friend void abstractGame :: loadSquares(string name);
 protected:
 	// tile selected by player
 	unsigned int chosenTile_;
@@ -32,6 +33,9 @@ protected:
 	
 	// puts piece at point P
 	void pieceAdd(numberSquare &piece, Point p);
+
+	// sets the board dimensions
+	void setBoardDim(int n);
 
 	// finds the magic constant value for this game
 	int getMagicConstant();
@@ -56,9 +60,6 @@ public:
 	magicSquares();
 	magicSquares(int size);
 	magicSquares(int size, int lowest);
-
-	// sets the board dimensions
-	virtual void setBoardDim(int n);
 
 	virtual void print();
 	virtual bool done();

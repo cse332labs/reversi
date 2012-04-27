@@ -28,10 +28,12 @@ using namespace std;
 class abstractGame{
 protected:
 	// stores state
-	gameState state_;
+	static gameState state_;
 
 	//stores game Name
 	string name_;
+
+
 
 	//stores number of turns (nineAlmonds) or number of uses of undo (magicSquare)
 	int turn_;
@@ -64,6 +66,7 @@ protected:
 	//function to move piece from start to destination on board_
 	virtual bool pieceMover(Point start, Point destination);
 
+
 	
 	Point placeHolder_;
 	virtual void undo()=0;
@@ -74,6 +77,7 @@ protected:
 
 	void loadAlmonds(string in);
 	void loadSquares(string in);
+	void loadReversi(string in);
 
 	void noSave();
 
@@ -81,18 +85,24 @@ protected:
 
 	gameState intToState(int i);
 
+	//method that can return various types of sub-games
+	static void newGame(int argc, char* argv[]);
+
 	// used by magicSquares and reversiGame to set the board size
 	virtual void setBoardDim(int n);
 
 public:
 	abstractGame();
 
+	static abstractGame* self_;
+
 	void setState(gameState s);
+
+	static void instance(int argc, char* argv[]);
 
 	void isQuitting();
 
-	//method that can return various types of sub-games
-	abstractGame* newGame(int argc, char* argv[]);
+
 
 	virtual void print()=0;
 	virtual bool done()=0;

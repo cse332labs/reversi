@@ -453,7 +453,7 @@ void magicSquares :: createSave()
 			save << start_.x_ << "," << start_.y_ << " " << dest_.x_ << "," <<  dest_.y_;
 			break;
 		case 5:
-			save << chosenTile_ << " " << lowest_ << maxAxis_;
+			save << chosenTile_ << " " << lowest_ << " " << maxAxis_;
 			break;
 		case 6:
 			for(unsigned int i = 0; i < availablePieces_.size(); ++i)
@@ -487,8 +487,9 @@ void magicSquares :: createSave()
 		save << endl;
 		++line;
 	}
-}
 
+
+}
 
 void magicSquares :: loadSave()
 {

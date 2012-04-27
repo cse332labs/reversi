@@ -7,12 +7,15 @@
 #include "abstractGame.h"
 #include "nineAlmonds.h"
 #include "magicSquares.h"
-#include "reversiGame.h"
 #include "inputProcessing.h"
 
+gameState abstractGame :: state_ = SETUP;
+abstractGame* abstractGame :: self_ = 0;
+
 abstractGame::abstractGame()
-	: state_(SETUP), quitGuard_(true), quitting_(false), comingBack_(false), maxSymbol_(1), validFirst_(false) 
+	: quitGuard_(true), quitting_(false), comingBack_(false), maxSymbol_(1), validFirst_(false) 
 {
+	
 }
 
 //basic piecemover for the all games. moves piece at Map[start] to map[finished] 
@@ -38,8 +41,6 @@ void abstractGame :: nameChecker()
 
 	name.open(name_ + ".txt");
 
-
-
 	getline(name, gameType);
 
 	lowerCase(gameType);
@@ -57,6 +58,11 @@ void abstractGame :: nameChecker()
 	}
 	else if(gameType == "reversi")
 	{
+		loadReversi(name_);
+		return;
+	}
+	else
+	{
 
 	}
 }
@@ -65,76 +71,73 @@ void abstractGame :: nameChecker()
 // returns a pointer of AbstractGame type that is based off the string in argv[1]
 // if there are improper argument numbers (or the argv[1] is not a valid game name)
 // the pointer is null, otherwise it is to the appropriate game type.
-abstractGame* abstractGame::newGame(int argc, char* argv[])
+void abstractGame::newGame(int argc, char* argv[])
 {
-	enum{PROGRAMNAME, GAMENAME, SIZE, LOWEST};
-	string gameName;
+	enum{PROGRAMNAME, GAMENAME, FIRSTVAR, SECONDVAR};
+	string gamename, firstvar, secondvar;
+
 	int lowest = 1;
 	int size = 3;
-	switch(argc)
-	{
-	case 4:
-	{
-		istringstream lowestString(argv[LOWEST]);
 
-		lowestString>>lowest;
-	}
-	case 3:
+	gamename = argv[GAMENAME];
+	lowerCase(gamename);
+	removePunctuation(gamename);
+
+	if(!(argc == 4 || argc == 2))
 	{
-		istringstream sizeString(argv[SIZE]);
-		if(sizeString >> size)
+		throw BADARGC;
+	}
+
+	if(argc == 4)
+	{
+
+		secondvar = argv[SECONDVAR];
+
+		lowerCase(secondvar);
+
+		removePunctuation(secondvar);
+	}
+	if(argc > 2)
+	{
+		firstvar = argv[FIRSTVAR];
+		lowerCase(firstvar);
+		removePunctuation(firstvar);
+	}
+	
+	try
+	{
+		if(gamename == "magicsquare" || gamename == "magicsquares" && argc == 4)
 		{
-			if(size <= 0)
-			{
-				cout << "That isn't a valid size. Exiting Program";
-				return 0;
-			}
+			int size = atoi(firstvar.c_str());
+			int lowest = atoi(secondvar.c_str());
+			self_ = new magicSquares(size, lowest);
+			self_->nameChecker();
+		}
+		else if (gamename == "reversi" && argc == 4)
+		{
+
+			self_->nameChecker();
 		}
 		else
 		{
-			cout << "That isn't a valid size. Exiting Program";
-			return 0;
+			self_ = new nineAlmonds();
+			self_->nameChecker();
 		}
-	}
-	case 2:
-	{
-		gameName = argv[GAMENAME];
-		lowerCase(gameName);
-		removePunctuation(gameName);
-		break;
-	}
-	default:
-		return 0;
-	}
-
-	try
-	{
-		if(gameName == "ninealmonds")
-		{
-			abstractGame* game = new nineAlmonds();
-			game->nameChecker();
-			return game;
-		}
-		else if(gameName == "magicsquare" || gameName == "magicsquares")
-		{
-			abstractGame* game = new magicSquares(size, lowest);
-			game->nameChecker();
-			return game;
-		}
-		else if(gameName == "reversi" || gameName == "reversigame")
-		{
-			abstractGame* game = new reversiGame();
-			game->nameChecker();
-			return game;
-		}
-		return 0;
-
 	}
 	catch (bad_alloc ba)
 	{
 		cout << "Failed to allocate memory. " << ba.what() << endl;
-		return 0;
+		throw BADMEM;
 	}
+}
+
+void abstractGame :: instance(int argc, char* argv[])
+{
+	if(self_ != 0)
+	{
+		throw INSTANCEFAIL;
+	}
+	newGame(argc, argv);
 }
 
 // state accessor
@@ -267,18 +270,6 @@ void abstractGame :: listen()
 							}
 						}
 						break;
-					case WHITETURN:
-						if(board_.count(p)==0)
-						{
-							dest_=p;
-						}
-						break;
-					case BLACKTURN:
-						if(board_.count(p)==0)
-						{
-							dest_=p;
-						}
-						break;
 					default:
 						cout << "You can't choose a piece right now. Try again later" << endl;
 					}
@@ -385,7 +376,7 @@ void abstractGame :: loadAlmonds(string name)
 {
 	nineAlmonds load = nineAlmonds();
 
-	
+	bool badSave = false;
 	
 	ifstream save;
 	string input;
@@ -407,26 +398,31 @@ void abstractGame :: loadAlmonds(string name)
 
 	string in1, in2, in3, in4, in5;
 	int int1, int2, int3, int4, int5;
+
 	if(!(ins >> in1))
 	{
 		cout << "Sorry, that's not a valid game file. You're missing the turn value" << endl << endl;
 		return;
 	}
+
 	if(!(ins >> in2))
 	{
 		cout << "Sorry, that's not a valid game file. You're missing the state value." << endl << endl;
 		return;
 	}
+
 	if(!(ins >> in3))
 	{
 		cout << "Sorry, that's not a valid game file. You're missing the validFirst boolean" << endl << endl;
 		return;
 	}
+
 	if(!(ins >> in4))
 	{
 		cout << "Sorry, that's not a valid game file. You're missing the Board X" << endl << endl;
 		return;
 	}
+
 	if(!(ins >> in5))
 	{
 		cout << "Sorry, that's not a valid game file. You're missing the Board Y" << endl << endl;
@@ -434,11 +430,13 @@ void abstractGame :: loadAlmonds(string name)
 	}
 
 	gameState state = intToState(atoi(in2.c_str()));
+
 	bool check1 = isNumber(in1);
 	bool check2 = ((isNumber(in2)) && (state != BADSTATE));
 	bool check3 = isNumber(in3);
 	bool check4 = isNumber(in4);
 	bool check5 = isNumber(in5);
+
 	if(!(check1 && check2 && check3 && check4 && check5))
 	{
 		cout << "One of your items failed its validity check in line 3 [The line with 5 numers]" << endl << endl;
@@ -586,83 +584,469 @@ void abstractGame :: loadAlmonds(string name)
 
 	
 
-	istringstream piece(input);
+		istringstream piece(input);
 
-	string xval, yval, name, symbol;
-	int xint, yint;
+		string xval, yval, name, symbol;
+		int xint, yint;
 	
-	if(!(piece >> xval))
+		if(!(piece >> xval))
+		{
+			cout << "Sorry, that's not a valid game file. You're missing an X value for a Piece. It has been skipped" << endl << endl;
+			badSave = true;
+		}
+		if(!(piece >> yval))
+		{
+			cout << "Sorry, that's not a valid game file. You're missing a Y value for a Piece. It has been skipped." << endl << endl;
+			badSave = true;
+		}
+		if(!(piece >> name))
+		{
+			cout << "Sorry, that's not a valid game file. You're missing the name for a piece. It has been skipped." << endl << endl;
+			badSave = true;
+		}
+		if(!(piece >> symbol))
+		{
+			cout << "Sorry, that's not a valid game file. You're missing the symbol for a piece. It has been skipped." << endl << endl;
+			badSave = true;
+		}
+
+
+
+		check1 = isNumber(xval);
+		check2 = isNumber(yval);
+		check3 = (name == "almond");
+		check4 = (symbol == "a");
+
+		xint = atoi(xval.c_str());
+		yint = atoi(yval.c_str());
+
+		if((xint <0 || yint < 0) || (xint > load.boardx_ || yint > load.boardy_))
+		{
+			cout << "A piece is out of bounds for this board. It has been skipped" << endl;
+			break;
+		}
+
+		if(!(check1 && check2 && check3 && check4))
+		{
+			cout <<"Sorry, that's not a valid game file. One of your pieces failed a validity check." << endl << endl;
+			badSave = true;
+			return; 
+		}
+
+		almondPiece almond = almondPiece();
+
+		board[Point(xint, yint)] = almond;
+
+		input="";
+		getline(save, input);
+		lowerCase(input);
+		removePunctuation(input);
+
+		if(input == "end")
+		{
+			boardDone=true;
+		}
+		if(!check1)
+		{
+			cout << "Critical piece error. Bad save file." << endl;
+			badSave = true;
+		}
+
+	}
+	if(!badSave)
 	{
-		cout << "Sorry, that's not a valid game file. You're missing an X value for a Piece. It has been skipped" << endl << endl;
+		cout << "File successfully loaded." << endl;
+		load.board_=board;
+		load.comingBack_=true;
+		*this=load;
 	}
-	if(!(piece >> yval))
+	else
 	{
-		cout << "Sorry, that's not a valid game file. You're missing a Y value for a Piece. It has been skipped." << endl << endl;
+		throw BADSAVE;
 	}
-	if(!(piece >> name))
-	{
-		cout << "Sorry, that's not a valid game file. You're missing the name for a piece. It has been skipped." << endl << endl;
-	}
-	if(!(piece >> symbol))
-	{
-		cout << "Sorry, that's not a valid game file. You're missing the symbol for a piece. It has been skipped." << endl << endl;
-	}
-
-
-
-	check1 = isNumber(xval);
-	check2 = isNumber(yval);
-	check3 = (name == "almond");
-	check4 = (symbol == "a");
-
-	xint = atoi(xval.c_str());
-	yint = atoi(yval.c_str());
-
-	if((xint <0 || yint < 0) || (xint > load.boardx_ || yint > load.boardy_))
-	{
-		cout << "A piece is out of bounds for this board. It has been skipped" << endl;
-		break;
-	}
-
-	if(!(check1 && check2 && check3 && check4))
-	{
-		cout <<"Sorry, that's not a valid game file. One of your pieces failed a validity check." << endl << endl;
-		return; 
-	}
-
-	almondPiece almond = almondPiece();
-
-	board[Point(xint, yint)] = almond;
-
-	input="";
-	getline(save, input);
-	lowerCase(input);
-	removePunctuation(input);
-
-	if(input == "end")
-	{
-		boardDone=true;
-	}
-
-	}
-
-	load.board_=board;
-	load.comingBack_=true;
-	*this=load;
 	
 }
 
 void abstractGame :: loadSquares(string name)
 {
+	magicSquares load = magicSquares();
+
+	bool badSave = false;
+	
 	ifstream save;
 	string input;
 
 	save.open(name + ".txt");
 	getline(save, input);
 
-	lowerCase(input);
-	removePunctuation(input);
+	int line = 1, loaded = 0, failed = 0;
 
+	vector<int> badPieceLines;
+
+	bool finished = false;
+
+	while(!finished || badSave)
+	{
+		istringstream ins(input);
+		 
+		if(input == "end")
+		{
+			finished=true;
+		}
+		if(line == 3)
+		{
+			string in1, in2, in3, in4, in5;
+			int int1, int2, int3, int4, int5;
+			if(ins >> in1)
+			{
+				if(isNumber(in1) && ins >> in2)
+				{
+					if(isNumber(in2) && ins >> in3)
+					{
+						if(isNumber(in3) && ins >> in4)
+						{
+							if(isNumber(in4) && ins >> in5)
+							{
+								if(isNumber(in5))
+								{
+									int1 = atoi(in1.c_str());
+									int2 = atoi(in2.c_str());
+									int3 = atoi(in3.c_str());
+									int4 = atoi(in4.c_str());
+									int5 = atoi(in5.c_str());
+
+									load.turn_ = int1;
+									load.state_= intToState(int2);
+									if(int3 == 1)
+									{
+										load.validFirst_ = true;
+									}
+									else
+										load.validFirst_ = false;
+									load.boardx_ = int4;
+									load.boardy_ = int5;
+								}
+								else
+								{
+									cout << "The fifth item in Line 3 is not a number. Bad Save File" << endl;
+									badSave = true;
+								}
+							}
+							else
+							{
+								if(!isNumber(in4))
+								{
+								cout << "The fourth item in Line 3 is not a number. Bad Save File" << endl;
+								badSave = true;
+								}
+								else
+								{
+									cout << "There is no fifth item in Line 3. Bad Save File" << endl;
+									badSave = true;
+								}
+							}
+						}
+						else
+						{
+							if(!isNumber(in3))
+							{
+							cout << "The third item in Line 3 is not a number. Bad Save File" << endl;
+							badSave = true;
+							}
+							else
+							{
+								cout << "There is no fourth item in Line 3. Bad Save File" << endl;
+								badSave = true;
+							}
+						}
+					}
+					else
+					{
+						if(!isNumber(in2))
+						{
+						cout << "The second item in Line 3 is not a number. Bad Save File" << endl;
+						badSave = true;
+						}
+						else
+						{
+							cout << "There is no third item in Line 3. Bad Save File" << endl;
+							badSave = true;
+						}
+					}
+				}
+				else
+				{
+					if(!isNumber(in1))
+					{
+						cout << "The first item in Line 3 is not a number. Bad Save File" << endl;
+						badSave = true;
+					}
+					else
+					{
+						cout << "There is no second item in Line 3. Bad Save File" << endl;
+						badSave = true;
+					}
+				}
+			}
+			else
+			{
+				cout << "It appears as though Line 3 is Misformed. Bad Save file." << endl;
+				badSave = true;
+			}
+		}
+
+		if(line == 4)
+		{
+			string startx, starty, destx, desty;
+			int intsx, intsy, intdx, intdy;
+
+			if(ins >> startx)
+			{
+				if(isNumber(startx) && ins >> starty)
+				{
+					if(isNumber(starty) && ins >> destx)
+					{
+						if(isNumber(destx) && ins >> desty)
+						{
+							if(isNumber(desty))
+							{
+								intsx = atoi(startx.c_str());
+								intsy = atoi(starty.c_str());
+								intdx = atoi(destx.c_str());
+								intdy = atoi(desty.c_str());
+								Point start = Point(intsx, intsy);
+								Point dest = Point(intdx, intdy);
+								load.start_ = start;
+								load.dest_ = dest;
+							}
+							else
+							{
+								cout << "The fourth item in Line 4 is not a number. Bad save file." << endl;
+								badSave = true;
+							}
+						}
+						else
+						{
+							if(!isNumber(destx))
+							{
+								cout << "The third item in Line 4 is not a number. Bad save file." << endl;
+								badSave = true;
+							}
+							else
+							{
+								cout << "There is no fourth item on Line 4. Bad save file." << endl;
+								badSave = true;
+							}
+						}
+					}
+					else
+					{
+						if(!isNumber(starty))
+						{
+							cout << "The second item in Line 4 is not a number. Bad save file." << endl;
+							badSave = true;
+						}
+						else
+						{
+							cout << "There is no third item in Line 4. Bad save file." << endl;
+							badSave = true;
+						}
+					}
+				}
+				else
+				{
+					if(!isNumber(startx))
+					{
+						cout << "The first item in Line 4 is not a number. Bad save file." << endl; 
+						badSave = true; 
+					}
+					else
+					{
+						cout << "There is no second item in Line 4. Bad Save File" << endl;
+						badSave = true;
+					}
+				}
+			}
+			else
+			{
+				cout << "There is no content in Line 4. Bad Save File" << endl;
+				badSave = true;
+			}
+		}
+
+		if(line == 5)
+		{
+			string schosenTile, slowest, smaxAxis;
+			int chosenTile, lowest, maxAxis;
+
+			if(ins >> schosenTile)
+			{
+				if(isNumber(schosenTile) && ins >> slowest)
+				{
+					if(isNumber(slowest) && ins >> smaxAxis)
+					{
+						if(isNumber(smaxAxis))
+						{
+							chosenTile = atoi(schosenTile.c_str());
+							lowest = atoi(slowest.c_str());
+							maxAxis = atoi(smaxAxis.c_str());
+
+							load.chosenTile_ = chosenTile;
+							load.lowest_ = lowest;
+							load.maxAxis_ = maxAxis;
+						}
+						else
+						{
+							cout << "The third item in Line 5 is not a number. Bad save file. " << endl;
+							badSave = true;
+						}
+					}
+					else
+					{
+						if(!isNumber(slowest))
+						{
+							cout << "The second item in Line 5 is not a number. Bad save file." << endl;
+							badSave = true;
+						}
+						else
+						{
+							cout << "There is no third item in Line 5. Bad save file." << endl;
+							badSave = true; 
+						}
+					}
+				}
+				else
+				{
+					if(!isNumber(schosenTile))
+					{
+						cout << "The first item in Line 5 is not a number. Bad save File. " << endl;
+						badSave = true;
+					}
+					else
+					{
+						cout << "There is no second item in Line 5. Bad save file." << endl;
+						badSave = true;
+					}
+				}
+			}
+			else
+			{
+				cout << "There is no content in Line 5. Bad save file." << endl;
+				badSave = true;
+			}
+		}
+
+		string in1;
+		int value, count = 0;
+
+		switch(line)
+		{
+		case 1:
+			break;
+		case 2:
+			ins >> in1;
+			if(!(in1 == name))
+			{
+				cout << "Encountered an unknown name error. Bad save file." << endl;
+				badSave = true;
+			}
+			else
+				cout << "Game name read and verified." << endl;
+			break;
+		case 6:
+			if(true)
+
+			while(ins >> in1)
+			{
+				value = atoi(in1.c_str());
+				load.availablePieces_.push_back(value);
+				in1 == "";
+			}
+			cout << "Available pieces read. " << count << " pieces loaded." << endl;
+			break;
+		case 7:
+			cout << "Loading board information. " << endl;
+			break;
+		default:
+			if(!finished)
+			{
+				string xvalS, yvalS, numberS;
+				int xval, yval, number;
+
+				if(ins >> xvalS)
+				{
+					if(isNumber(xvalS) && ins >> yvalS)
+					{
+						if(isNumber(yvalS) && ins >> numberS)
+						{
+							if(isNumber(numberS))
+							{
+
+								xval = atoi(xvalS.c_str());
+								yval = atoi(yvalS.c_str());
+								number = atoi(numberS.c_str());
+								
+								Point location = Point(xval, yval);
+								
+								if(load.board_.count(location) == 0)
+								{
+									numberSquare temp = numberSquare(number);
+									load.board_[location] = temp;
+									++loaded;
+								}
+								else
+								{
+								++failed;
+								badPieceLines.push_back(line);
+								}
+							}
+							else
+							{
+								++failed;
+								badPieceLines.push_back(line);
+							}
+						}
+						else
+						{
+							++failed;
+							badPieceLines.push_back(line);
+						}
+					}
+					else
+					{
+						++failed;
+						badPieceLines.push_back(line);
+					}
+				}
+				else
+				{
+					cout << "There was a critical piece error. Bad save file. " << endl;
+					++failed;
+					badPieceLines.push_back(line);
+					badSave = true; 
+				}
+			}
+		}
+
+		++line;
+
+	}
+
+	if(!badSave)
+	{
+		cout << "File successfully loaded." << endl;
+		load.comingBack_=true;
+		*this=load;
+	}
+	else
+	{
+		throw BADSAVE;
+	}
+
+}
+
+void abstractGame :: loadReversi(string name)
+{
 
 }
 

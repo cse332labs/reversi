@@ -121,8 +121,6 @@ bool reversiGame :: done()
 			{
 				++Wcount_;
 			}
-
-
 		}
 	}
 	if((Bcount_+Wcount_ == 64) || (Bcount_>0 && Wcount_==0) || (Bcount_==0 && Wcount_>0) /* OR NO MOVES LEFT*/)  // fix so not hard coding
@@ -194,11 +192,9 @@ endCondition reversiGame :: play()
 	return SUCCESS;
 }
 
-
-//abstract version of undo(), retreives most recent piece from usedPieces_ (i.e. the most recent move)
-// and calls undo(numberSquare piece) on it (below)
 void reversiGame :: undo()
 {
+	return;
 }
 
 
@@ -211,18 +207,226 @@ void reversiGame :: loadSave()
 	abstractGame :: loadSave("reversi");
 }
 
+//returns if there are any available moves from the given 
 bool reversiGame:: checkMove()
 {
-	bool firstCheck = false;
-	int offset = 1;
-	for(int i = dest_.y_+1; i < boardy_; ++ i)
+	Point p = dest_;
+
+	vector<Point> up, upright, right, downright, down, downleft, left, upleft;
+
+	
+	for(int offset = 0; offset < boardx_; ++offset)
 	{
-		Point temp = Point(dest_.x_, i);
+		if(board_.count(Point(p.x_, p.y_+offset))==1)
+		{
+			up.push_back(Point(p.x_, p.y_+offset));
+		}
+		if(board_.count(Point(p.x_+offset, p.y_+offset))==1)
+		{
+			upright.push_back(Point(p.x_+offset, p.y_+offset));
+		}
+		if(board_.count(Point(p.x_+offset, p.y_))==1)
+		{
+			right.push_back(Point(p.x_+offset, p.y_));
+		}
+		if(board_.count(Point(p.x_+offset, p.y_-offset))==1)
+		{
+			downright.push_back(Point(p.x_+offset, p.y_-offset));
+		}
+		if(board_.count(Point(p.x_, p.y_-offset))==1)
+		{
+			down.push_back(Point(p.x_, p.y_-offset));
+		}
+		if(board_.count(Point(p.x_-offset, p.y_-offset))==1)
+		{
+			downleft.push_back(Point(p.x_-offset, p.y_ - offset));
+		}
+		if(board_.count(Point(p.x_-offset, p.y_))==1)
+		{
+			left.push_back(Point(p.x_-offset, p.y_));
+		}
+		if(board_.count(Point(p.x_-offset, p.y_+offset))==1)
+		{
+			upleft.push_back(Point(p.x_-offset, p.y_+offset));
+		}
 	}
-	return false;
+
+	bool ub=lineCheck(up);
+	bool urb=lineCheck(upright);
+	bool rb=lineCheck(right);
+	bool drb=lineCheck(downright);
+	bool d=lineCheck(down);
+	bool dl=lineCheck(downleft);
+	bool l=lineCheck(left);
+	bool ul=lineCheck(upleft);
+	
+	if(ub || urb || rb || drb || d || dl || l || ul)
+	{
+		return true;
+	}
+	else
+		return false;
+}
+
+bool reversiGame :: lineCheck(vector<Point> points)
+{
+	int size = points.size();
+	bool currentPieceBlack = false;
+
+	if(state_==BLACKTURN)
+	{
+		currentPieceBlack = true;
+	}
+	
+	bool stillWorking = true, valid = false;
+
+	int i = 0;
+	while(stillWorking)
+	{
+		Point temp = points.at(i);
+		if(board_.count(temp)==0 || i == size || temp.x_ >= boardx_ || temp.y_ >= boardy_)
+		{
+			stillWorking = false;
+		}
+		else
+		{
+			if(board_.at(points.at(i)).TF_ != currentPieceBlack)
+			{
+				++i;
+			}
+			else
+			{
+				if(i != 0)
+				{
+					valid = true;
+				}
+				stillWorking = false;
+			}
+		}
+	}
+
+	return valid;
 }
 
 bool reversiGame::addPiece()
 {
-	return true;
+	if(checkMove())
+	{
+		if(BLACKTURN)
+		{
+			reversiPiece black = reversiPiece(true);
+			board_[dest_] = black;
+			pieceFlipper(dest_);
+			return true;
+		}
+		else if(WHITETURN)
+		{
+			reversiPiece white = reversiPiece(false);
+			board_[dest_] = white;
+			pieceFlipper(dest_);
+			return true;
+		}
+		else
+			return false;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void reversiGame :: pieceFlipper(Point p)
+{
+	vector<Point> up, upright, right, downright, down, downleft, left, upleft;
+
+	for(int offset = 0; offset < boardx_; ++offset)
+	{
+		if(board_.count(Point(p.x_, p.y_+offset))==1)
+		{
+			up.push_back(Point(p.x_, p.y_+offset));
+		}
+		if(board_.count(Point(p.x_+offset, p.y_+offset))==1)
+		{
+			upright.push_back(Point(p.x_+offset, p.y_+offset));
+		}
+		if(board_.count(Point(p.x_+offset, p.y_))==1)
+		{
+			right.push_back(Point(p.x_+offset, p.y_));
+		}
+		if(board_.count(Point(p.x_+offset, p.y_-offset))==1)
+		{
+			downright.push_back(Point(p.x_+offset, p.y_-offset));
+		}
+		if(board_.count(Point(p.x_, p.y_-offset))==1)
+		{
+			down.push_back(Point(p.x_, p.y_-offset));
+		}
+		if(board_.count(Point(p.x_-offset, p.y_-offset))==1)
+		{
+			downleft.push_back(Point(p.x_-offset, p.y_ - offset));
+		}
+		if(board_.count(Point(p.x_-offset, p.y_))==1)
+		{
+			left.push_back(Point(p.x_-offset, p.y_));
+		}
+		if(board_.count(Point(p.x_-offset, p.y_+offset))==1)
+		{
+			upleft.push_back(Point(p.x_-offset, p.y_+offset));
+		}
+	}
+
+	lineFlipper(up);
+	lineFlipper(upright);
+	lineFlipper(right);
+	lineFlipper(downright);
+	lineFlipper(down);
+	lineFlipper(downleft);
+	lineFlipper(left);
+	lineFlipper(upleft);
+}
+
+void reversiGame :: lineFlipper(vector<Point> points)
+{
+	int size = points.size();
+	bool currentPieceBlack = false;
+
+	if(state_==BLACKTURN)
+	{
+		currentPieceBlack = true;
+	}
+
+	vector<Point> toFlip;
+	
+	bool stillWorking = true, valid = false;
+
+	int i = 0;
+	while(stillWorking)
+	{
+		Point temp = points.at(i);
+		if(board_.count(temp)==0 || i >= size || temp.x_ >= boardx_ || temp.y_ >= boardy_)
+		{
+			stillWorking = false;
+		}
+		else
+		{
+			if(board_.at(points.at(i)).TF_ != currentPieceBlack)
+			{
+				++i;
+				toFlip.push_back(points.at(i));
+			}
+			else
+			{
+				stillWorking = false;
+				valid = true;
+			}
+		}
+	}
+
+	if(valid)
+	{
+		for(unsigned int i = 0; i < toFlip.size(); ++i)
+		{
+			board_.at(toFlip.at(i)).flip();
+		}
+	}
 }
