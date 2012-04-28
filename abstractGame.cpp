@@ -1308,7 +1308,7 @@ void abstractGame :: loadReversi(string name)
 			istringstream piece(input);
 
 			string xval, yval, symbol;
-			int xint, yint;
+//			int xint, yint;
 
 			if(!(piece >> xval))
 			{
@@ -1330,39 +1330,46 @@ void abstractGame :: loadReversi(string name)
 
 		/////
 		while(!boardDone)
-			string xvalS, yvalS, symbol;
-		int xval, yval;
-
-		if(ins >> xvalS)
 		{
-			if(isNumber(xvalS) && ins >> yvalS)
+			string xvalS, yvalS, symbol;
+			int xval, yval;
+
+			if(ins >> xvalS)
 			{
-				if(isNumber(yvalS) && ins >> symbol)
+				if(isNumber(xvalS) && ins >> yvalS)
 				{
-					xval = atoi(xvalS.c_str());
-					yval = atoi(yvalS.c_str());
-
-
-					Point location = Point(xval, yval);
-
-					if(load.board_.count(location) == 0)
+					if(isNumber(yvalS) && ins >> symbol)
 					{
-						if (symbol == 'X')
+						xval = atoi(xvalS.c_str());
+						yval = atoi(yvalS.c_str());
+
+
+						Point location = Point(xval, yval);
+
+						if(load.board_.count(location) == 0)
 						{
-							reversiPiece temp = reversiPiece(BLACK);
-							load.board_[location] = temp;
-							++loaded;
-						}
-						else if (symbol == 'O')
-						{
-							reversiPiece temp = reversiPiece(WHITE);
-							load.board_[location] = temp;
-							++loaded;
+							if (symbol[0] == 'X')
+							{
+								reversiPiece temp = reversiPiece(BLACK);
+								load.board_[location] = temp;
+								++loaded;
+							}
+							else if (symbol[0] == 'O')
+							{
+								reversiPiece temp = reversiPiece(WHITE);
+								load.board_[location] = temp;
+								++loaded;
+							}
+							else
+							{
+								cout << "Line did not contain a valid symbol" << endl;
+							}	
 						}
 						else
 						{
-							cout << "Line did not contain a valid symbol" << endl;
-						}	
+							++failed;
+							badPieceLines.push_back(line);
+						}
 					}
 					else
 					{
@@ -1378,34 +1385,28 @@ void abstractGame :: loadReversi(string name)
 			}
 			else
 			{
+				cout << "There was a critical piece error. Bad save file. " << endl;
 				++failed;
 				badPieceLines.push_back(line);
+				badSave = true; 
 			}
 		}
-		else
-		{
-			cout << "There was a critical piece error. Bad save file. " << endl;
-			++failed;
-			badPieceLines.push_back(line);
-			badSave = true; 
-		}
+		++line;
 	}
-	++line;
-}
 
 
-//end parsing
-if(!badSave)
-{
-	cout << "File successfully loaded." << endl;
-	load.comingBack_=true;
-	self_=&load;
-	return;
-}
-else
-{
-	throw BADSAVE;
-}
+	//end parsing
+	if(!badSave)
+	{
+		cout << "File successfully loaded." << endl;
+		load.comingBack_=true;
+		self_=&load;
+		return;
+	}
+	else
+	{
+		throw BADSAVE;
+	}
 }
 
 //transforms an int to a corresponding state of the gameState enum
