@@ -1,4 +1,4 @@
-//Lab 5 - Single Player and Multiplayer Games
+///Lab 5 - Single Player and Multiplayer Games
 //Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu) and Chris Lauber (clauber@wustl.edu)
 // 4-27-12
 // abstractGame.cpp
@@ -37,26 +37,29 @@ void abstractGame :: nameChecker()
 	cout << "What would you like to name this game? ";
 	listen();
 	ifstream name;
-	string gameType = "";
+	gameType gameType;
+	string typestring;
 
 	name.open(name_ + ".txt");
 
-	getline(name, gameType);
+	getline(name, typestring);
 
-	lowerCase(gameType);
-	removePunctuation(gameType);
+	lowerCase(typestring);
+	removePunctuation(typestring);
+	
+	gameType = stringGetType(typestring);
 
-	if(gameType == "ninealmonds")
+	if(gameType == ALMONDS)
 	{
 		loadAlmonds(name_);
 		return;
 	}
-	else if(gameType =="magicsquare")
+	else if(gameType == MAGIC)
 	{
 		loadSquares(name_);
 		return;
 	}
-	else if(gameType == "reversi")
+	else if(gameType == REVERSI)
 	{
 		loadReversi(name_);
 		return;
@@ -102,6 +105,17 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 
 		removePunctuation(secondvar);
 	}
+	else
+	{
+		if(type_ == REVERSI)
+		{
+
+		}
+		else
+		{
+
+		}
+	}
 	if(argc > 2)
 	{
 		firstvar = argv[FIRSTVAR];
@@ -115,6 +129,7 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 		{
 			int size = atoi(firstvar.c_str());
 			int lowest = atoi(secondvar.c_str());
+			type_ = MAGIC;
 			pointer = new magicSquares(size, lowest);
 			pointer->nameChecker();
 			return;
@@ -123,12 +138,19 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 		{
 
 			pointer->nameChecker();
+			type_ = REVERSI;
+			return;
+		}
+		else if(gamename == "ninealmonds")
+		{
+			pointer = new nineAlmonds();
+			type_ = ALMONDS;
+			pointer->nameChecker();
 			return;
 		}
 		else
 		{
-			pointer = new nineAlmonds();
-			pointer->nameChecker();
+			type_ = INVALID;
 			return;
 		}
 	}
@@ -1091,3 +1113,20 @@ void abstractGame :: isQuitting()
 	quitting_=true;
 }
 
+//gameType stringGetType(string s)
+//{
+//	if(s == "magicsquares" || s == "magicsquare")
+//	{
+//		return MAGIC;
+//	}
+//	else if(s == "reversi")
+//	{
+//		return REVERSI;
+//	}
+//	else if(s == "ninealmonds")
+//	{
+//		return ALMONDS;
+//	}
+//	else
+//		return INVALID;
+//}
