@@ -15,7 +15,7 @@
 
 using namespace std;
 
-typedef enum{BLACK, WHITE, INVALID_COLOR}color;
+typedef enum{BLACK, WHITE, INVALID_COLOR} pieceColor;
 
 //declarations for basic gamepiece
 struct gamePiece
@@ -23,7 +23,6 @@ struct gamePiece
 	string name_;
 	string symbol_;
 	int value_;
-	bool TF_;
 
 	bool operator==(const gamePiece& piece);
 
@@ -64,7 +63,7 @@ struct numberSquare : gamePiece
 struct reversiPiece : gamePiece
 {
 	reversiPiece(); //default is true
-	reversiPiece(bool TF);
+	reversiPiece(pieceColor color);
 
 	virtual void flip();
 };

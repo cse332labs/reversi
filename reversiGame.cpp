@@ -14,8 +14,8 @@ reversiGame::reversiGame()
 	this->setBoardDim(defaultSize);
 
 	//define initial pieces
-	reversiPiece black = reversiPiece();
-	reversiPiece white = reversiPiece(false);
+	reversiPiece black = reversiPiece(BLACK);
+	reversiPiece white = reversiPiece(WHITE);
 
 	Point ul = Point(3, 4);
 	Point ur = Point(4, 4);
@@ -327,14 +327,14 @@ bool reversiGame::addPiece()
 	{
 		if(BLACKTURN)
 		{
-			reversiPiece black = reversiPiece(true);
+			reversiPiece black = reversiPiece(BLACK);
 			board_[dest_] = black;
 			pieceFlipper(dest_);
 			return true;
 		}
 		else if(WHITETURN)
 		{
-			reversiPiece white = reversiPiece(false);
+			reversiPiece white = reversiPiece(WHITE);
 			board_[dest_] = white;
 			pieceFlipper(dest_);
 			return true;
