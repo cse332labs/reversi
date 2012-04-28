@@ -48,53 +48,53 @@ void reversiGame :: setBoardDim(int n)
 
 ostream& operator<<(ostream &stream, const reversiGame &game)
 {
-        // formatting set-up to account for variable length symbols and readability 
-        char space = ' ';
-        string spacing(game.maxSymbol_, space); // adds space the width of the max length symbol
-        char verticalBar = '|';
-        int dashCount = (game.boardx_ * 3) + (game.boardx_ - 1); 
-        string dashes(dashCount,'-');
-        string offset = spacing + space; // offets by the width of the vertical axis
-        string dashRow = offset + verticalBar + dashes + verticalBar;
+	// formatting set-up to account for variable length symbols and readability 
+	char space = ' ';
+	string spacing(game.maxSymbol_, space); // adds space the width of the max length symbol
+	char verticalBar = '|';
+	int dashCount = (game.boardx_ * 3) + (game.boardx_ - 1); 
+	string dashes(dashCount,'-');
+	string offset = spacing + space; // offets by the width of the vertical axis
+	string dashRow = offset + verticalBar + dashes + verticalBar;
 
-        stream << space << 'y' << endl;
-        for(unsigned int y=(game.boardy_); y > 0; --y)
-        {
-                stream << dashRow << endl; //add a dashed line before each line of content for formatting
-                for(int x=0; x <= game.boardx_; ++x)
-                {
-                        if(x==0 && y!=0)
-                        {
-                                if (getLength(y-1) < game.maxSymbol_)
-                                {
-                                //determine number spaces to add before y-axis symbol (only need if we are using nxn boards)
-                                        string spaces(game.maxSymbol_ - getLength(y-1), space);
-                                        stream << spaces;
-                                }
-                                stream << y-1; //prints vertical axis
-                        }
-                        else if(game.board_.count(Point(x-1, y-1)) == 1) //check if there is a piece at that position
-                        {
-							stream << game.board_.at(Point(x-1, y-1)).symbol_;
-						}
-                        else
-                        {
-                                stream << space; 
-                        }
-                        stream << space << verticalBar << space;
-                }
-                stream << endl;
-        }
-        stream << dashRow << endl;
-        stream << offset;  // offets the axis labeling by the width of the vertical axis
+	stream << space << 'y' << endl;
+	for(unsigned int y=(game.boardy_); y > 0; --y)
+	{
+		stream << dashRow << endl; //add a dashed line before each line of content for formatting
+		for(int x=0; x <= game.boardx_; ++x)
+		{
+			if(x==0 && y!=0)
+			{
+				if (getLength(y-1) < game.maxSymbol_)
+				{
+					//determine number spaces to add before y-axis symbol (only need if we are using nxn boards)
+					string spaces(game.maxSymbol_ - getLength(y-1), space);
+					stream << spaces;
+				}
+				stream << y-1; //prints vertical axis
+			}
+			else if(game.board_.count(Point(x-1, y-1)) == 1) //check if there is a piece at that position
+			{
+				stream << game.board_.at(Point(x-1, y-1)).symbol_;
+			}
+			else
+			{
+				stream << space; 
+			}
+			stream << space << verticalBar << space;
+		}
+		stream << endl;
+	}
+	stream << dashRow << endl;
+	stream << offset;  // offets the axis labeling by the width of the vertical axis
 
-        //prints the horizontal axis
-        for(int xPos=0; xPos < game.boardx_; ++xPos)
-        {
-                stream << space << space << xPos << space;
-        }
-		stream << " x" << endl;
-        return stream;
+	//prints the horizontal axis
+	for(int xPos=0; xPos < game.boardx_; ++xPos)
+	{
+		stream << space << space << xPos << space;
+	}
+	stream << " x" << endl;
+	return stream;
 }
 
 void reversiGame :: print()
@@ -234,6 +234,29 @@ void reversiGame :: undo()
 	return;
 }
 
+void reversiGame::countALLtheThings()
+{
+	Bcount_ = 0;
+	Wcount_ = 0;
+	for(int i = 0; i < boardx_; ++i)
+	{
+		for(int j = 0; j < boardy_; ++j)
+		{
+			Point temp = Point(i,j);
+			reversiPiece piece = reversiPiece(board_.at(temp).color_);
+			if(piece.color_==BLACK)
+			{
+				++Bcount_;
+			}else if(piece.color_ == WHITE){
+				++Wcount_;
+			}else{
+				return;
+			}
+		}
+	}
+	return;
+}
+
 
 void reversiGame :: createSave()
 {
@@ -297,7 +320,7 @@ bool reversiGame:: checkMove(Point p)
 {
 	vector<Point> up, upright, right, downright, down, downleft, left, upleft;
 
-	
+
 	for(int offset = 0; offset < boardx_; ++offset)
 	{
 		if(board_.count(Point(p.x_, p.y_+offset))==1)
@@ -342,7 +365,7 @@ bool reversiGame:: checkMove(Point p)
 	bool dl = lineCheck(downleft);
 	bool l = lineCheck(left);
 	bool ul = lineCheck(upleft);
-	
+
 	if(ub || urb || rb || drb || d || dl || l || ul)
 	{
 		return true;
@@ -362,7 +385,7 @@ bool reversiGame :: lineCheck(vector<Point> points)
 	}
 	else
 		current = WHITE;
-	
+
 	bool stillWorking = true, valid = false;
 
 	int i = 0;
@@ -483,7 +506,7 @@ void reversiGame :: lineFlipper(vector<Point> points)
 		current = WHITE;
 
 	vector<Point> toFlip;
-	
+
 	bool stillWorking = true, valid = false;
 
 	int i = 0;
