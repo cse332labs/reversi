@@ -1,6 +1,6 @@
-//Lab 4 - Nine Almonds and Magic Squares
-//Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu)
-// 5-7-12
+//Lab 5 - Single Player and Multiplayer Games
+//Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu) and Chris Lauber (clauber@wustl.edu)
+// 4-27-12
 // inputProcessing.cpp
 
 #include "stdafx.h"
@@ -52,3 +52,20 @@ bool :: isNumber(string s)
 	return num;
 }
 
+gameType stringGetType(string s)
+{
+	if(s == "magicsquares" || s == "magicsquare")
+	{
+		return MAGIC;
+	}
+	else if(s == "reversi")
+	{
+		return REVERSI;
+	}
+	else if(s == "ninealmonds")
+	{
+		return ALMONDS;
+	}
+	else
+		return INVALID;
+}

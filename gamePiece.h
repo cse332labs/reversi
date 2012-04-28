@@ -1,6 +1,6 @@
-//Lab 4 - Nine Almonds and Magic Squares
-//Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu)
-// 5-7-12
+//Lab 5 - Single Player and Multiplayer Games
+//Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu) and Chris Lauber (clauber@wustl.edu)
+// 4-27-12
 // gamePiece.h
 
 #include "stdafx.h"
@@ -21,6 +21,7 @@ typedef enum{BLACK, WHITE, INVALID_COLOR} pieceColor;
 struct gamePiece
 {
 	string name_;
+	pieceColor color_;
 	string symbol_;
 	int value_;
 
@@ -62,6 +63,8 @@ struct numberSquare : gamePiece
 
 struct reversiPiece : gamePiece
 {
+
+
 	reversiPiece(); //default is true
 	reversiPiece(pieceColor color);
 

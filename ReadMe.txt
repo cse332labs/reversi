@@ -1,4 +1,4 @@
-// Atalie Holman (aholman@go.wustl.edu), Mason Allen (mrallen@wustl.edu), and Chris Lauber()
+// Atalie Holman (aholman@go.wustl.edu), Mason Allen (mrallen@wustl.edu), and Chris Lauber(clauber@wustl.edu)
 // 4-27-12
 // ReadMe.txt - This file contains a summary of what you will find in each of the files of the Lab4 application.
 

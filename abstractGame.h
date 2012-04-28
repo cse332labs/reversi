@@ -1,6 +1,6 @@
-//Lab 4 - Nine Almonds and Magic Squares
-//Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu)
-// 5-7-12
+//Lab 5 - Single Player and Multiplayer Games
+//Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu) and Chris Lauber (clauber@wustl.edu)
+// 4-27-12
 // abstractGame.h
 
 #include "stdafx.h"
@@ -22,7 +22,7 @@
 using namespace std;
 
 	typedef enum{SETUP, TURNSTART, FIRSTLOCKED, NEEDPIECE, NEEDLOC, EXTENDEDTURN, ENDTURN, FINISHED, QUITTING, WHITETURN, BLACKTURN, BADSTATE}gameState;
-	typedef enum{ALMONDS, MAGIC, REVERSI, INVALID} gameType;
+
 
 // struct of abstract (base) game type. Above are the various states that the game could be in declared in an enum
 
@@ -88,7 +88,7 @@ protected:
 	gameState intToState(int i);
 
 	//method that can return various types of sub-games
-	static void newGame(int argc, char* argv[], abstractGame* pointer);
+	static void newGame(int argc, char* argv[], abstractGame*& pointer);
 
 	// used by magicSquares and reversiGame to set the board size
 	virtual void setBoardDim(int n);
@@ -98,7 +98,7 @@ public:
 
 	static abstractGame* self_;
 
-	gameType stringGetType(string s);
+
 
 	void setState(gameState s);
 

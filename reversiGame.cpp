@@ -1,3 +1,8 @@
+//Lab 5 - Single Player and Multiplayer Games
+//Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu) and Chris Lauber (clauber@wustl.edu)
+// 4-27-12
+// reversiGame.cpp
+
 #include "stdafx.h"
 #include "reversiGame.h"
 #include <iostream>
@@ -299,12 +304,14 @@ bool reversiGame:: checkMove(Point p)
 bool reversiGame :: lineCheck(vector<Point> points)
 {
 	int size = points.size();
-	bool currentPieceBlack = false;
+	pieceColor current;
 
 	if(state_==BLACKTURN)
 	{
-		currentPieceBlack = true;
+		current = BLACK;
 	}
+	else
+		current = WHITE;
 	
 	bool stillWorking = true, valid = false;
 
@@ -318,7 +325,7 @@ bool reversiGame :: lineCheck(vector<Point> points)
 		}
 		else
 		{
-			if(board_.at(points.at(i)).TF_ != currentPieceBlack)
+			if(board_.at(temp).color_ != current)
 			{
 				++i;
 			}
@@ -416,12 +423,14 @@ void reversiGame :: pieceFlipper(Point p)
 void reversiGame :: lineFlipper(vector<Point> points)
 {
 	int size = points.size();
-	bool currentPieceBlack = false;
+	pieceColor current;
 
 	if(state_==BLACKTURN)
 	{
-		currentPieceBlack = true;
+		current = BLACK;
 	}
+	else
+		current = WHITE;
 
 	vector<Point> toFlip;
 	
@@ -437,7 +446,8 @@ void reversiGame :: lineFlipper(vector<Point> points)
 		}
 		else
 		{
-			if(board_.at(points.at(i)).TF_ != currentPieceBlack)
+
+			if(board_.at(temp).color_ == current)
 			{
 				++i;
 				toFlip.push_back(points.at(i));
