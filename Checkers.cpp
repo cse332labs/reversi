@@ -20,7 +20,7 @@ Checkers :: Checkers()
 }
 
 Checkers :: Checkers(string playerB, string playerR)
-	:abstractGame(), isBlacksTurn_(true), currentMoveType_(EMPTY)
+	:abstractGame(), isBlacksTurn_(true), currentMoveType_(EMPTY), Bcount_(0), Rcount_(0)
 {
 	maxSymbol_=1;
 
@@ -47,7 +47,9 @@ Checkers :: Checkers(string playerB, string playerR)
 				++xOffset;
 			}
 			board_[Point(boardx_+xOffset, boardy_-yOffset-1)]=black;
-			board_[Point(boardx_+xOffset, boardy_+yOffset)]=red;
+			board_[Point(boardx_+xOffset, boardy_+yOffset-8)]=red;
+			++Bcount_;
+			++Rcount_;
 		}
 		offsetLine = (!offsetLine);
 	}
@@ -82,7 +84,7 @@ ostream& operator<<(ostream &stream, const Checkers &game)
 				}
 				stream << y-1; //prints vertical axis
 			}
-			else if(game.board_.count(Point(x-1, y-1)) == 1) //check if there is a piece at that position
+ 			else if(game.board_.count(Point(x-1, y-1)) == 1) //check if there is a piece at that position
 			{
 				stream << game.board_.at(Point(x-1, y-1)).symbol_;
 			}

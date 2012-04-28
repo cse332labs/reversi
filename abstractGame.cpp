@@ -182,8 +182,7 @@ void abstractGame::newGame(int argc, abstractGame*& pointer)
 		}
 		else if(type_ == CHECKERS)
 		{
-			Checkers checkers = *new Checkers(firstvar, secondvar);
-			pointer = &checkers;
+			pointer = new Checkers(firstvar, secondvar);
 			pointer -> nameChecker();
 			type_ = CHECKERS;
 			return;
