@@ -18,6 +18,8 @@ Thumbs.db
 *.cache
 *.ilk
 *.log
+*.vcxproj
+*.vcxproj.filters
 [Bb]in
 [Dd]ebug*/
 *.lib
