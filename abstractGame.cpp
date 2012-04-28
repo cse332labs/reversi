@@ -15,7 +15,7 @@ abstractGame* abstractGame ::self_ = 0;
 gameType abstractGame :: type_ = INVALID;
 
 abstractGame::abstractGame()
-	: quitGuard_(true), quitting_(false), comingBack_(false), maxSymbol_(1), validFirst_(false) 
+	: quitGuard_(true), quitting_(false), comingBack_(false), maxSymbol_(1), validFirst_(false)
 {
 }
 

@@ -21,7 +21,7 @@ reversiGame :: reversiGame()
 }
 
 reversiGame :: reversiGame(string playerB, string playerW)
-	:abstractGame()
+	:abstractGame(), needPoint(false)
 {
 	this->setBoardDim(defaultSize);
 
