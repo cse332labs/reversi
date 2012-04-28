@@ -34,11 +34,10 @@ Checkers :: Checkers(string playerB, string playerR)
 
 	bool offsetLine = false;
 
-	int xOffset, yOffset;
+	int xOffset;
 
 	for(int i = 0; i < 3; ++i)
 	{
-		yOffset = i;
 		for(int j = 0; j < 4; ++j)
 		{
 			xOffset = 2*j;
@@ -46,11 +45,31 @@ Checkers :: Checkers(string playerB, string playerR)
 			{
 				++xOffset;
 			}
-			board_[Point(boardx_+xOffset, boardy_-yOffset-1)]=black;
-			board_[Point(boardx_+xOffset, boardy_+yOffset-8)]=red;
-			++Bcount_;
+
+			board_[Point(xOffset, i)] = red;
 			++Rcount_;
+
 		}
+
+		offsetLine = (!offsetLine);
+
+
+	}
+
+	for(int i = 5; i < 8; ++i)
+	{
+		for(int j = 0; j < 4; ++j)
+		{
+			xOffset = 2*j;
+			if(offsetLine)
+			{
+				++xOffset;
+			}
+
+			board_[Point(xOffset, i)] = black;
+			++Bcount_;
+		}
+
 		offsetLine = (!offsetLine);
 	}
 	
@@ -131,6 +150,11 @@ void Checkers :: turn()
 	{
 		prompt();
 		listen();
+
+		if(checkStartSelect())
+		{
+			state_ = NEEDLOC;
+		}
 	}
 
 	//ensures that they are ready to be asked to give a destination point.
@@ -144,6 +168,11 @@ void Checkers :: turn()
 	{
 		prompt();
 		listen();
+
+		if(moveCheck(start_, dest_))
+		{
+			state_ = PROCESSING;
+		}
 	}
 
 	//ensures that that all operations in finding location went properly (i.e. they didnt cancel or
@@ -156,6 +185,9 @@ void Checkers :: turn()
 	if(moveCheck(start_, dest_))
 	{
 		state_ = EXTENDEDTURN;
+
+		//superfluous for it's boolean check function, but used to ensure that the member variable
+		//is accurate for the current move and current jummped piece.
 		if(jumpedPiece(start_, dest_))
 		{
 			movePiece();
@@ -167,7 +199,6 @@ void Checkers :: turn()
 			prompt();
 			listen();
 		}
-		state_ = ENDTURN;
 	}
 	else
 	{
@@ -194,22 +225,22 @@ void Checkers :: prompt()
 	switch(state_)
 	{
 	case TURNSTART:
-		cout << "Starting " << color << "'s turn. " << endl;
+		cout << "Starting " << name << "'s turn. " << endl;
 		cout << "Number of Black Pieces: " << Bcount_ << endl;
 		cout << "Number of Red Pieces: " << Rcount_ << endl << endl;
 		break;
 	case NEEDPIECE:
-		cout << name << ", please select a piece to move." << endl;
+		cout << name << ", please select a piece to move.";
 		break;
 	case NEEDLOC:
-		cout << color << "'S TURN: " << endl;
-		cout << "Moving piece at " << start_ << ". Where would you like to move it?" << endl;
+		cout << name << "'S TURN: " << endl;
+		cout << "Moving piece at " << start_ << ". Where would you like to move it?";
 		cout << "Type 'listmoves' to see the available moves for this piece." << endl;
 		break;
 	case EXTENDEDTURN:
 		cout << "Continuing turn. Moving piece originally located at " << original_ << "." << endl;
-		cout << "Piece currently located at " << start_ << ". Where would you like to move it?" << endl;
-		cout << "Type 'listmoves' to see the available moves for this pieces." << endl;
+		cout << "Piece currently located at " << start_ << ". Where would you like to move it?";
+		cout << "Type 'listmoves' to see the available moves for this pieces. Type 'finished' or 'done' to end your turn" << endl;
 		break;
 	default:
 		abstractGame :: prompt();
@@ -310,6 +341,36 @@ bool Checkers :: jumpedPiece(Point start, Point dest)
 	}
 	else
 		return false;
+}
+
+bool Checkers :: checkStartSelect()
+{
+	if(board_.count(start_) == 0)
+	{
+		return false;
+	}
+	if(board_.at(start_).color_ == BLACK)
+	{
+		if(isBlacksTurn_)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		if(isBlacksTurn_)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
 }
 
 void Checkers :: movePiece()
@@ -461,6 +522,26 @@ void Checkers :: loadSave()
 	abstractGame :: loadSave("checkers");
 }
 
+void Checkers :: listMoves()
+{
+	Point p = start_;
+
+	vector<Point> destinations = possibleLocations(p);
+
+	cout << "AVAILABLE MOVES: ";
+	movesOut(cout, destinations);
+	cout << endl;
+
+	return;
+}
+
+void Checkers :: movesOut(ostream& stream, vector<Point> points)
+{
+	for(unsigned int i = 0; i < points.size(); ++i)
+	{
+		stream << points.at(i) << "  |  ";
+	}
+}
 
 
 
