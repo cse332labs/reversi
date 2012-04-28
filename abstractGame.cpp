@@ -97,7 +97,7 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 		throw BADARGC;
 	}
 
-	if(argc == 4)
+	if(argc > 2)
 	{
 		secondvar = argv[SECONDVAR];
 
@@ -109,11 +109,12 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 	{
 		if(type_ == REVERSI)
 		{
-
+			getNames(firstvar, secondvar);
 		}
 		else if(type_ == MAGIC)
 		{
-
+			firstvar = 3;
+			lowest = 1;
 		}
 	}
 	if(argc > 4)

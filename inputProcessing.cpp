@@ -69,3 +69,22 @@ gameType stringGetType(string s)
 	else
 		return INVALID;
 }
+
+void getNames(string& playerB, string& playerW)
+{
+	cout << "What is the first player's name? ";
+	string input1;
+	getline(cin, input1);
+	lowerCase(input1);
+	removePunctuation(input1);
+	playerB = input1;
+	
+	cout << "What is the second palyer's name? ";
+	string input2;
+	getline(cin, input2);
+	lowerCase(input2);
+	removePunctuation(input2);
+	playerW = input2;
+	
+	return;
+}

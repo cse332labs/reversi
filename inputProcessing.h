@@ -23,6 +23,8 @@ bool isNumber(string s);
 
 gameType stringGetType(string s);
 
+void getNames(string& playerB, string& playerW);
+
 // returns length of the string of an int
 int getLength(int symbol);
 
