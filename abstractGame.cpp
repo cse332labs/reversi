@@ -83,6 +83,7 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 {
 	enum{PROGRAMNAME, GAMENAME, FIRSTVAR, SECONDVAR};
 	string gamename, firstvar, secondvar;
+	bool first, second;
 
 	int lowest = 1;
 	int size = 3;
@@ -92,44 +93,38 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 	lowerCase(gamename);
 	removePunctuation(gamename);
 
-	if(!(argc == 4 || argc == 2))
+	switch(argc)
 	{
+	case 1:
 		throw BADARGC;
-	}
-
-	if(argc > 2)
-	{
+		break;
+	case 2:
+		break;
+	case 4:
 		secondvar = argv[SECONDVAR];
-
 		lowerCase(secondvar);
-
 		removePunctuation(secondvar);
-	}
-	else
-	{
-		if(type_ == REVERSI)
-		{
-			getNames(firstvar, secondvar);
-		}
-		else if(type_ == MAGIC)
-		{
-			firstvar = 3;
-			lowest = 1;
-		}
-	}
-	if(argc > 4)
-	{
+		second = true;
+	case 3:
 		firstvar = argv[FIRSTVAR];
 		lowerCase(firstvar);
 		removePunctuation(firstvar);
+		first = true;
+		break;
+	default:
+		throw BADARGC;
+		break;
+	}
+
+	if(type_ == REVERSI && (!first || !second))
+	{
+		getNames(firstvar, secondvar);
 	}
 	
 	try
 	{
 		if(gamename == "magicsquare" || gamename == "magicsquares")
 		{
-			int size = atoi(firstvar.c_str());
-			int lowest = atoi(secondvar.c_str());
 			type_ = MAGIC;
 			pointer = new magicSquares(size, lowest);
 			pointer->nameChecker();
@@ -1112,21 +1107,3 @@ void abstractGame :: isQuitting()
 {
 	quitting_=true;
 }
-
-//gameType stringGetType(string s)
-//{
-//	if(s == "magicsquares" || s == "magicsquare")
-//	{
-//		return MAGIC;
-//	}
-//	else if(s == "reversi")
-//	{
-//		return REVERSI;
-//	}
-//	else if(s == "ninealmonds")
-//	{
-//		return ALMONDS;
-//	}
-//	else
-//		return INVALID;
-//}

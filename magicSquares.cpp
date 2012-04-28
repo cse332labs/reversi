@@ -93,8 +93,7 @@ void magicSquares :: prompt()
 	{
 		case SETUP:
 			cout << "Welcome to Magic Square! Fill a square board with distinct integers such that the n numbers in all rows, all columns, and both diagonals sum to the same constant." << endl << endl;
-			cout << "Magic Square can be played on any N x N board. What size board would you like? ";
-			listen();
+
 			cout << "Magic Constant = " << getMagicConstant() << endl;
 			state_=NEEDPIECE;
 			break;
