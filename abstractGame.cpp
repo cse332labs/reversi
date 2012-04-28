@@ -10,7 +10,7 @@
 #include "inputProcessing.h"
 
 gameState abstractGame :: state_ = SETUP;
-abstractGame* abstractGame :: self_ = 0;
+abstractGame* abstractGame ::self_ = 0;
 gameType abstractGame :: type_ = INVALID;
 
 abstractGame::abstractGame()
@@ -35,7 +35,7 @@ bool abstractGame :: pieceMover(Point start, Point destination)
 void abstractGame :: nameChecker()
 {
 	cout << "What would you like to name this game? ";
-	listen();
+	abstractGame::listen();
 	ifstream name;
 	gameType gameType;
 	string typestring;
