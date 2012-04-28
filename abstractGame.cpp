@@ -1255,9 +1255,7 @@ void abstractGame :: loadReversi(string name)
 
 						intdx = atoi(destx.c_str());
 						intdy = atoi(desty.c_str());
-						Point start = Point(intsx, intsy);
 						Point dest = Point(intdx, intdy);
-						load.start_ = start;
 						load.dest_ = dest;
 					}
 					else
@@ -1269,7 +1267,7 @@ void abstractGame :: loadReversi(string name)
 				}
 				else
 				{
-					if(!isNumber(startx))
+					if(!isNumber(destx))
 					{
 						cout << "The first item in Line 4 is not a number. Bad save file." << endl; 
 						badSave = true; 
