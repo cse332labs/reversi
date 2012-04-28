@@ -22,10 +22,13 @@ protected:
 	string playerB_;
 	string playerW_;
 
+	bool needPoint;
+
 	int Bcount_, Wcount_;
 
 	bool checkMove(Point p);
 	bool addPiece();
+	void countALLtheThings();
 
 	void pieceFlipper(Point p);
 
@@ -48,6 +51,8 @@ public:
 	virtual void print();
 	virtual bool done();
 	virtual void turn();
+	virtual void listen();
+	void listenForPoint();
 	virtual endCondition play();
 };
 

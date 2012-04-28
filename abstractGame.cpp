@@ -6,16 +6,16 @@
 #include "stdafx.h"
 #include "abstractGame.h"
 #include "nineAlmonds.h"
-#include "magicSquares.h"
 #include "reversiGame.h"
+#include "magicSquares.h"
 #include "inputProcessing.h"
 
 gameState abstractGame :: state_ = SETUP;
-abstractGame* abstractGame :: self_ = 0;
+abstractGame* abstractGame ::self_ = 0;
 gameType abstractGame :: type_ = INVALID;
 
 abstractGame::abstractGame()
-	: quitGuard_(true), quitting_(false), comingBack_(false), maxSymbol_(1), validFirst_(false) 
+	: quitGuard_(true), quitting_(false), comingBack_(false), maxSymbol_(1), validFirst_(false)
 {
 }
 
@@ -106,6 +106,7 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 {
 	enum{PROGRAMNAME, GAMENAME, FIRSTVAR, SECONDVAR};
 	string gamename, firstvar, secondvar;
+	bool first=false, second=false;
 
 	int lowest = 1;
 	int size = 3;
@@ -114,52 +115,52 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 	type_ = stringGetType(gamename);
 	lowerCase(gamename);
 	removePunctuation(gamename);
+	istringstream sanitize(gamename);
 
-	if(!(argc == 4 || argc == 2))
+	gamename = "";
+
+	sanitize >> gamename;
+
+	switch(argc)
 	{
+	case 1:
 		throw BADARGC;
-	}
-
-	if(argc == 4)
-	{
+		break;
+	case 2:
+		break;
+	case 4:
 		secondvar = argv[SECONDVAR];
-
 		lowerCase(secondvar);
-
 		removePunctuation(secondvar);
-	}
-	else
-	{
-		if(type_ == REVERSI)
-		{
-
-		}
-		else
-		{
-
-		}
-	}
-	if(argc > 2)
-	{
+		second = true;
+	case 3:
 		firstvar = argv[FIRSTVAR];
 		lowerCase(firstvar);
 		removePunctuation(firstvar);
+		first = true;
+		break;
+	default:
+		throw BADARGC;
+		break;
+	}
+
+	if(type_ == REVERSI && (!first || !second))
+	{
+		getNames(firstvar, secondvar);
 	}
 
 	try
 	{
-		if(gamename == "magicsquare" || gamename == "magicsquares" && argc == 4)
+		if(gamename == "magicsquare" || gamename == "magicsquares")
 		{
-			int size = atoi(firstvar.c_str());
-			int lowest = atoi(secondvar.c_str());
 			type_ = MAGIC;
 			pointer = new magicSquares(size, lowest);
 			pointer->nameChecker();
 			return;
 		}
-		else if (gamename == "reversi" && argc == 4)
+		else if (gamename == "reversi")
 		{
-
+			pointer = new reversiGame(firstvar, secondvar);
 			pointer->nameChecker();
 			type_ = REVERSI;
 			return;
@@ -284,6 +285,18 @@ void abstractGame :: listen()
 					Point p = Point(x, y);
 					switch(state_)
 					{
+					case REVERSIPOINT:
+						if(board_.count(p)==0 && p.x_ < boardx_ && p.y_ <boardy_)
+						{
+							dest_=p;
+							return;
+						}
+						else
+						{
+							cout << "There is already a piece there. Try again" << endl;
+							listen();
+						}
+						break;
 					case NEEDLOC:
 						if(board_.count(p)==0 && p.x_ < boardx_ && p.y_ <boardy_)
 						{
@@ -1431,4 +1444,3 @@ void abstractGame :: isQuitting()
 {
 	quitting_=true;
 }
-
