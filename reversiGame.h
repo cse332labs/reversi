@@ -17,6 +17,7 @@ using namespace std;
 
 class reversiGame : public abstractGame {
 	friend ostream& operator<<(ostream &stream, const reversiGame &game);
+	friend void abstractGame :: loadReversi(string name);
 protected:
 	string playerB_;
 	string playerW_;
@@ -31,7 +32,7 @@ protected:
 	void lineFlipper(vector<Point> points);
 	bool lineCheck(vector<Point> points);
 
-virtual void createSave();
+	virtual void createSave();
 	virtual void loadSave();
 	
 	//temporarily adding - we probably shouldn't give the option to undo but it is pure virtual in abstractGame
