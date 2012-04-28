@@ -305,12 +305,14 @@ void abstractGame :: listen()
 						start_ = Point(x, y);
 					}
 					else
+					{
 						dest_ = Point(x, y);
+					}
 				}
 			}
 
 			
-			if(isNumber(in1) && isNumber(in2))
+			if(isNumber(in1) && isNumber(in2) && type_ != CHECKERS)
 			{
 				int x = atoi(in1.c_str());
 				int y = atoi(in2.c_str());

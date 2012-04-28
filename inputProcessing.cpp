@@ -112,3 +112,4 @@ void getNames(string& playerB, string& playerW)
 	
 	return;
 }
+

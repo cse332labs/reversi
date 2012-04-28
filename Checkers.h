@@ -47,6 +47,7 @@ protected:
 	// returns true of the move from start to destination is valid. Also updates jumped_ 
 	// member variable. DOES NOT DO THE MOVING
 	bool jumpedPiece(Point start, Point dest);
+	bool checkStartSelect();
 
 	// this will move whatever is in start to whatever is in destination. 
 	void movePiece();
@@ -60,6 +61,10 @@ protected:
 	virtual void undo();
 	virtual void createSave();
 	virtual void loadSave();
+
+	void listMoves();
+
+	void movesOut(ostream& stream, vector<Point> points);
 	
 public:
 	Checkers();
