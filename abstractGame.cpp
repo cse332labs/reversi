@@ -73,7 +73,7 @@ void abstractGame :: nameChecker()
 	name.open(name_ + ".txt");
 
 	getline(name, typestring);
-
+	
 	lowerCase(typestring);
 	removePunctuation(typestring);
 
