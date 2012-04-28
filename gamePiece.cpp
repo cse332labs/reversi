@@ -29,22 +29,27 @@ reversiPiece::reversiPiece()
 {
 	name_="Black";
 	symbol_="X";
-	TF_=true;
 	value_ = BLACK;
 }
 
-reversiPiece::reversiPiece(bool TF)
+reversiPiece::reversiPiece(pieceColor color)
 {
-	if(TF == true){
+	value_ = color;
+	
+	if(value_ == BLACK)
+	{
 		name_="Black";
 		symbol_="X";
-		TF_=true;
-		value_ = BLACK;
-	}else{
+	}
+	else if(value_ == WHITE)
+	{
 		name_="White";
 		symbol_="O";
-		TF_=false;
-		value_ = WHITE;
+	}
+	else //invalid color
+	{
+		name_="";
+		symbol_="";
 	}
 }
 
