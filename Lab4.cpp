@@ -15,11 +15,15 @@ using namespace std;
 // it is called if the user specifies incorrect arguments from the console
 endCondition usage()
 {
-	cout << "To run this program, please include the name of the game you wish to run as an argument" << endl;
-	cout << "Game Options: NineAlmonds or MagicSquare" << endl;
-	cout << "For MagicSquare, you may add 1 or 2 optional extra parameters." << endl;
-	cout << "First, a size value may be specified that determines the board dimensions." << endl;
-	cout << "The second extra value determines the lowest value of the number tiles." << endl;
+	cout << "To run this program, please include the name of the game you wish to run as an argument." << endl;
+	cout << "Game Options: NineAlmonds, MagicSquare, or Reversi" << endl ;
+	cout << "Extra Arguments:" << endl;
+	cout << "  NineAlmonds has none." << endl;
+	cout << "  For Reversi, you must add 2 extra parameters for two player names." << endl;
+	cout << "  For MagicSquare, you may add 1 or 2 optional extra parameters." << endl;
+	cout << "    First, a size value that determines the board dimensions. (Default is 3)" << endl;
+	cout << "	 Second, a value that determines the lowest value of the number tiles. (Default is 1)" << endl << endl;
+	
 	return USAGE;
 }
 
@@ -35,7 +39,7 @@ int main(int argc, char* argv[])
 		}
 		catch(endCondition)
 		{
-			cout << "There was an uknown error involving instancing." <<endl;
+			cout << "There was an unknown error involving instancing." <<endl;
 			return INSTANCEFAIL;
 		}
 	}

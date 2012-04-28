@@ -37,7 +37,7 @@ void abstractGame :: nameChecker()
 	cout << "What would you like to name this game? ";
 	listen();
 	ifstream name;
-	string gameType;
+	string gameType = "";
 
 	name.open(name_ + ".txt");
 
