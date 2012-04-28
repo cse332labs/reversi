@@ -1,4 +1,4 @@
-//Lab 5 - Single Player and Multiplayer Games
+///Lab 5 - Single Player and Multiplayer Games
 //Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu) and Chris Lauber (clauber@wustl.edu)
 // 4-27-12
 // abstractGame.cpp
@@ -1113,3 +1113,20 @@ void abstractGame :: isQuitting()
 	quitting_=true;
 }
 
+//gameType stringGetType(string s)
+//{
+//	if(s == "magicsquares" || s == "magicsquare")
+//	{
+//		return MAGIC;
+//	}
+//	else if(s == "reversi")
+//	{
+//		return REVERSI;
+//	}
+//	else if(s == "ninealmonds")
+//	{
+//		return ALMONDS;
+//	}
+//	else
+//		return INVALID;
+//}
