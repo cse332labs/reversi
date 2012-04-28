@@ -1,3 +1,8 @@
+//Lab 5 - Single Player and Multiplayer Games
+//Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu) and Chris Lauber (clauber@wustl.edu)
+// 4-27-12
+// reversiGame.cpp
+
 #include "stdafx.h"
 #include "reversiGame.h"
 #include <iostream>
@@ -203,7 +208,22 @@ endCondition reversiGame :: play()
 		}
 	}
 
-	cout << "Congratulations! You completed the game! Exiting game now." << endl << endl;
+	//call new method here to update piece counts
+
+	cout << "Game over. " << Bcount_ << " black pieces. " << Wcount_ << "white pieces." << endl;
+	if(Bcount_ < Wcount_)
+	{
+		cout << playerW_ << " won! Congratulations!" <<endl;
+	}
+	else if(Wcount_ < Bcount_)
+	{
+		cout << playerB_ << " won! Congratulations!" <<endl;
+	}
+	else
+	{
+		cout << "Draw. " << endl;
+	}
+	cout << "Exiting game now." << endl << endl;
 	return SUCCESS;
 }
 
@@ -264,14 +284,14 @@ bool reversiGame:: checkMove(Point p)
 		}
 	}
 
-	bool ub=lineCheck(up);
-	bool urb=lineCheck(upright);
-	bool rb=lineCheck(right);
-	bool drb=lineCheck(downright);
-	bool d=lineCheck(down);
-	bool dl=lineCheck(downleft);
-	bool l=lineCheck(left);
-	bool ul=lineCheck(upleft);
+	bool ub = lineCheck(up);
+	bool urb = lineCheck(upright);
+	bool rb = lineCheck(right);
+	bool drb = lineCheck(downright);
+	bool d = lineCheck(down);
+	bool dl = lineCheck(downleft);
+	bool l = lineCheck(left);
+	bool ul = lineCheck(upleft);
 	
 	if(ub || urb || rb || drb || d || dl || l || ul)
 	{
