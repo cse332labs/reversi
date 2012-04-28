@@ -1,4 +1,4 @@
-//Lab 5 - Single Player and Multiplayer Games
+///Lab 5 - Single Player and Multiplayer Games
 //Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu) and Chris Lauber (clauber@wustl.edu)
 // 4-27-12
 // abstractGame.cpp
@@ -76,7 +76,7 @@ void abstractGame :: nameChecker()
 // returns a pointer of AbstractGame type that is based off the string in argv[1]
 // if there are improper argument numbers (or the argv[1] is not a valid game name)
 // the pointer is null, otherwise it is to the appropriate game type.
-void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
+void abstractGame::newGame(int argc, char* argv[], abstractGame* pointer)
 {
 	enum{PROGRAMNAME, GAMENAME, FIRSTVAR, SECONDVAR};
 	string gamename, firstvar, secondvar;
@@ -85,7 +85,7 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 	int size = 3;
 
 	gamename = argv[GAMENAME];
-	type_ = stringGetType(gamename);
+	type_ = self_->stringGetType(gamename);
 	lowerCase(gamename);
 	removePunctuation(gamename);
 
@@ -1091,3 +1091,20 @@ void abstractGame :: isQuitting()
 	quitting_=true;
 }
 
+gameType stringGetType(string s)
+{
+	if(s == "magicsquares" || s == "magicsquare")
+	{
+		return MAGIC;
+	}
+	else if(s == "reversi")
+	{
+		return REVERSI;
+	}
+	else if(s == "ninealmonds")
+	{
+		return ALMONDS;
+	}
+	else
+		return INVALID;
+}
