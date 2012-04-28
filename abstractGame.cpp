@@ -111,12 +111,12 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 		{
 
 		}
-		else
+		else if(type_ == MAGIC)
 		{
 
 		}
 	}
-	if(argc > 2)
+	if(argc > 4)
 	{
 		firstvar = argv[FIRSTVAR];
 		lowerCase(firstvar);
@@ -125,7 +125,7 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 	
 	try
 	{
-		if(gamename == "magicsquare" || gamename == "magicsquares" && argc == 4)
+		if(gamename == "magicsquare" || gamename == "magicsquares")
 		{
 			int size = atoi(firstvar.c_str());
 			int lowest = atoi(secondvar.c_str());
@@ -134,9 +134,8 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 			pointer->nameChecker();
 			return;
 		}
-		else if (gamename == "reversi" && argc == 4)
+		else if (gamename == "reversi")
 		{
-
 			pointer->nameChecker();
 			type_ = REVERSI;
 			return;
