@@ -21,9 +21,14 @@ reversiGame :: reversiGame()
 }
 
 reversiGame :: reversiGame(string playerB, string playerW)
-	:abstractGame(), needPoint(false)
+	:abstractGame(), needPoint_(false)
 {
 	this->setBoardDim(defaultSize);
+
+	maxSymbol_=1;
+
+	playerB_ = playerB;
+	playerW_ = playerW;
 
 	//define initial pieces
 	reversiPiece black = reversiPiece(BLACK);
@@ -99,7 +104,7 @@ ostream& operator<<(ostream &stream, const reversiGame &game)
 
 void reversiGame :: print()
 {
-	cout << *this << endl;
+	cout << self_ << endl;
 }
 
 bool reversiGame :: done()
@@ -116,16 +121,20 @@ bool reversiGame :: done()
 		for (int j=0; j< boardy_; ++j)
 		{
 			key.set(i, j);
-			if(board_.at(key).value_ == BLACK)
+			if(board_.count(key) == 1)
 			{
-				++Bcount_;
-			}else if(board_.at(key).value_ == WHITE)
-			{
-				++Wcount_;
+				if(board_.at(key).value_ == BLACK)
+				{
+					++Bcount_;
+				}
+				else if(board_.at(key).value_ == WHITE)
+				{
+					++Wcount_;
+				}
 			}
 		}
 	}
-	if((Bcount_+Wcount_ == 64) || (Bcount_>0 && Wcount_==0) || (Bcount_==0 && Wcount_>0) /* OR NO MOVES LEFT*/)  // fix so not hard coding
+	if((Bcount_+Wcount_ == 64) || (Bcount_>0 && Wcount_==0) || (Bcount_==0 && Wcount_>0)) 
 	{
 		print();
 		return true;
@@ -138,9 +147,14 @@ bool reversiGame :: done()
 		{
 			for(int j = 0; j<boardy_; ++j)
 			{
-				if(checkMove(Point(i, j)))
+				if(board_.count(Point(i, j)) == 0)
 				{
-					noMoves = false;
+					cout << "Checking " << i << " " << j << endl;
+					Point temp = Point(i, j);
+					if(checkMove(temp))
+					{
+						noMoves = false;
+					}
 				}
 			}
 		}
@@ -150,18 +164,18 @@ bool reversiGame :: done()
 }
 
 
-// calls prompt from abstractGame for now
 void reversiGame :: prompt()
 {
+
 	switch(state_)
 	{
 	case WHITETURN:
 		cout << playerW_ << ", where do you want to place your piece this turn? ";
-		needPoint = true;
+		needPoint_ = true;
 		break;
 	case BLACKTURN:
 		cout << playerB_ << ", where do you want to place your piece this turn? ";
-		needPoint = true;
+		needPoint_ = true;
 		break;
 	case NEEDPIECE:
 		cout << "That move was not valid." << endl;
@@ -201,9 +215,9 @@ endCondition reversiGame :: play()
 	state_ = BLACKTURN;
 	while(!finished)
 	{
-		print();
-		this->turn();
-		if(this->done())
+		self_->print();
+		self_->turn();
+		if(self_->done())
 		{
 
 			finished = true;
@@ -211,7 +225,6 @@ endCondition reversiGame :: play()
 	}
 
 	//call new method here to update piece counts
-
 	cout << "Game over. " << Bcount_ << " black pieces. " << Wcount_ << "white pieces." << endl;
 	if(Bcount_ < Wcount_)
 	{
@@ -320,6 +333,8 @@ bool reversiGame:: checkMove(Point p)
 {
 	vector<Point> up, upright, right, downright, down, downleft, left, upleft;
 
+	bool ub=false, urb=false, rb=false, drb=false, db=false, dlb=false, lb=false, ulb=false;
+
 
 	for(int offset = 0; offset < boardx_; ++offset)
 	{
@@ -357,16 +372,40 @@ bool reversiGame:: checkMove(Point p)
 		}
 	}
 
-	bool ub = lineCheck(up);
-	bool urb = lineCheck(upright);
-	bool rb = lineCheck(right);
-	bool drb = lineCheck(downright);
-	bool d = lineCheck(down);
-	bool dl = lineCheck(downleft);
-	bool l = lineCheck(left);
-	bool ul = lineCheck(upleft);
+	if(!(up.size() == 0))
+	{
+		ub = lineCheck(up);
+	}
+	if(!(up.size()) == 0)
+	{
+		urb = lineCheck(upright);
+	}
+	if(!(right.size()) == 0)
+	{
+		rb = lineCheck(right);
+	}
+	if(!(downright.size()) == 0)
+	{
+		drb = lineCheck(downright);
+	}
+	if(!(down.size()) == 0)
+	{
+		db = lineCheck(down);
+	}
+	if(!(downleft.size()) == 0)
+	{
+		dlb = lineCheck(downleft);
+	}
+	if(!(left.size()) == 0)
+	{
+		lb = lineCheck(left);
+	}
+	if(!(upleft.size()) == 0)
+	{
+		ulb = lineCheck(upleft);
+	}
 
-	if(ub || urb || rb || drb || d || dl || l || ul)
+	if(ub || urb || rb || drb || db || dlb || lb || ulb)
 	{
 		return true;
 	}
@@ -447,7 +486,10 @@ void reversiGame :: pieceFlipper(Point p)
 {
 	vector<Point> up, upright, right, downright, down, downleft, left, upleft;
 
-	for(int offset = 0; offset < boardx_; ++offset)
+	bool ub=false, urb=false, rb=false, drb=false, db=false, dlb=false, lb=false, ulb=false;
+
+
+	for(int offset = 1; offset < boardx_; ++offset)
 	{
 		if(board_.count(Point(p.x_, p.y_+offset))==1)
 		{
@@ -483,14 +525,38 @@ void reversiGame :: pieceFlipper(Point p)
 		}
 	}
 
-	lineFlipper(up);
-	lineFlipper(upright);
-	lineFlipper(right);
-	lineFlipper(downright);
-	lineFlipper(down);
-	lineFlipper(downleft);
-	lineFlipper(left);
-	lineFlipper(upleft);
+	if(!(up.size() == 0))
+	{
+		lineFlipper(up);
+	}
+	if(!(up.size()) == 0)
+	{
+		lineFlipper(upright);
+	}
+	if(!(right.size()) == 0)
+	{
+		lineFlipper(right);
+	}
+	if(!(downright.size()) == 0)
+	{
+		lineFlipper(downright);
+	}
+	if(!(down.size()) == 0)
+	{
+		lineFlipper(down);
+	}
+	if(!(downleft.size()) == 0)
+	{
+		lineFlipper(downleft);
+	}
+	if(!(left.size()) == 0)
+	{
+		lineFlipper(left);
+	}
+	if(!(upleft.size()) == 0)
+	{
+		lineFlipper(upleft);
+	}
 }
 
 void reversiGame :: lineFlipper(vector<Point> points)
@@ -520,7 +586,7 @@ void reversiGame :: lineFlipper(vector<Point> points)
 		else
 		{
 
-			if(board_.at(temp).color_ == current)
+			if(!(board_.at(temp).color_ == current))
 			{
 				++i;
 				toFlip.push_back(points.at(i));
@@ -544,10 +610,10 @@ void reversiGame :: lineFlipper(vector<Point> points)
 
 void reversiGame :: listen()
 {
-	if(needPoint)
+	if(needPoint_)
 	{
 		listenForPoint();
-		needPoint = false;
+		needPoint_ = false;
 		return;
 	}
 	else

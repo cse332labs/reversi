@@ -8,7 +8,7 @@
 #ifndef INPUTPROCESSING_H
 #define INPUTPROCESSING_H
 
-typedef enum{ALMONDS, MAGIC, REVERSI, INVALID} gameType;
+typedef enum{ALMONDS, MAGIC, REVERSI, NOGAME, INVALID} gameType;
 
 #include <string>
 #include <sstream>

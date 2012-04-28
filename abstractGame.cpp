@@ -14,6 +14,10 @@ gameState abstractGame :: state_ = SETUP;
 abstractGame* abstractGame ::self_ = 0;
 gameType abstractGame :: type_ = INVALID;
 
+string abstractGame :: roughType_ = "";
+string abstractGame :: roughArg1_ = "";
+string abstractGame :: roughArg2_ = "";
+
 abstractGame::abstractGame()
 	: quitGuard_(true), quitting_(false), comingBack_(false), maxSymbol_(1), validFirst_(false)
 {
@@ -65,39 +69,34 @@ void abstractGame :: nameChecker()
 		loadReversi(name_);
 		return;
 	}
-	else
+	else if(gameType == NOGAME)
 	{
-		if(type_ == INVALID)
-		{
-			throw BADGAME;
-		}
-		else
-			return;
+		return;
 	}
+	else
+		throw BADGAME;
 }
 
 
 // returns a pointer of AbstractGame type that is based off the string in argv[1]
 // if there are improper argument numbers (or the argv[1] is not a valid game name)
 // the pointer is null, otherwise it is to the appropriate game type.
-void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
+void abstractGame::newGame(int argc, abstractGame*& pointer)
 {
-	enum{PROGRAMNAME, GAMENAME, FIRSTVAR, SECONDVAR};
-	string gamename, firstvar, secondvar;
+	string firstvar, secondvar;
 	bool first=false, second=false;
 
 	int lowest = 1;
 	int size = 3;
 
-	gamename = argv[GAMENAME];
-	type_ = stringGetType(gamename);
-	lowerCase(gamename);
-	removePunctuation(gamename);
-	istringstream sanitize(gamename);
+	lowerCase(roughType_);
+	removePunctuation(roughType_);
+	istringstream sanitize(roughType_);
 
-	gamename = "";
+	string type;
+	sanitize >> type;
+	type_ = stringGetType(type);
 
-	sanitize >> gamename;
 
 	switch(argc)
 	{
@@ -107,12 +106,12 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 	case 2:
 		break;
 	case 4:
-		secondvar = argv[SECONDVAR];
+		secondvar = roughArg2_;
 		lowerCase(secondvar);
 		removePunctuation(secondvar);
 		second = true;
 	case 3:
-		firstvar = argv[FIRSTVAR];
+		firstvar = roughArg1_;
 		lowerCase(firstvar);
 		removePunctuation(firstvar);
 		first = true;
@@ -129,21 +128,21 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 	
 	try
 	{
-		if(gamename == "magicsquare" || gamename == "magicsquares")
+		if(type_ == MAGIC)
 		{
-			type_ = MAGIC;
 			pointer = new magicSquares(size, lowest);
 			pointer->nameChecker();
 			return;
 		}
-		else if (gamename == "reversi")
+		else if (type_ == REVERSI)
 		{
-			pointer = new reversiGame(firstvar, secondvar);
+			reversiGame game = *new reversiGame(firstvar, secondvar);
+			pointer = &game;
 			pointer->nameChecker();
 			type_ = REVERSI;
 			return;
 		}
-		else if(gamename == "ninealmonds")
+		else if(type_ == ALMONDS)
 		{
 			pointer = new nineAlmonds();
 			type_ = ALMONDS;
@@ -169,8 +168,16 @@ void abstractGame :: instance(int argc, char* argv[])
 	{
 		throw INSTANCEFAIL;
 	}
+
+	roughType_ = argv[1];
+	if(argc == 4)
+	{
+		roughArg1_ = argv[2];
+		roughArg2_ = argv[3];
+	}
+
 	abstractGame* g = 0;
-	newGame(argc, argv, g);
+	newGame(argc, g);
 	self_=g;
 }
 

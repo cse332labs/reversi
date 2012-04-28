@@ -17,11 +17,12 @@ using namespace std;
 
 class reversiGame : public abstractGame {
 	friend ostream& operator<<(ostream &stream, const reversiGame &game);
+	friend void getNames(string& playerW, string& playerB);
 protected:
 	string playerB_;
 	string playerW_;
 
-	bool needPoint;
+	bool needPoint_;
 
 	int Bcount_, Wcount_;
 

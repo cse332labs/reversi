@@ -25,12 +25,13 @@ using namespace std;
 
 
 // struct of abstract (base) game type. Above are the various states that the game could be in declared in an enum
-
 class abstractGame{
 protected:
 	// stores state
 	static gameState state_;
 	static gameType type_;
+
+	static string roughType_, roughArg1_, roughArg2_;
 
 	//stores game Name
 	string name_;
@@ -86,7 +87,7 @@ protected:
 	gameState intToState(int i);
 
 	//method that can return various types of sub-games
-	static void newGame(int argc, char* argv[], abstractGame*& pointer);
+	static void newGame(int argc, abstractGame*& pointer);
 
 	// used by magicSquares and reversiGame to set the board size
 	virtual void setBoardDim(int n);

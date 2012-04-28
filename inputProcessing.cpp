@@ -66,6 +66,10 @@ gameType stringGetType(string s)
 	{
 		return ALMONDS;
 	}
+	else if(s == "")
+	{
+		return NOGAME;
+	}
 	else
 		return INVALID;
 }
@@ -79,7 +83,7 @@ void getNames(string& playerB, string& playerW)
 	removePunctuation(input1);
 	playerB = input1;
 	
-	cout << "What is the second palyer's name? ";
+	cout << "What is the second player's name? ";
 	string input2;
 	getline(cin, input2);
 	lowerCase(input2);
