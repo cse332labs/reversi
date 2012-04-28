@@ -8,6 +8,8 @@
 #ifndef INPUTPROCESSING_H
 #define INPUTPROCESSING_H
 
+typedef enum{ALMONDS, MAGIC, REVERSI, INVALID} gameType;
+
 #include <string>
 #include <sstream>
 #include "abstractGame.h"
@@ -18,6 +20,8 @@ void lowerCase(string& s);
 void removePunctuation(string&);
 
 bool isNumber(string s);
+
+gameType stringGetType(string s);
 
 // returns length of the string of an int
 int getLength(int symbol);
