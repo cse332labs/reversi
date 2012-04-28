@@ -1,6 +1,6 @@
-//Lab 4 - Nine Almonds and Magic Squares
-//Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu)
-// 5-7-12
+//Lab 5 - Single Player and Multiplayer Games
+//Name: Atalie Holman (aholman@go.wustl.edu) and Mason Allen (mrallen@wustl.edu) and Chris Lauber (clauber@wustl.edu)
+// 4-27-12
 // inputProcessing.cpp
 
 #include "stdafx.h"
