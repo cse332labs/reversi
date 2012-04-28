@@ -8,7 +8,7 @@
 #ifndef INPUTPROCESSING_H
 #define INPUTPROCESSING_H
 
-typedef enum{ALMONDS, MAGIC, REVERSI, NOGAME, INVALID} gameType;
+typedef enum{ALMONDS, MAGIC, REVERSI, CHECKERS, NOGAME, INVALID} gameType;
 
 #include <string>
 #include <sstream>
@@ -16,8 +16,9 @@ typedef enum{ALMONDS, MAGIC, REVERSI, NOGAME, INVALID} gameType;
 
 using namespace std;
 
-void lowerCase(string& s);
+void lowerCase(string&);
 void removePunctuation(string&);
+void sanitizeInput(string&);
 
 bool isNumber(string s);
 

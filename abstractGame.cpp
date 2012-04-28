@@ -6,6 +6,7 @@
 #include "stdafx.h"
 #include "abstractGame.h"
 #include "nineAlmonds.h"
+#include "Checkers.h"
 #include "reversiGame.h"
 #include "magicSquares.h"
 #include "inputProcessing.h"
@@ -13,6 +14,8 @@
 gameState abstractGame :: state_ = SETUP;
 abstractGame* abstractGame ::self_ = 0;
 gameType abstractGame :: type_ = INVALID;
+
+const int defaultSize = 8;
 
 string abstractGame :: roughType_ = "";
 string abstractGame :: roughArg1_ = "";
@@ -91,6 +94,11 @@ void abstractGame :: nameChecker()
 		loadReversi(name_);
 		return;
 	}
+	else if(gameType == CHECKERS)
+	{
+		loadCheckers(name_);
+		return;
+	}
 	else if(gameType == NOGAME)
 	{
 		return;
@@ -111,12 +119,11 @@ void abstractGame::newGame(int argc, abstractGame*& pointer)
 	int lowest = 1;
 	int size = 3;
 
-	lowerCase(roughType_);
-	removePunctuation(roughType_);
-	istringstream sanitize(roughType_);
+	sanitizeInput(roughType_);
+	istringstream typeStream(roughType_);
 
 	string type;
-	sanitize >> type;
+	typeStream >> type;
 	type_ = stringGetType(type);
 
 
@@ -131,11 +138,13 @@ void abstractGame::newGame(int argc, abstractGame*& pointer)
 		secondvar = roughArg2_;
 		lowerCase(secondvar);
 		removePunctuation(secondvar);
+		roughArg2_ = "2";
 		second = true;
 	case 3:
 		firstvar = roughArg1_;
 		lowerCase(firstvar);
 		removePunctuation(firstvar);
+		roughArg1_ = "1";
 		first = true;
 		break;
 	default:
@@ -143,7 +152,7 @@ void abstractGame::newGame(int argc, abstractGame*& pointer)
 		break;
 	}
 
-	if(type_ == REVERSI && (!first || !second))
+	if((type_ == REVERSI || type_ == CHECKERS) && (!first || !second)) 
 	{
 		getNames(firstvar, secondvar);
 	}
@@ -169,6 +178,14 @@ void abstractGame::newGame(int argc, abstractGame*& pointer)
 			pointer = new nineAlmonds();
 			type_ = ALMONDS;
 			pointer->nameChecker();
+			return;
+		}
+		else if(type_ == CHECKERS)
+		{
+			Checkers checkers = *new Checkers(firstvar, secondvar);
+			pointer = &checkers;
+			pointer -> nameChecker();
+			type_ = CHECKERS;
 			return;
 		}
 		else
@@ -275,15 +292,26 @@ void abstractGame :: listen()
 		}
 		if(iss >> in2)
 		{
-			bool num1 = true, num2 = true;
-			for(unsigned int i = 0; i < in2.length(); ++i)
+
+			//disables certain checks that are not used during checkers games.
+			if(type_ == CHECKERS)
 			{
-				if(!isdigit(in2.at(i)))
+				if(isNumber(in1) && isNumber(in2))
 				{
-					num2=false;
+					int x = atoi(in1.c_str());
+					int y = atoi(in2.c_str());
+
+					if(state_ == NEEDPIECE)
+					{
+						start_ = Point(x, y);
+					}
+					else
+						dest_ = Point(x, y);
 				}
 			}
-			if(num1 && num2)
+
+			
+			if(isNumber(in1) && isNumber(in2))
 			{
 				int x = atoi(in1.c_str());
 				int y = atoi(in2.c_str());
@@ -351,6 +379,8 @@ void abstractGame :: listen()
 				}
 			}
 		}
+		
+		//picks up relevant quit commands that might be used by the player.
 		else if(in1 == "quit" || !quitGuard_)
 		{
 			if(quitGuard_)
@@ -367,15 +397,20 @@ void abstractGame :: listen()
 			else
 				throw QUIT;
 		}
-		else if(in1 == "cancel")
+		//listens for the cancel message for almondGame. Probably shouldnt be here but legacy code now.
+		else if(in1 == "cancel" && type_ == ALMONDS)
 		{
 			state_ = NEEDPIECE;
 		}
+
+		//calls the virtual undo method of the particular game type.
 		else if(in1 == "undo")
 		{
 			this->undo();
 			return;
 		}
+
+		// is used to advanced to the ENDTURN state for advancing purposes.
 		else if(in1 == "finished" || in1 == "fin" || in1 == "done")
 		{
 			if(validFirst_)
@@ -389,12 +424,16 @@ void abstractGame :: listen()
 				return;
 			}
 		}
+
+		//forces the game to reprint the board in case it is lost for some reason.
 		else if(in1 == "board")
 		{
 			this->print();
 			return;
 		}
-		else
+
+		//rejects unknown commands
+		else if(type_ != CHECKERS)
 		{
 			cout << "I'm sorry, that doesn't appear to be a valid command. Try again." << endl << endl;
 		}
@@ -1414,6 +1453,11 @@ void abstractGame :: loadReversi(string name)
 	{
 		throw BADSAVE;
 	}
+}
+
+void abstractGame :: loadCheckers(string name)
+{
+	return;
 }
 
 //transforms an int to a corresponding state of the gameState enum

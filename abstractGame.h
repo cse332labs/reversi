@@ -18,10 +18,11 @@
 #include <fstream>
 #include <map>
 
+const int defaultBoardSize = 8;
 
 using namespace std;
 
-	typedef enum{SETUP, TURNSTART, FIRSTLOCKED, NEEDPIECE, NEEDLOC, EXTENDEDTURN, ENDTURN, FINISHED, QUITTING, WHITETURN, BLACKTURN, REVERSIPOINT, BADSTATE}gameState;
+	typedef enum{SETUP, TURNSTART, FIRSTLOCKED, NEEDPIECE, NEEDLOC, EXTENDEDTURN, ENDTURN, FINISHED, QUITTING, WHITETURN, BLACKTURN, REVERSIPOINT, PROCESSING, BADSTATE}gameState;
 
 
 // struct of abstract (base) game type. Above are the various states that the game could be in declared in an enum
@@ -79,6 +80,7 @@ protected:
 	void loadAlmonds(string in);
 	void loadSquares(string in);
 	void loadReversi(string in);
+	void loadCheckers(string in);
 
 	void noSave();
 

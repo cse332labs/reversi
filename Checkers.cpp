@@ -9,20 +9,49 @@
 
 using namespace std;
 
-const int defaultSize = 8;
+bool Checkers :: notFinished_ = true;
 
 //constructs reversiGame using the base class constructor and its own specifications. fills board
 // for proper reversi game.
 Checkers :: Checkers()
 {
-	string playerW, playerB;
-	getNames(playerB, playerW);
-	Checkers(playerB, playerW);
+	string playerR=" ", playerB=" ";
+	Checkers(playerB, playerR);
 }
 
-Checkers :: Checkers(string playerB, string playerW)
-	:abstractGame()
+Checkers :: Checkers(string playerB, string playerR)
+	:abstractGame(), isBlacksTurn_(true), currentMoveType_(EMPTY)
 {
+	maxSymbol_=1;
+
+	this ->setBoardDim(defaultBoardSize);
+
+	playerB_ = playerB;
+	playerR_ = playerR;
+
+	checkerPiece black = checkerPiece(BLACK);
+	checkerPiece red = checkerPiece(RED);
+
+	bool offsetLine = false;
+
+	int xOffset, yOffset;
+
+	for(int i = 0; i < 3; ++i)
+	{
+		yOffset = i;
+		for(int j = 0; j < 4; ++j)
+		{
+			xOffset = 2*j;
+			if(offsetLine)
+			{
+				++xOffset;
+			}
+			board_[Point(boardx_+xOffset, boardy_-yOffset-1)]=black;
+			board_[Point(boardx_+xOffset, boardy_+yOffset)]=red;
+		}
+		offsetLine = (!offsetLine);
+	}
+	
 }
 
 
@@ -89,11 +118,335 @@ bool Checkers :: done()
 
 void Checkers :: turn()
 {
-	return;
+	state_ = TURNSTART;
+	//begin the turn by printing out a useful message and the board.
+	prompt();
+	print();
+	state_ = NEEDPIECE;
+
+	//asks them for a piece to move until one is selected or a command is given
+	while(state_ == NEEDPIECE)
+	{
+		prompt();
+		listen();
+	}
+
+	//ensures that they are ready to be asked to give a destination point.
+	if(state_ != NEEDLOC)
+	{
+		return;
+	}
+
+	//asks them for a destination until they give one. 
+	while(state_ == NEEDLOC)
+	{
+		prompt();
+		listen();
+	}
+
+	//ensures that that all operations in finding location went properly (i.e. they didnt cancel or
+	//input anything weird)
+	if(state_ != PROCESSING)
+	{
+		return;
+	}
+
+	if(moveCheck(start_, dest_))
+	{
+		state_ = EXTENDEDTURN;
+		if(jumpedPiece(start_, dest_))
+		{
+			movePiece();
+			removePiece(jumped_);
+		}
+
+		while(state_ == EXTENDEDTURN)
+		{
+			prompt();
+			listen();
+		}
+		state_ = ENDTURN;
+	}
+	else
+	{
+		return;
+	}
+
+
 }
+
+void Checkers :: prompt()
+{
+	string name, color;
+	if(isBlacksTurn_)
+	{
+		name = playerB_;
+		color = "BLACK";
+	}
+	else
+	{
+		name = playerR_;
+		color = "RED";
+	}
+
+	switch(state_)
+	{
+	case TURNSTART:
+		cout << "Starting " << color << "'s turn. " << endl;
+		cout << "Number of Black Pieces: " << Bcount_ << endl;
+		cout << "Number of Red Pieces: " << Rcount_ << endl << endl;
+		break;
+	case NEEDPIECE:
+		cout << name << ", please select a piece to move." << endl;
+		break;
+	case NEEDLOC:
+		cout << color << "'S TURN: " << endl;
+		cout << "Moving piece at " << start_ << ". Where would you like to move it?" << endl;
+		cout << "Type 'listmoves' to see the available moves for this piece." << endl;
+		break;
+	case EXTENDEDTURN:
+		cout << "Continuing turn. Moving piece originally located at " << original_ << "." << endl;
+		cout << "Piece currently located at " << start_ << ". Where would you like to move it?" << endl;
+		cout << "Type 'listmoves' to see the available moves for this pieces." << endl;
+		break;
+	default:
+		abstractGame :: prompt();
+
+	}
+}
+
+void Checkers :: listen()
+{
+	abstractGame :: listen();
+}
+
 endCondition Checkers :: play()
 {
+	//begins the game by asking for the names of the players.
+	if(roughArg1_ != "1" || roughArg2_ != "2")
+	{
+		getNames(playerB_, playerR_);
+	}
+
+	while(notFinished_)
+	{
+		turn();
+
+		if(done())
+		{
+			notFinished_ = false;
+		}
+	}
+
 	return SUCCESS;
+}
+
+bool Checkers :: moveCheck(Point start, Point dest)
+{
+	checkerPiece piece = checkerPiece();
+	piece.set(board_.at(start));
+	
+	bool isValid = false;
+	vector<Point> availChoices = possibleLocations(start);
+
+	if(availChoices.size() == 0)
+	{
+		return isValid;
+	}
+
+	for(unsigned int i = 0; i < availChoices.size(); ++i)
+	{
+		Point temp = availChoices.at(i);
+
+		if(temp.x_ == dest.x_ && temp.y_ == dest.y_)
+		{
+			isValid=true;
+			currentMoveType_ = getMoveType(start, dest);
+		}
+	}
+
+	return isValid;	
+}
+
+bool Checkers :: jumpedPiece(Point start, Point dest)
+{
+
+	if(currentMoveType_ == UP || currentMoveType_ == DOWN || currentMoveType_ == EMPTY)
+	{
+		return false;
+	}
+
+	Point ans;
+
+	if(currentMoveType_ == JUMPDOWN)
+	{
+		if(start.x_ > dest.x_)
+		{
+			ans = Point(start.x_ - 1, start.y_-1);
+		}
+		else
+		{
+			ans = Point(start.x_ + 1, start.y_ -1);
+		}
+	}
+	else 
+	{
+		if(start.x_ > dest.x_)
+		{
+			ans = Point(start.x_ - 1, start.y_ + 1);
+		}
+		else
+		{
+			ans = Point(start.x_ + 1, start.y_ + 1);
+		}
+	}
+
+	if(board_.count(ans)==1)
+	{
+		jumped_ = ans;
+		return true;
+	}
+	else
+		return false;
+}
+
+void Checkers :: movePiece()
+{
+	board_[dest_]=board_.at(start_);
+	board_.erase(start_);
+
+	start_ = dest_;
+
+	if(start_.y_ == 0 && isBlacksTurn_ == true)
+	{
+		board_.at(start_).flip();
+	}
+	else if(start_.y_ == 7 && isBlacksTurn_ == false)
+	{
+		board_.at(start_).flip();
+	}
+	else
+		return;
+}
+
+void Checkers :: removePiece(Point p)
+{
+	checkerPiece removed = checkerPiece();
+	removed.set(board_.at(p));
+
+	if(removed.color_ == BLACK)
+	{
+		--Bcount_;
+	}
+	else
+	{
+		--Rcount_;
+	}
+
+	board_.erase(p);
+	
+}
+
+vector<Point> Checkers :: possibleLocations(Point p)
+{
+	vector<Point> ans;
+
+	checkerPiece checker = checkerPiece();
+	checker.set(board_.at(p));
+
+	Point ur, ul, dr, dl, urj, ulj, drj, dlj;
+
+	int moveDist=1, jumpDist=2;
+
+	ur =  Point(p.x_ + moveDist, p.y_ + moveDist);
+	ul =  Point(p.x_ - moveDist, p.y_ + moveDist);
+	dr =  Point(p.x_ + moveDist, p.y_ - moveDist);
+	dl =  Point(p.x_ - moveDist, p.y_ - moveDist);
+
+	urj = Point(p.x_ + jumpDist, p.y_ + jumpDist);
+	ulj = Point(p.x_ - jumpDist, p.y_ + jumpDist);
+	drj = Point(p.x_ + jumpDist, p.y_ - jumpDist);
+	dlj = Point(p.x_ - jumpDist, p.y_ - jumpDist);
+
+	if(checker.isKing_ || isBlacksTurn_)
+	{
+		if(board_.count(dr) == 0)
+		{
+			ans.push_back(dr);
+		}
+		if(board_.count(dl) == 0)
+		{
+			ans.push_back(dl);
+		}
+		if(board_.count(drj)==0 && jumpedPiece(start_, dest_))
+		{
+			ans.push_back(drj);
+		}
+		if(board_.count(dlj)==0 && jumpedPiece(start_, dest_))
+		{
+			ans.push_back(dlj);
+		}
+	}
+
+	if(checker.isKing_ || !isBlacksTurn_)
+	{
+		if(board_.count(ur) == 0)
+		{
+			ans.push_back(ur);
+		}
+		if(board_.count(ul) == 0)
+		{
+			ans.push_back(ul);
+		}
+		if((board_.count(urj)==0) && jumpedPiece(start_, dest_))
+		{
+			ans.push_back(urj);
+		}
+		if((board_.count(ulj))==0 && jumpedPiece(start_, dest_))
+		{
+			ans.push_back(ulj);
+		}
+	}
+
+	return ans;
+}
+
+moveType Checkers :: getMoveType(Point start, Point dest)
+{
+	bool sYisBigger = false;
+	bool jumpMove = false;
+	if(abs(start.x_ - dest.x_) == 2 || abs(start.y_ - dest.y_) == 2)
+	{
+		jumpMove = true;
+	}
+
+	if(start.y_ > dest.y_)
+	{
+		sYisBigger = true;
+	}
+	
+	if(!sYisBigger)
+	{
+		if(!jumpMove)
+		{
+			return UP;
+		}
+		else
+		{
+			return JUMPUP;
+		}
+	}
+	else
+	{
+		if(!jumpMove)
+		{
+			return DOWN;
+		}
+		else
+		{
+			return JUMPDOWN;
+		}
+	}
 }
 
 void Checkers :: createSave()
@@ -103,7 +456,7 @@ void Checkers :: createSave()
 
 void Checkers :: loadSave()
 {
-	return;
+	abstractGame :: loadSave("checkers");
 }
 
 
@@ -116,5 +469,6 @@ void Checkers :: loadSave()
 //not needed but necessary functions below
 void Checkers :: undo()
 {
+	cout << "No take backs! You can't undo in checkers!!" << endl;
 	return;
 }

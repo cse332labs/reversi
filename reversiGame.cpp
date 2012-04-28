@@ -9,7 +9,7 @@
 
 using namespace std;
 
-const int defaultSize = 8;
+
 
 //constructs reversiGame using the base class constructor and its own specifications. fills board
 // for proper reversi game.
@@ -23,7 +23,7 @@ reversiGame :: reversiGame()
 reversiGame :: reversiGame(string playerB, string playerW)
 	:abstractGame(), needPoint_(false)
 {
-	this->setBoardDim(defaultSize);
+	this->setBoardDim(defaultBoardSize);
 
 	maxSymbol_=1;
 

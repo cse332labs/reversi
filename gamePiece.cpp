@@ -56,17 +56,17 @@ reversiPiece::reversiPiece(pieceColor color)
 
 void almondPiece :: flip()
 {
-	return;
+	gamePiece :: flip();
 }
 
 void numberSquare :: flip()
 {
-	return;
+	gamePiece :: flip();
 }
 
 void gamePiece :: flip()
 {
-
+	return;
 }
 
 void reversiPiece :: flip()
@@ -123,3 +123,76 @@ bool const numberSquare :: operator<(const numberSquare &other)
 {
 	return (this->value_ < other.value_);
 }
+
+checkerPiece :: checkerPiece()
+{
+	checkerPiece(BLACK);
+}
+
+checkerPiece :: checkerPiece(pieceColor color)
+{
+	value_ = color;
+	color_ = color;
+	isKing_ = false;
+	switch(color)
+	{
+	case BLACK:
+		name_ = "black checker";
+		symbol_="X";
+		break;
+	case RED:
+		name_ = "red checker";
+		symbol_="O";
+		break;
+	default:
+		value_=0;
+		color_=INVALID_COLOR;
+		name_="badpiece";
+		symbol_="ERROR:BADPIECE";
+		break;
+	}
+}
+
+void checkerPiece :: flip()
+{
+	isKing_ = true;
+	if(color_ == RED)
+	{
+		name_ = "red king";
+		value_ = 1337;
+		symbol_ = "R";
+	}
+	else if(color_ == BLACK)
+	{
+		name_ = "black king";
+		value_ = 1337;
+		symbol_ = "b";
+	}
+	else
+	{
+		isKing_ = false;
+		cout << "There was an error trying to king that piece." << endl;
+	}
+}
+
+void checkerPiece :: king()
+{
+	flip();
+}
+
+void checkerPiece :: set(gamePiece p)
+{
+	this->color_=p.color_;
+	this->name_ = p.name_;
+	this->symbol_ = p.symbol_;
+	this->value_ = p.value_;
+	if(value_ == 1337)
+	{
+		isKing_ = true;
+	}
+	else
+		isKing_ = false;
+	return;
+}
+
+

@@ -10,6 +10,6 @@
 
 using namespace std;
 
-typedef enum{SUCCESS, USAGE, QUIT, BADSAVE, INSTANCEFAIL, BADMEM, BADARGC, BADGAME, ERROR}endCondition;
+typedef enum{SUCCESS, USAGE, QUIT, BADSAVE, INSTANCEFAIL, BADARGC, BADMEM, BADGAME, ERROR}endCondition;
 
 #endif

@@ -5,6 +5,8 @@
 
 #include "stdafx.h"
 #include "inputProcessing.h"
+#include "sstream"
+#include <sstream>
 
 using namespace std;
 
@@ -27,6 +29,15 @@ void removePunctuation(string& str)
 			str.at(i)=' ';
 		}
 	}
+}
+
+void sanitizeInput(string& str)
+{
+	removePunctuation(str);
+	lowerCase(str);
+	istringstream ins(str);
+	str = "";
+	getline(ins, str);
 }
 
 // returns the length of the int symbol as if it were a string.
@@ -66,6 +77,10 @@ gameType stringGetType(string s)
 	{
 		return ALMONDS;
 	}
+	else if(s == "checkers")
+	{
+		return CHECKERS;
+	}
 	else if(s == "")
 	{
 		return NOGAME;
@@ -76,6 +91,10 @@ gameType stringGetType(string s)
 
 void getNames(string& playerB, string& playerW)
 {
+	//begins by deleting the original content of the strings
+	playerB = "", playerW = "";
+	
+	//asks for and extracts player one's name
 	cout << "What is the first player's name? ";
 	string input1;
 	getline(cin, input1);
@@ -83,6 +102,7 @@ void getNames(string& playerB, string& playerW)
 	removePunctuation(input1);
 	playerB = input1;
 	
+	//asks for and extracts player two's name
 	cout << "What is the second player's name? ";
 	string input2;
 	getline(cin, input2);
