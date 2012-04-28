@@ -12,6 +12,7 @@ typedef enum{ALMONDS, MAGIC, REVERSI, CHECKERS, NOGAME, INVALID} gameType;
 
 #include <string>
 #include <sstream>
+#include <iostream>
 #include "abstractGame.h"
 
 using namespace std;
