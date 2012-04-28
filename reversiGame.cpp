@@ -235,6 +235,54 @@ void reversiGame :: undo()
 
 void reversiGame :: createSave()
 {
+	ofstream save;
+
+	save.open(name_ + ".txt");
+
+	bool finished = false;
+	int line = 1;
+
+	while(!finished)
+	{
+		switch(line)
+		{
+		case 1:
+			save << "Reversi";
+			break;
+		case 2:
+			save << name_;
+			break;
+		case 3:
+			save << turn_ << " " << state_ << " " << boardx_ <<","<<boardy_;
+			break;
+		case 4:
+			save << dest_.x_ << "," << dest_.y_;
+			break;
+		case 5:
+			save << "START";
+			break;
+		default:
+			for(int i = 0; i < boardx_; ++i)
+			{
+				for(int j = 0; j < boardy_; ++j)
+				{
+					Point temp = Point(i,j);
+					if(board_.count(temp)==1)
+					{
+						reversiPiece piece = reversiPiece(board_.at(temp).color_);
+
+						save << i << "," << j << " " << piece.symbol_ << endl;
+						++line;
+					}
+				}
+			}
+			save << "END";
+			finished=true;
+			break;
+		}
+		save << endl;
+		++line;
+	}
 }
 
 void reversiGame :: loadSave()

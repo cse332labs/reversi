@@ -35,6 +35,7 @@ reversiPiece::reversiPiece()
 reversiPiece::reversiPiece(pieceColor color)
 {
 	value_ = color;
+	color_ = color;
 	
 	if(value_ == BLACK)
 	{
