@@ -6,6 +6,7 @@
 #include "stdafx.h"
 #include "abstractGame.h"
 #include "nineAlmonds.h"
+#include "reversiGame.h"
 #include "magicSquares.h"
 #include "inputProcessing.h"
 
@@ -83,7 +84,7 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 {
 	enum{PROGRAMNAME, GAMENAME, FIRSTVAR, SECONDVAR};
 	string gamename, firstvar, secondvar;
-	bool first, second;
+	bool first=false, second=false;
 
 	int lowest = 1;
 	int size = 3;
@@ -132,6 +133,7 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 		}
 		else if (gamename == "reversi")
 		{
+			pointer = new reversiGame(firstvar, secondvar);
 			pointer->nameChecker();
 			type_ = REVERSI;
 			return;

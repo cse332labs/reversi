@@ -13,7 +13,14 @@ const int defaultSize = 8;
 
 //constructs reversiGame using the base class constructor and its own specifications. fills board
 // for proper reversi game.
-reversiGame::reversiGame()
+reversiGame :: reversiGame()
+{
+	string playerW, playerB;
+	getNames(playerB, playerW);
+	reversiGame(playerB, playerW);
+}
+
+reversiGame :: reversiGame(string playerB, string playerW)
 	:abstractGame()
 {
 	this->setBoardDim(defaultSize);
@@ -30,16 +37,6 @@ reversiGame::reversiGame()
 	board_[lr]=black;
 	board_[ur]=white;
 	board_[ll]=white;
-	
-
-
-}
-
-reversiGame::reversiGame(string playerB, string playerW)
-	:abstractGame() 
-{
-	playerB_ = playerB;
-	playerW_ = playerW;
 }
 
 // sets the board dimensions. 
@@ -133,7 +130,9 @@ bool reversiGame :: done()
 		print();
 		return true;
 	}
+
 	bool noMoves = true;
+
 	{
 		for(int i = 0; i < boardx_; ++i)
 		{
@@ -197,6 +196,7 @@ void reversiGame :: turn()
 endCondition reversiGame :: play()
 {
 	bool finished = false;
+	state_ = BLACKTURN;
 	while(!finished)
 	{
 		print();
