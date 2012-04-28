@@ -18,6 +18,7 @@ using namespace std;
 class reversiGame : public abstractGame {
 	friend ostream& operator<<(ostream &stream, const reversiGame &game);
 	friend void getNames(string& playerW, string& playerB);
+	friend void abstractGame :: loadReversi(string name);
 protected:
 	string playerB_;
 	string playerW_;

@@ -23,7 +23,7 @@ Lab4.cpp
 abstractGame.cpp
 	This contains the methods and functions related to the abstract game. Many of the virtual
 	functions have their intial definitions here. This is the class that is extended by 
-	nineAlmonds and magicSquares
+	nineAlmonds, magicSquares, and reversiGame
 
 nineAlmonds.cpp
 	This contains the methods and functions related to the nineAlmonds game class. This contains
@@ -84,23 +84,31 @@ gamePiece.h
 
 /////////////////////////////////////////////////////////////////////////////
 TEST CASES:
-	We tested our program against a vareity of inputs. We found that it was able to handle most 
-	game sizes (although there are some problems viewing extremely large boards on the console). 
-	We tested it on a variety of inputs all of them are handled properly (negative, out of bounds, 
-	etc).
+	We tested our program against a variety of proper and improper argument formats.
+		Proper formats: ninealmonds, magicsquare (with and without 1 or 2 additional arguments), and
+		reversi (with two extra arguments for the two players' names)
+		Improper formats: no gamename argument, badly formed gamename, incorrect extra arguments, and
+		reversi without 2 extra name arguments.
+
+	We found that Magic Square was able to handle most game sizes (although there are some problems 
+	viewing extremely large boards on the small console window). 
+
+	We tested a variety of coordinate inputs and all of them are handled properly for each game (negative, 
+	out-of-bounds, non-integer, etc.).
 
 /////////////////////////////////////////////////////////////////////////////
 ERRORS: 
 
 Linker 2001 and Linker 2019 errors
 
+In lab 4, the only game that needed to handle extra arguments was Magic Square. However, now two games
+need to handle two extra arguments. When we tried to implement reversiGame with player name arguments, 
+we faced this issue. We had to make changes to allow for extra arguments to be passed in and handled to 
+create either Magic Square and Reversi from the abstractGame newGame method.
+
+We had difficulty getting games to run. Several errors for a long time, such as "invalid null pointer".
+
 We have also faced errors with static/non-static objects as we implemented the Singleton pattern.
-
-In lab 4, the only game that needed to handle extra arguments was Magic Square. We had to make changes
-to allow for extra arguments to be passed in and handled to create either Magic Square and Reversi from
-the abstractGame newGame method.
-
-no significant compiler errors
 
 /////////////////////////////////////////////////////////////////////////////
 TEAMWORK:
@@ -112,7 +120,7 @@ and game set-up while Chris worked on game logic (play, done, turn, etc.).
 
 To make code updating and sharing more efficient than working from one monitor or emailing versions back and forth,
 we set up a github group account (https://github.com/cse332labs/reversi). While this took a little getting used to, 
-it ultimately made merging and version control far more effective.
+and caused several merge conflicts, it ultimately made version control more effective so we could each contribute more.
 
 /////////////////////////////////////////////////////////////////////////////
 EXTRAS:
