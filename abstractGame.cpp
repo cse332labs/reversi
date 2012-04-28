@@ -93,6 +93,11 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 	type_ = stringGetType(gamename);
 	lowerCase(gamename);
 	removePunctuation(gamename);
+	istringstream sanitize(gamename);
+
+	gamename = "";
+
+	sanitize >> gamename;
 
 	switch(argc)
 	{
@@ -258,6 +263,18 @@ void abstractGame :: listen()
 					Point p = Point(x, y);
 					switch(state_)
 					{
+					case REVERSIPOINT:
+						if(board_.count(p)==0 && p.x_ < boardx_ && p.y_ <boardy_)
+						{
+							dest_=p;
+							return;
+						}
+						else
+						{
+							cout << "There is already a piece there. Try again" << endl;
+							listen();
+						}
+						break;
 					case NEEDLOC:
 						if(board_.count(p)==0 && p.x_ < boardx_ && p.y_ <boardy_)
 						{

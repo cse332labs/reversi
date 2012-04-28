@@ -156,10 +156,12 @@ void reversiGame :: prompt()
 	switch(state_)
 	{
 	case WHITETURN:
-		cout << playerW_ << " select a piece to move? ";
+		cout << playerW_ << ", where do you want to place your piece this turn? ";
+		needPoint = true;
 		break;
 	case BLACKTURN:
-		cout << playerB_ << " select a piece to move? ";
+		cout << playerB_ << ", where do you want to place your piece this turn? ";
+		needPoint = true;
 		break;
 	case NEEDPIECE:
 		cout << "That move was not valid." << endl;
@@ -516,3 +518,27 @@ void reversiGame :: lineFlipper(vector<Point> points)
 		}
 	}
 }
+
+void reversiGame :: listen()
+{
+	if(needPoint)
+	{
+		listenForPoint();
+		needPoint = false;
+		return;
+	}
+	else
+	{
+		abstractGame :: listen();
+	}
+}
+
+void reversiGame :: listenForPoint()
+{
+	gameState temp = state_;
+	state_ = REVERSIPOINT;
+	abstractGame :: listen();
+	state_ = temp;
+	return;
+}
+

@@ -21,7 +21,7 @@
 
 using namespace std;
 
-	typedef enum{SETUP, TURNSTART, FIRSTLOCKED, NEEDPIECE, NEEDLOC, EXTENDEDTURN, ENDTURN, FINISHED, QUITTING, WHITETURN, BLACKTURN, BADSTATE}gameState;
+	typedef enum{SETUP, TURNSTART, FIRSTLOCKED, NEEDPIECE, NEEDLOC, EXTENDEDTURN, ENDTURN, FINISHED, QUITTING, WHITETURN, BLACKTURN, REVERSIPOINT, BADSTATE}gameState;
 
 
 // struct of abstract (base) game type. Above are the various states that the game could be in declared in an enum
@@ -34,8 +34,6 @@ protected:
 
 	//stores game Name
 	string name_;
-
-
 
 	//stores number of turns (nineAlmonds) or number of uses of undo (magicSquare)
 	int turn_;
