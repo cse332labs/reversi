@@ -33,7 +33,6 @@ magicSquares :: magicSquares(int size, int lowest)
 	this->setBoardDim(size);
 	generateTiles(lowest, size);
 	maxAxis_ = getLength(boardx_+1);
-	state_=NEEDPIECE;
 	lowest_=lowest;
 }
 

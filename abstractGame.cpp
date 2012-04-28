@@ -35,7 +35,7 @@ bool abstractGame :: pieceMover(Point start, Point destination)
 void abstractGame :: nameChecker()
 {
 	cout << "What would you like to name this game? ";
-	listen();
+	this->listen();
 	ifstream name;
 	gameType gameType;
 	string typestring;
