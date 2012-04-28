@@ -98,8 +98,6 @@ public:
 
 	static abstractGame* self_;
 
-
-
 	void setState(gameState s);
 
 	static void instance(int argc, char* argv[]);

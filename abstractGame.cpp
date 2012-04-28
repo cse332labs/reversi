@@ -105,6 +105,17 @@ void abstractGame::newGame(int argc, char* argv[], abstractGame*& pointer)
 
 		removePunctuation(secondvar);
 	}
+	else
+	{
+		if(type_ == REVERSI)
+		{
+
+		}
+		else
+		{
+
+		}
+	}
 	if(argc > 2)
 	{
 		firstvar = argv[FIRSTVAR];
