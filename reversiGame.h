@@ -25,13 +25,14 @@ protected:
 
 	bool checkMove(Point p);
 	bool addPiece();
+	void countALLtheThings();
 
 	void pieceFlipper(Point p);
 
 	void lineFlipper(vector<Point> points);
 	bool lineCheck(vector<Point> points);
 
-virtual void createSave();
+	virtual void createSave();
 	virtual void loadSave();
 	
 	//temporarily adding - we probably shouldn't give the option to undo but it is pure virtual in abstractGame

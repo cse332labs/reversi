@@ -232,6 +232,13 @@ void reversiGame :: undo()
 	return;
 }
 
+void reversiGame::countALLtheThings()
+{
+	Bcount_ = 0;
+	Wcount_ = 0;
+
+}
+
 
 void reversiGame :: createSave()
 {
