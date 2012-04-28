@@ -52,3 +52,20 @@ bool :: isNumber(string s)
 	return num;
 }
 
+gameType stringGetType(string s)
+{
+	if(s == "magicsquares" || s == "magicsquare")
+	{
+		return MAGIC;
+	}
+	else if(s == "reversi")
+	{
+		return REVERSI;
+	}
+	else if(s == "ninealmonds")
+	{
+		return ALMONDS;
+	}
+	else
+		return INVALID;
+}

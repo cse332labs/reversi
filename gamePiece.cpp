@@ -70,18 +70,18 @@ void gamePiece :: flip()
 
 void reversiPiece :: flip()
 {
-	if(TF_ == true)
+	if(this->color_ == BLACK)
 	{
 		name_="White";
 		symbol_="O";
-		TF_=false;
+		color_ = WHITE;
 		value_ = WHITE;
 	}
 	else
 	{
 		name_="Black";
 		symbol_="X";
-		TF_=true;
+		color_ = BLACK;
 		value_ = BLACK;
 	}
 }

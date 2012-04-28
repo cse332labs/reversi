@@ -21,6 +21,7 @@ typedef enum{BLACK, WHITE, INVALID_COLOR} pieceColor;
 struct gamePiece
 {
 	string name_;
+	pieceColor color_;
 	string symbol_;
 	int value_;
 
@@ -62,6 +63,8 @@ struct numberSquare : gamePiece
 
 struct reversiPiece : gamePiece
 {
+
+
 	reversiPiece(); //default is true
 	reversiPiece(pieceColor color);
 

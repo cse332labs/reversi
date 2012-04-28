@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 		cout << "Failed to allocate memory." << endl;
 	}
 
-	if(abstractGame :: self_ != 0)
+	if(abstractGame :: self_ == 0)
 	{
 		return usage();
 	}
