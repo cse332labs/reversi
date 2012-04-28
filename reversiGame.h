@@ -18,7 +18,7 @@ protected:
 
 	int Bcount_, Wcount_;
 
-	bool checkMove();
+	bool checkMove(Point p);
 	bool addPiece();
 
 	void pieceFlipper(Point p);

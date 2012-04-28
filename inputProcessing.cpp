@@ -51,3 +51,4 @@ bool :: isNumber(string s)
 	}
 	return num;
 }
+

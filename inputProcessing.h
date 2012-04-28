@@ -10,6 +10,7 @@
 
 #include <string>
 #include <sstream>
+#include "abstractGame.h"
 
 using namespace std;
 

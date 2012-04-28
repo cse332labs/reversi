@@ -128,7 +128,21 @@ bool reversiGame :: done()
 		print();
 		return true;
 	}
-	return false;
+	bool noMoves = true;
+	{
+		for(int i = 0; i < boardx_; ++i)
+		{
+			for(int j = 0; j<boardy_; ++j)
+			{
+				if(checkMove(Point(i, j)))
+				{
+					noMoves = false;
+				}
+			}
+		}
+	}
+
+	return noMoves;
 }
 
 
@@ -180,6 +194,7 @@ endCondition reversiGame :: play()
 	bool finished = false;
 	while(!finished)
 	{
+		print();
 		this->turn();
 		if(this->done())
 		{
@@ -208,10 +223,8 @@ void reversiGame :: loadSave()
 }
 
 //returns if there are any available moves from the given 
-bool reversiGame:: checkMove()
+bool reversiGame:: checkMove(Point p)
 {
-	Point p = dest_;
-
 	vector<Point> up, upright, right, downright, down, downleft, left, upleft;
 
 	
@@ -310,7 +323,7 @@ bool reversiGame :: lineCheck(vector<Point> points)
 
 bool reversiGame::addPiece()
 {
-	if(checkMove())
+	if(checkMove(dest_))
 	{
 		if(BLACKTURN)
 		{

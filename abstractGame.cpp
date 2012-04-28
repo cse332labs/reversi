@@ -11,11 +11,11 @@
 
 gameState abstractGame :: state_ = SETUP;
 abstractGame* abstractGame :: self_ = 0;
+gameType abstractGame :: type_ = INVALID;
 
 abstractGame::abstractGame()
 	: quitGuard_(true), quitting_(false), comingBack_(false), maxSymbol_(1), validFirst_(false) 
 {
-	
 }
 
 //basic piecemover for the all games. moves piece at Map[start] to map[finished] 
@@ -63,7 +63,12 @@ void abstractGame :: nameChecker()
 	}
 	else
 	{
-
+		if(type_ == INVALID)
+		{
+			throw BADGAME;
+		}
+		else
+			return;
 	}
 }
 
@@ -71,7 +76,7 @@ void abstractGame :: nameChecker()
 // returns a pointer of AbstractGame type that is based off the string in argv[1]
 // if there are improper argument numbers (or the argv[1] is not a valid game name)
 // the pointer is null, otherwise it is to the appropriate game type.
-void abstractGame::newGame(int argc, char* argv[])
+void abstractGame::newGame(int argc, char* argv[], abstractGame* pointer)
 {
 	enum{PROGRAMNAME, GAMENAME, FIRSTVAR, SECONDVAR};
 	string gamename, firstvar, secondvar;
@@ -80,6 +85,7 @@ void abstractGame::newGame(int argc, char* argv[])
 	int size = 3;
 
 	gamename = argv[GAMENAME];
+	type_ = self_->stringGetType(gamename);
 	lowerCase(gamename);
 	removePunctuation(gamename);
 
@@ -90,7 +96,6 @@ void abstractGame::newGame(int argc, char* argv[])
 
 	if(argc == 4)
 	{
-
 		secondvar = argv[SECONDVAR];
 
 		lowerCase(secondvar);
@@ -110,18 +115,21 @@ void abstractGame::newGame(int argc, char* argv[])
 		{
 			int size = atoi(firstvar.c_str());
 			int lowest = atoi(secondvar.c_str());
-			self_ = new magicSquares(size, lowest);
-			self_->nameChecker();
+			pointer = new magicSquares(size, lowest);
+			pointer->nameChecker();
+			return;
 		}
 		else if (gamename == "reversi" && argc == 4)
 		{
 
-			self_->nameChecker();
+			pointer->nameChecker();
+			return;
 		}
 		else
 		{
-			self_ = new nineAlmonds();
-			self_->nameChecker();
+			pointer = new nineAlmonds();
+			pointer->nameChecker();
+			return;
 		}
 	}
 	catch (bad_alloc ba)
@@ -137,7 +145,9 @@ void abstractGame :: instance(int argc, char* argv[])
 	{
 		throw INSTANCEFAIL;
 	}
-	newGame(argc, argv);
+	abstractGame* g = 0;
+	newGame(argc, argv, g);
+	self_=g;
 }
 
 // state accessor
@@ -580,10 +590,6 @@ void abstractGame :: loadAlmonds(string name)
 
 	while(!boardDone)
 	{
-
-
-	
-
 		istringstream piece(input);
 
 		string xval, yval, name, symbol;
@@ -653,12 +659,14 @@ void abstractGame :: loadAlmonds(string name)
 		}
 
 	}
+
 	if(!badSave)
 	{
 		cout << "File successfully loaded." << endl;
 		load.board_=board;
 		load.comingBack_=true;
-		*this=load;
+		self_= &load;
+		return;
 	}
 	else
 	{
@@ -1036,7 +1044,8 @@ void abstractGame :: loadSquares(string name)
 	{
 		cout << "File successfully loaded." << endl;
 		load.comingBack_=true;
-		*this=load;
+		self_=&load;
+		return;
 	}
 	else
 	{
@@ -1080,4 +1089,22 @@ gameState abstractGame :: intToState(int i)
 void abstractGame :: isQuitting()
 {
 	quitting_=true;
+}
+
+gameType stringGetType(string s)
+{
+	if(s == "magicsquares" || s == "magicsquare")
+	{
+		return MAGIC;
+	}
+	else if(s == "reversi")
+	{
+		return REVERSI;
+	}
+	else if(s == "ninealmonds")
+	{
+		return ALMONDS;
+	}
+	else
+		return INVALID;
 }

@@ -26,13 +26,12 @@ endCondition usage()
 // creates a pointer of abstract type that is specialized in the newGame function
 int main(int argc, char* argv[])
 {
-	abstractGame* game = 0;
-
+	
 	try
 	{
 		try
 		{
-			game->instance(argc, argv);
+			abstractGame :: self_->instance(argc, argv);
 		}
 		catch(endCondition)
 		{
@@ -45,25 +44,25 @@ int main(int argc, char* argv[])
 		cout << "Failed to allocate memory." << endl;
 	}
 
-	if(!game)
+	if(abstractGame :: self_ != 0)
 	{
 		return usage();
 	}
 
 	try
 	{
-		endCondition play = game->play();
-		delete game;
+		endCondition play = abstractGame :: self_->play();
+		delete abstractGame :: self_;
 		return play;
 	}
 	catch(endCondition e)
 	{	 
 		if(e == QUIT)
 		{
-			game->isQuitting();
+			abstractGame :: self_->isQuitting();
 			cout << "Do you want to save? ";
-			game->listen();
-			delete game; 
+			abstractGame :: self_->listen();
+			delete abstractGame :: self_; 
 			return QUIT;
 		}
 	}

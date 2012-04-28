@@ -22,6 +22,7 @@
 using namespace std;
 
 	typedef enum{SETUP, TURNSTART, FIRSTLOCKED, NEEDPIECE, NEEDLOC, EXTENDEDTURN, ENDTURN, FINISHED, QUITTING, WHITETURN, BLACKTURN, BADSTATE}gameState;
+	typedef enum{ALMONDS, MAGIC, REVERSI, INVALID} gameType;
 
 // struct of abstract (base) game type. Above are the various states that the game could be in declared in an enum
 
@@ -29,6 +30,7 @@ class abstractGame{
 protected:
 	// stores state
 	static gameState state_;
+	static gameType type_;
 
 	//stores game Name
 	string name_;
@@ -86,7 +88,7 @@ protected:
 	gameState intToState(int i);
 
 	//method that can return various types of sub-games
-	static void newGame(int argc, char* argv[]);
+	static void newGame(int argc, char* argv[], abstractGame* pointer);
 
 	// used by magicSquares and reversiGame to set the board size
 	virtual void setBoardDim(int n);
@@ -95,6 +97,8 @@ public:
 	abstractGame();
 
 	static abstractGame* self_;
+
+	gameType stringGetType(string s);
 
 	void setState(gameState s);
 
