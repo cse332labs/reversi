@@ -230,17 +230,17 @@ void Checkers :: prompt()
 		cout << "Number of Red Pieces: " << Rcount_ << endl << endl;
 		break;
 	case NEEDPIECE:
-		cout << name << ", please select a piece to move.";
+		cout << name << ", please select a piece to move. ";
 		break;
 	case NEEDLOC:
 		cout << name << "'S TURN: " << endl;
-		cout << "Moving piece at " << start_ << ". Where would you like to move it?";
+		cout << "Moving piece at " << start_ << ". Where would you like to move it?" ;
 		cout << "Type 'listmoves' to see the available moves for this piece." << endl;
 		break;
 	case EXTENDEDTURN:
 		cout << "Continuing turn. Moving piece originally located at " << original_ << "." << endl;
-		cout << "Piece currently located at " << start_ << ". Where would you like to move it?";
-		cout << "Type 'listmoves' to see the available moves for this pieces. Type 'finished' or 'done' to end your turn" << endl;
+		cout << "Piece currently located at " << start_ << ". Where would you like to move it? ";
+		cout << "Type 'listmoves' to see the available moves for this pieces. Type 'finished' or 'done' to end your turn. " << endl;
 		break;
 	default:
 		abstractGame :: prompt();
