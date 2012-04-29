@@ -29,8 +29,8 @@ Checkers :: Checkers(string playerB, string playerR)
 	playerB_ = playerB;
 	playerR_ = playerR;
 
-	checkerPiece black = checkerPiece(BLACK);
-	checkerPiece red = checkerPiece(RED);
+	checkerPiece black = checkerByColor(BLACK);
+	checkerPiece red = checkerByColor(RED);
 
 	bool offsetLine = false;
 
@@ -184,28 +184,37 @@ void Checkers :: turn()
 
 	if(moveCheck(start_, dest_))
 	{
-		state_ = EXTENDEDTURN;
+
 
 		//superfluous for it's boolean check function, but used to ensure that the member variable
 		//is accurate for the current move and current jummped piece.
-		if(jumpedPiece(start_, dest_))
+		if(jumpedPiece(start_, dest_) || currentMoveType_ == UP || currentMoveType_ == DOWN)
 		{
 			movePiece();
-			removePiece(jumped_);
+			if( currentMoveType_ == JUMPUP || currentMoveType_ == JUMPDOWN)
+			{
+				removePiece(jumped_);
+				state_ = EXTENDEDTURN;
+			}
 		}
 
 		while(state_ == EXTENDEDTURN)
 		{
+			print();
 			prompt();
 			listen();
+			if(moveCheck(start_, dest_))
+			{
+				if(currentMoveType_ == JUMPUP || currentMoveType_ == JUMPDOWN)
+				{
+					movePiece();
+					removePiece(jumped_);
+				}
+			}
 		}
 	}
-	else
-	{
-		return;
-	}
-
-
+	
+	isBlacksTurn_ = (!isBlacksTurn_);
 }
 
 void Checkers :: prompt()
@@ -234,17 +243,17 @@ void Checkers :: prompt()
 		break;
 	case NEEDLOC:
 		cout << name << "'S TURN: " << endl;
-		cout << "Moving piece at " << start_ << ". Where would you like to move it?" ;
 		cout << "Type 'listmoves' to see the available moves for this piece." << endl;
+		cout << "Moving piece at " << start_ << ". Where would you like to move it? " ;
 		break;
 	case EXTENDEDTURN:
 		cout << "Continuing turn. Moving piece originally located at " << original_ << "." << endl;
-		cout << "Piece currently located at " << start_ << ". Where would you like to move it? ";
 		cout << "Type 'listmoves' to see the available moves for this pieces. Type 'finished' or 'done' to end your turn. " << endl;
+		cout << "Piece currently located at " << start_ << ". Where would you like to move it? ";
 		break;
 	default:
 		abstractGame :: prompt();
-
+		break;
 	}
 }
 

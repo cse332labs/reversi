@@ -55,7 +55,7 @@ ostream& operator<<(ostream &stream, const reversiGame &game)
 {
 	// formatting set-up to account for variable length symbols and readability 
 	char space = ' ';
-	string spacing(game.maxSymbol_, space); // adds space the width of the max length symbol
+	string spacing(1, space); // adds space the width of the max length symbol
 	char verticalBar = '|';
 	int dashCount = (game.boardx_ * 3) + (game.boardx_ - 1); 
 	string dashes(dashCount,'-');
@@ -70,12 +70,6 @@ ostream& operator<<(ostream &stream, const reversiGame &game)
 		{
 			if(x==0 && y!=0)
 			{
-				if (getLength(y-1) < game.maxSymbol_)
-				{
-					//determine number spaces to add before y-axis symbol (only need if we are using nxn boards)
-					string spaces(game.maxSymbol_ - getLength(y-1), space);
-					stream << spaces;
-				}
 				stream << y-1; //prints vertical axis
 			}
 			else if(game.board_.count(Point(x-1, y-1)) == 1) //check if there is a piece at that position
@@ -104,7 +98,7 @@ ostream& operator<<(ostream &stream, const reversiGame &game)
 
 void reversiGame :: print()
 {
-	cout << self_ << endl;
+	cout << *this << endl;
 }
 
 bool reversiGame :: done()

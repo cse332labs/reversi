@@ -126,31 +126,39 @@ bool const numberSquare :: operator<(const numberSquare &other)
 
 checkerPiece :: checkerPiece()
 {
-	checkerPiece(BLACK);
+	name_ = "black checker";
+	color_ = BLACK;
+	isKing_ = false;
+	symbol_ = "X";
+	value_ = 0;
 }
 
-checkerPiece :: checkerPiece(pieceColor color)
+checkerPiece checkerByColor(pieceColor color)
 {
-	value_ = color;
-	color_ = color;
-	isKing_ = false;
+	checkerPiece piece = checkerPiece();
+
+	piece.value_ = color;
+	piece.color_ = color;
+	piece.isKing_ = false;
 	switch(color)
 	{
 	case BLACK:
-		name_ = "black checker";
-		symbol_="X";
+		piece.name_ = "black checker";
+		piece.symbol_="X";
 		break;
 	case RED:
-		name_ = "red checker";
-		symbol_="O";
+		piece.name_ = "red checker";
+		piece.symbol_="O";
 		break;
 	default:
-		value_=0;
-		color_=INVALID_COLOR;
-		name_="badpiece";
-		symbol_="ERROR:BADPIECE";
+		piece.value_=0;
+		piece.color_=INVALID_COLOR;
+		piece.name_="badpiece";
+		piece.symbol_="ERROR:BADPIECE";
 		break;
 	}
+
+	return piece;
 }
 
 void checkerPiece :: flip()

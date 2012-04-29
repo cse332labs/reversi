@@ -72,13 +72,14 @@ struct reversiPiece : gamePiece
 struct checkerPiece : gamePiece
 {
 	checkerPiece();
-	checkerPiece(pieceColor color);
 
 	bool isKing_;
 
 	virtual void flip();
 	void king();
-	void set(gamePiece piece);
+	void set(gamePiece p);
 };
+
+checkerPiece checkerByColor(pieceColor color);
 
 #endif
