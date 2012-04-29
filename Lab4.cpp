@@ -16,10 +16,10 @@ using namespace std;
 endCondition usage()
 {
 	cout << "To run a game, please include its name as an argument after the program name." << endl;
-	cout << "Game Options: NineAlmonds, MagicSquare, or Reversi" << endl ;
+	cout << "Game Options: NineAlmonds, MagicSquare, Reversi, or Checkers" << endl ;
 	cout << "Extra Arguments:" << endl;
 	cout << "  NineAlmonds has none." << endl;
-	cout << "  For Reversi, you must add 2 extra parameters for two player names." << endl;
+	cout << "  For Reversi and Checkers, you may add 2 extra parameters for player names." << endl;
 	cout << "  For MagicSquare, you may add 1 or 2 optional extra parameters." << endl;
 	cout << "    First, a size value that determines the board dimensions. (Default is 3)" << endl;
 	cout << "    Second, a value that determines the lowest value number tile. (Default is 1)" << endl << endl;
