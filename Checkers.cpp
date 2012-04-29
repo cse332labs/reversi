@@ -155,6 +155,7 @@ void Checkers :: turn()
 		{
 			state_ = NEEDLOC;
 		}
+
 	}
 
 	//ensures that they are ready to be asked to give a destination point.
@@ -184,7 +185,6 @@ void Checkers :: turn()
 
 	if(moveCheck(start_, dest_))
 	{
-
 
 		//superfluous for it's boolean check function, but used to ensure that the member variable
 		//is accurate for the current move and current jummped piece.
@@ -398,7 +398,9 @@ void Checkers :: movePiece()
 		board_.at(start_).flip();
 	}
 	else
+	{
 		return;
+	}
 }
 
 void Checkers :: removePiece(Point p)
