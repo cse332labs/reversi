@@ -154,11 +154,14 @@ checkerPiece :: checkerPiece(pieceColor color)
 	}
 }
 
+//used to interface with the abstract class
 void checkerPiece :: flip()
 {
 	crown();
+	return;
 }
 
+//turns a regular checker into a King piece.
 void checkerPiece :: crown()
 {
 	isKing_ = true;
