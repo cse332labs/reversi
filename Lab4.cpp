@@ -23,14 +23,14 @@ endCondition usage()
 	cout << "  For MagicSquare, you may add 1 or 2 optional extra parameters." << endl;
 	cout << "    First, a size value that determines the board dimensions. (Default is 3)" << endl;
 	cout << "    Second, a value that determines the lowest value number tile. (Default is 1)" << endl << endl;
-	
+
 	return USAGE;
 }
 
 // creates a pointer of abstract type that is specialized in the newGame function
 int main(int argc, char* argv[])
 {
-	
+
 	try
 	{
 		try
@@ -71,4 +71,3 @@ int main(int argc, char* argv[])
 		}
 	}
 }
-
