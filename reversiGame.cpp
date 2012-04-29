@@ -185,6 +185,7 @@ void reversiGame :: prompt()
 
 void reversiGame :: turn()
 {
+	print();
 	prompt();
 	listen();
 	if(addPiece())
@@ -215,8 +216,7 @@ endCondition reversiGame :: play()
 	state_ = BLACKTURN;
 	while(!finished)
 	{
-		self_->print();
-		self_->turn();
+		turn();
 		if(self_->done())
 		{
 
@@ -578,18 +578,25 @@ void reversiGame :: lineFlipper(vector<Point> points)
 	int i = 0;
 	while(stillWorking)
 	{
-		Point temp = points.at(i);
-		if(board_.count(temp)==0 || i >= size || temp.x_ >= boardx_ || temp.y_ >= boardy_)
+		Point temp;
+		if(i < size)
 		{
-			stillWorking = false;
+			temp = points.at(i);
 		}
 		else
 		{
-
+			stillWorking=false;
+		}
+		if(board_.count(temp)==0 || temp.x_ >= boardx_ || temp.y_ >= boardy_)
+		{
+			stillWorking = false;
+		}
+		if(stillWorking)
+		{
 			if(!(board_.at(temp).color_ == current))
 			{
+				toFlip.push_back(temp);
 				++i;
-				toFlip.push_back(points.at(i));
 			}
 			else
 			{

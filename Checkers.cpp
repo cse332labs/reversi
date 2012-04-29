@@ -46,8 +46,8 @@ Checkers :: Checkers(string playerB, string playerR)
 				++xOffset;
 			}
 
-			board_[Point(xOffset, i)] = red;
-			++Rcount_;
+			//board_[Point(xOffset, i)] = red;
+			//++Rcount_;
 
 		}
 
@@ -66,15 +66,70 @@ Checkers :: Checkers(string playerB, string playerR)
 				++xOffset;
 			}
 
-			board_[Point(xOffset, i)] = black;
-			++Bcount_;
+			//board_[Point(xOffset, i)] = black;
+			//++Bcount_;
 		}
 
 		offsetLine = (!offsetLine);
 	}
 	
-	//debug piece
-	board_[Point(2,4)] = red;
+	//debug pieces
+	board_[Point(1,1)] = black;
+	board_[Point(3,1)] = red;
+	board_[Point(3,3)] = red;
+	board_[Point(2,2)] = red;
+}
+
+void Checkers :: createSave()
+{
+	ofstream save;
+
+	save.open(name_ + ".txt");
+
+	bool finished = false;
+	int line = 1;
+
+	while(!finished)
+	{
+		switch(line)
+		{
+		case 1:
+			save << "Checkers";
+			break;
+		case 2:
+			save << name_;
+			break;
+		case 3:
+			save << turn_ << " " << state_ << " " << boardx_ <<","<<boardy_;
+			break;
+		case 4:
+			save << dest_.x_ << "," << dest_.y_;
+			break;
+		case 5:
+			save << "START";
+			break;
+		default:
+			for(int i = 0; i < boardx_; ++i)
+			{
+				for(int j = 0; j < boardy_; ++j)
+				{
+					Point temp = Point(i,j);
+					if(board_.count(temp)==1)
+					{
+						checkerPiece piece = checkerByColor(board_.at(temp).color_);
+
+						save << i << "," << j << " " << piece.symbol_ << endl;
+						++line;
+					}
+				}
+			}
+			save << "END";
+			finished=true;
+			break;
+		}
+		save << endl;
+		++line;
+	}
 }
 
 
@@ -171,7 +226,7 @@ void Checkers :: turn()
 		prompt();
 		listen();
 
-		if(moveCheck(start_, dest_))
+		if(moveCheck(start_, dest_) && !validFirst_)
 		{
 			state_ = PROCESSING;
 		}
@@ -212,6 +267,12 @@ void Checkers :: turn()
 
 void Checkers :: prompt()
 {
+	if(validFirst_)
+	{
+		validFirst_ = false;
+		listMoves();
+		return;
+	}
 	string name, color;
 	if(isBlacksTurn_)
 	{
@@ -278,6 +339,7 @@ endCondition Checkers :: play()
 
 bool Checkers :: moveCheck(Point start, Point dest)
 {
+	currentMoveType_ = getMoveType(start, dest);
 	checkerPiece piece = checkerPiece();
 	piece.set(board_.at(start));
 	
@@ -296,7 +358,6 @@ bool Checkers :: moveCheck(Point start, Point dest)
 		if(temp.x_ == dest.x_ && temp.y_ == dest.y_)
 		{
 			isValid=true;
-			currentMoveType_ = getMoveType(start, dest);
 		}
 	}
 
@@ -384,14 +445,19 @@ void Checkers :: movePiece()
 
 	if(start_.y_ == 0 && isBlacksTurn_ == true)
 	{
-		board_.at(start_).flip();
+		checkerPiece newKing = checkerByColor(board_.at(start_).color_);
+		newKing.crown();
+		board_[start_] = newKing;
+		state_ = ENDTURN;
 	}
 	else if(start_.y_ == 7 && isBlacksTurn_ == false)
 	{
-		board_.at(start_).flip();
+		checkerPiece newKing = checkerByColor(board_.at(start_).color_);
+		newKing.crown();
+		board_[start_] = newKing;
+		state_ = ENDTURN;
+
 	}
-	else
-		return;
 }
 
 void Checkers :: removePiece(Point p)
@@ -530,7 +596,7 @@ void Checkers :: listMoves()
 
 	vector<Point> destinations = possibleLocations(p);
 
-	cout << "AVAILABLE MOVES: ";
+	cout << "AVAILABLE MOVES: |";
 	movesOut(cout, destinations);
 	cout << endl;
 

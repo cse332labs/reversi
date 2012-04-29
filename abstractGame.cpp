@@ -413,7 +413,7 @@ void abstractGame :: listen()
 		// is used to advanced to the ENDTURN state for advancing purposes.
 		else if(in1 == "finished" || in1 == "fin" || in1 == "done")
 		{
-			if(validFirst_)
+			if(validFirst_  || type_ == CHECKERS)
 			{
 				state_=ENDTURN;
 				return;
@@ -436,6 +436,10 @@ void abstractGame :: listen()
 		else if(type_ != CHECKERS)
 		{
 			cout << "I'm sorry, that doesn't appear to be a valid command. Try again." << endl << endl;
+		}
+		else if(in1 == "listmoves" && type_ == CHECKERS)
+		{
+			validFirst_ = true;
 		}
 	}
 }
