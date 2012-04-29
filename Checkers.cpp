@@ -287,6 +287,7 @@ endCondition Checkers :: play()
 
 bool Checkers :: moveCheck(Point start, Point dest)
 {
+	currentMoveType_ = getMoveType(start, dest);
 	checkerPiece piece = checkerPiece();
 	piece.set(board_.at(start));
 	
@@ -305,7 +306,6 @@ bool Checkers :: moveCheck(Point start, Point dest)
 		if(temp.x_ == dest.x_ && temp.y_ == dest.y_)
 		{
 			isValid=true;
-			currentMoveType_ = getMoveType(start, dest);
 		}
 	}
 
@@ -399,10 +399,8 @@ void Checkers :: movePiece()
 	{
 		board_.at(start_).flip();
 	}
-	else
-	{
-		return;
-	}
+	
+	if(
 }
 
 void Checkers :: removePiece(Point p)

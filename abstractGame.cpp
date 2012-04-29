@@ -413,7 +413,7 @@ void abstractGame :: listen()
 		// is used to advanced to the ENDTURN state for advancing purposes.
 		else if(in1 == "finished" || in1 == "fin" || in1 == "done")
 		{
-			if(validFirst_)
+			if(validFirst_  || type_ == CHECKERS)
 			{
 				state_=ENDTURN;
 				return;
