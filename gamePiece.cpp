@@ -56,18 +56,19 @@ reversiPiece::reversiPiece(pieceColor color)
 
 void almondPiece :: flip()
 {
-	gamePiece :: flip();
-}
-
-void numberSquare :: flip()
-{
-	gamePiece :: flip();
+	return;
 }
 
 void gamePiece :: flip()
 {
 	return;
 }
+
+void numberSquare :: flip()
+{
+	return;
+}
+
 
 void reversiPiece :: flip()
 {
@@ -163,6 +164,11 @@ checkerPiece checkerByColor(pieceColor color)
 
 void checkerPiece :: flip()
 {
+	crown();
+}
+
+void checkerPiece :: crown()
+{
 	isKing_ = true;
 	if(color_ == RED)
 	{
@@ -181,11 +187,6 @@ void checkerPiece :: flip()
 		isKing_ = false;
 		cout << "There was an error trying to king that piece." << endl;
 	}
-}
-
-void checkerPiece :: king()
-{
-	flip();
 }
 
 void checkerPiece :: set(gamePiece p)

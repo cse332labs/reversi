@@ -76,10 +76,11 @@ struct checkerPiece : gamePiece
 	bool isKing_;
 
 	virtual void flip();
-	void king();
+	void crown();
+
 	void set(gamePiece p);
 };
 
-checkerPiece checkerByColor(pieceColor color);
+checkerPiece checkerByColor(pieceColor color);	
 
 #endif

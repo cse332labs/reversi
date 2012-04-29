@@ -62,8 +62,6 @@ protected:
 	virtual void createSave();
 	virtual void loadSave();
 
-	bool 
-
 	void listMoves();
 
 	void movesOut(ostream& stream, vector<Point> points);

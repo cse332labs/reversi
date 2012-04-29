@@ -437,6 +437,10 @@ void abstractGame :: listen()
 		{
 			cout << "I'm sorry, that doesn't appear to be a valid command. Try again." << endl << endl;
 		}
+		else if(in1 == "listmoves" && type_ == CHECKERS)
+		{
+			validFirst_ = true;
+		}
 	}
 }
 

@@ -46,8 +46,8 @@ Checkers :: Checkers(string playerB, string playerR)
 				++xOffset;
 			}
 
-			board_[Point(xOffset, i)] = red;
-			++Rcount_;
+			//board_[Point(xOffset, i)] = red;
+			//++Rcount_;
 
 		}
 
@@ -66,15 +66,18 @@ Checkers :: Checkers(string playerB, string playerR)
 				++xOffset;
 			}
 
-			board_[Point(xOffset, i)] = black;
-			++Bcount_;
+			//board_[Point(xOffset, i)] = black;
+			//++Bcount_;
 		}
 
 		offsetLine = (!offsetLine);
 	}
 	
-	//debug piece
-	board_[Point(2,4)] = red;
+	//debug pieces
+	board_[Point(1,1)] = black;
+	board_[Point(3,1)] = red;
+	board_[Point(3,3)] = red;
+	board_[Point(2,2)] = red;
 }
 
 
@@ -172,7 +175,7 @@ void Checkers :: turn()
 		prompt();
 		listen();
 
-		if(moveCheck(start_, dest_))
+		if(moveCheck(start_, dest_) && !validFirst_)
 		{
 			state_ = PROCESSING;
 		}
@@ -221,6 +224,12 @@ void Checkers :: turn()
 
 void Checkers :: prompt()
 {
+	if(validFirst_)
+	{
+		validFirst_ = false;
+		listMoves();
+		return;
+	}
 	string name, color;
 	if(isBlacksTurn_)
 	{
@@ -393,14 +402,18 @@ void Checkers :: movePiece()
 
 	if(start_.y_ == 0 && isBlacksTurn_ == true)
 	{
-		board_.at(start_).flip();
+		checkerPiece newKing = checkerByColor(board_.at(start_).color_);
+		newKing.crown();
+		board_[start_] = newKing;
+		state_ = ENDTURN;
 	}
 	else if(start_.y_ == 7 && isBlacksTurn_ == false)
 	{
-		board_.at(start_).flip();
+		checkerPiece newKing = checkerByColor(board_.at(start_).color_);
+		newKing.crown();
+		board_[start_] = newKing;
+		state_ = ENDTURN;
 	}
-	
-	if(
 }
 
 void Checkers :: removePiece(Point p)
@@ -539,7 +552,7 @@ void Checkers :: listMoves()
 
 	vector<Point> destinations = possibleLocations(p);
 
-	cout << "AVAILABLE MOVES: ";
+	cout << "AVAILABLE MOVES: |";
 	movesOut(cout, destinations);
 	cout << endl;
 
