@@ -106,9 +106,11 @@ need to handle two extra arguments. When we tried to implement reversiGame with 
 we faced this issue. We had to make changes to allow for extra arguments to be passed in and handled to 
 create either Magic Square and Reversi from the abstractGame newGame method.
 
-We had difficulty getting games to run. Several errors for a long time, such as "invalid null pointer".
-
 We have also faced errors with static/non-static objects as we implemented the Singleton pattern.
+
+We had difficulty getting reversi to run. Several errors for a long time, such as "invalid null pointer".
+We discovered that class slicing was happening, and our reversi-specific members were no-longer accessible.
+To fix this, we directly returned the value to the static pointer.
 
 /////////////////////////////////////////////////////////////////////////////
 TEAMWORK:
