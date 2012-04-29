@@ -80,59 +80,6 @@ Checkers :: Checkers(string playerB, string playerR)
 	board_[Point(2,2)] = red;
 }
 
-void Checkers :: createSave()
-{
-	ofstream save;
-
-	save.open(name_ + ".txt");
-
-	bool finished = false;
-	int line = 1;
-
-	while(!finished)
-	{
-		switch(line)
-		{
-		case 1:
-			save << "Checkers";
-			break;
-		case 2:
-			save << name_;
-			break;
-		case 3:
-			save << turn_ << " " << state_ << " " << boardx_ <<","<<boardy_;
-			break;
-		case 4:
-			save << dest_.x_ << "," << dest_.y_;
-			break;
-		case 5:
-			save << "START";
-			break;
-		default:
-			for(int i = 0; i < boardx_; ++i)
-			{
-				for(int j = 0; j < boardy_; ++j)
-				{
-					Point temp = Point(i,j);
-					if(board_.count(temp)==1)
-					{
-						checkerPiece piece = checkerByColor(board_.at(temp).color_);
-
-						save << i << "," << j << " " << piece.symbol_ << endl;
-						++line;
-					}
-				}
-			}
-			save << "END";
-			finished=true;
-			break;
-		}
-		save << endl;
-		++line;
-	}
-}
-
-
 ostream& operator<<(ostream &stream, const Checkers &game)
 {
 	// formatting set-up to account for variable length symbols and readability 
@@ -191,7 +138,38 @@ void Checkers :: print()
 
 bool Checkers :: done()
 {
-	return false;
+	bool done = true;
+
+	if(Bcount_ == 0 || Rcount_ == 0)
+	{
+		return done;
+	}
+	else if(done)
+	{
+		pieceColor nextTurn=BLACK;
+		if(isBlacksTurn_)
+		{
+			nextTurn = RED;
+		}
+
+		for(int i = 0; i < boardx_ ; ++i)
+		{
+			for(int j = 0; j < boardy_; ++j)
+			{
+				Point temp = Point(i, j);
+				if(board_.at(temp).color_ == nextTurn)
+				{
+					vector<Point> movesFromTemp = possibleLocations(temp);
+					if(movesFromTemp.size() != 0)
+					{
+						done = false;
+					}
+				}
+			}
+		}
+	}
+	else
+		return done;
 }
 
 void Checkers :: turn()
@@ -588,14 +566,61 @@ moveType Checkers :: getMoveType(Point start, Point dest)
 	}
 }
 
-void Checkers :: createSave()
-{
-	return;
-}
-
 void Checkers :: loadSave()
 {
 	abstractGame :: loadSave("checkers");
+}
+
+void Checkers :: createSave()
+{
+	ofstream save;
+
+	save.open(name_ + ".txt");
+
+	bool finished = false;
+	int line = 1;
+
+	while(!finished)
+	{
+		switch(line)
+		{
+		case 1:
+			save << "Checkers";
+			break;
+		case 2:
+			save << name_;
+			break;
+		case 3:
+			save << turn_ << " " << state_ << " " << boardx_ <<","<<boardy_;
+			break;
+		case 4:
+			save << dest_.x_ << "," << dest_.y_;
+			break;
+		case 5:
+			save << "START";
+			break;
+		default:
+			for(int i = 0; i < boardx_; ++i)
+			{
+				for(int j = 0; j < boardy_; ++j)
+				{
+					Point temp = Point(i,j);
+					if(board_.count(temp)==1)
+					{
+						checkerPiece piece = checkerByColor(board_.at(temp).color_);
+
+						save << i << "," << j << " " << piece.symbol_ << endl;
+						++line;
+					}
+				}
+			}
+			save << "END";
+			finished=true;
+			break;
+		}
+		save << endl;
+		++line;
+	}
 }
 
 void Checkers :: listMoves()

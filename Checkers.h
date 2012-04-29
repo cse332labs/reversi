@@ -13,7 +13,6 @@
 #include "endCondition.h"
 #include "abstractGame.h"
 #include "inputProcessing.h"
-#include "Checkers.h"
 #include <vector>
 #include <sstream>
 #include <iostream>
