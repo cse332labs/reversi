@@ -33,3 +33,5 @@ _ReSharper*/
 *.sdfbak
 ipch/
 *.orig
+Lab4.vcxproj.user
+Lab5.suo
