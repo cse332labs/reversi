@@ -179,6 +179,7 @@ void reversiGame :: prompt()
 
 void reversiGame :: turn()
 {
+	print();
 	prompt();
 	listen();
 	if(addPiece())
@@ -209,8 +210,7 @@ endCondition reversiGame :: play()
 	state_ = BLACKTURN;
 	while(!finished)
 	{
-		self_->print();
-		self_->turn();
+		turn();
 		if(self_->done())
 		{
 
