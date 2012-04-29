@@ -580,10 +580,6 @@ moveType Checkers :: getMoveType(Point start, Point dest)
 	}
 }
 
-void Checkers :: createSave()
-{
-	return;
-}
 
 void Checkers :: loadSave()
 {
