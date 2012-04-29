@@ -167,8 +167,7 @@ void abstractGame::newGame(int argc, abstractGame*& pointer)
 		}
 		else if (type_ == REVERSI)
 		{
-			reversiGame game = *new reversiGame(firstvar, secondvar);
-			pointer = &game;
+			pointer = new reversiGame(firstvar, secondvar);
 			pointer->nameChecker();
 			type_ = REVERSI;
 			return;

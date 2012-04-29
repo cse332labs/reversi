@@ -104,7 +104,7 @@ ostream& operator<<(ostream &stream, const reversiGame &game)
 
 void reversiGame :: print()
 {
-	cout << self_ << endl;
+	cout << *this << endl;
 }
 
 bool reversiGame :: done()
