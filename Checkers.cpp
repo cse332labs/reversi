@@ -73,6 +73,8 @@ Checkers :: Checkers(string playerB, string playerR)
 		offsetLine = (!offsetLine);
 	}
 	
+	//debug piece
+	board_[Point(2,4)] = red;
 }
 
 
@@ -174,7 +176,7 @@ void Checkers :: turn()
 		{
 			state_ = PROCESSING;
 		}
-	}
+	}	
 
 	//ensures that that all operations in finding location went properly (i.e. they didnt cancel or
 	//input anything weird)
