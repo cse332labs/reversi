@@ -91,7 +91,7 @@ ostream& operator<<(ostream &stream, const reversiGame &game)
 		stream << endl;
 	}
 	stream << dashRow << endl;
-	stream << offset;  // offets the axis labeling by the width of the vertical axis
+	stream << offset;  // offsets the axis labeling by the width of the vertical axis
 
 	//prints the horizontal axis
 	for(int xPos=0; xPos < game.boardx_; ++xPos)
@@ -102,14 +102,19 @@ ostream& operator<<(ostream &stream, const reversiGame &game)
 	return stream;
 }
 
+//prints the board state using the ostream insertion operator
 void reversiGame :: print()
 {
 	cout << *this << endl;
 }
 
+
+//this method checks to see if the game termination conditions have been met
+//conditions: board is full, all pieces are one color, or no valid moves remain
 bool reversiGame :: done()
 {
 	//bool isFull = true;
+	/*
 	bool sameColor = false;
 
 	Bcount_=0;
@@ -161,6 +166,8 @@ bool reversiGame :: done()
 	}
 
 	return noMoves;
+	*/
+	return false;
 }
 
 
@@ -217,7 +224,7 @@ endCondition reversiGame :: play()
 	while(!finished)
 	{
 		turn();
-		if(self_->done())
+		if(done())
 		{
 
 			finished = true;

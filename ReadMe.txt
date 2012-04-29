@@ -4,9 +4,8 @@
 
 TO-DO:
 -testing and documenting
--update error section
 -change our main source file from Lab4 to Lab5
--extras - Mason - describe extra functionality in save
+-extras - Mason - describe extra functionality in save and Checkers
 -include memento details
 ========================================================================
     CONSOLE APPLICATION : Lab 5 Project Overview
@@ -18,7 +17,8 @@ Lab4.cpp
     This is the main application source file. This contains the main function which creates
 	an abstractGame pointer that it assigns using a special function newGame() that uses the
 	program arguments to create and assign a game to the pointer. Returns an endCondition, a
-	typedef enum.
+	typedef enum. It is named Lab4.cpp because we started with Lab4 as a base and did not 
+	want to cause conflicts from changing names mid-project.
 
 abstractGame.cpp
 	This contains the methods and functions related to the abstract game. Many of the virtual
@@ -39,6 +39,11 @@ reversiGame.cpp
 	This contains the methods and functions related to the mulitplayer reversiGame game class. It 
 	contains overridden virtual methods, references to abstractGame's methods, as well as new static
 	method. This game inherits from abstractGame.cpp.
+
+Checkers.cpp
+	(Extra Credit game) This contains the methods and functions related to the mulitplayer Checker 
+	game class. It contains overridden virtual methods, references to abstractGame's methods, as 
+	well as new static method. This game inherits from abstractGame.cpp.
 
 gamePiece.cpp
 	This contains the struct definitions of all gamePiece types (abstract, almond, reversi and 
@@ -70,6 +75,9 @@ magicSquares.h
 reversiGame.h
 	Contains forward declarations for the reversiGame game class
 
+Checkers.h
+	(Extra Credit game) Contains forward declarations for the Checkers game class
+
 Point.h
 	Contains forward declarations for the struct Point, which is used for  board coordinate locations 
 	in each game
@@ -87,8 +95,8 @@ TEST CASES:
 	We tested our program against a variety of proper and improper argument formats.
 		Proper formats: ninealmonds, magicsquare (with and without 1 or 2 additional arguments), and
 		reversi (with two extra arguments for the two players' names)
-		Improper formats: no gamename argument, badly formed gamename, incorrect extra arguments, and
-		reversi without 2 extra name arguments.
+		Improper formats: no gamename argument, badly formed gamename, incorrect formatted extra 
+		arguments, and reversi with 1 name argument or more than two name arguments.
 
 	We found that Magic Square was able to handle most game sizes (although there are some problems 
 	viewing extremely large boards on the small console window). 
@@ -112,19 +120,30 @@ We had difficulty getting reversi to run. Several errors for a long time, such a
 We discovered that class slicing was happening, and our reversi-specific members were no-longer accessible.
 To fix this, we directly returned the value to the static pointer.
 
+Because we decided to use version control, we ended up losing several hours of work time to merge conflicts 
+and related errors. :-(
+
 /////////////////////////////////////////////////////////////////////////////
 TEAMWORK:
 Group members: Atalie Holman, Mason Allen, and Chris Lauber
 
 We started with Atalie and Mason's code from Lab4 as a base. Mason had started save functionality during Lab4, so he
 focused on implementing Memento while Atalie and Chris teamed up to implement reversi. Atalie worked on construction
-and game set-up while Chris worked on game logic (play, done, turn, etc.).
+and game set-up while Chris worked on game logic (play, done, turn, etc.). We all shared debugging.
 
 To make code updating and sharing more efficient than working from one monitor or emailing versions back and forth,
 we set up a github group account (https://github.com/cse332labs/reversi). While this took a little getting used to, 
-and caused several merge conflicts, it ultimately made version control more effective so we could each contribute more.
+and caused several merge conflicts, version control made it possible for us to each contribute more code (and bond
+over the difficult process it also caused).
 
 /////////////////////////////////////////////////////////////////////////////
-EXTRAS:
+EXTRA CREDIT:
 
-Extra save features?
+CHECKERS
+
+Design & Implementation:
+
+Testing:
+
+Output produced from one run with two players:
+
